@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "637863079080",
+    "firebase_url": "https://hot-cold-guess-game.firebaseio.com",
+    "project_id": "hot-cold-guess-game",
+    "storage_bucket": "hot-cold-guess-game.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:637863079080:android:7d6abc96a2f9ae3ae7a69d",
+        "android_client_info": {
+          "package_name": "com.OrendaVStudios.HotCold"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "637863079080-bvdkb960v1vdspt54d8g4i3082r0qnct.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjW6SMDG2O9ORWXwi9Uh9ARkMtnhH4vws"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "637863079080-bvdkb960v1vdspt54d8g4i3082r0qnct.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
