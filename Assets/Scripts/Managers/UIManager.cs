@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     public GameObject pnl_Store;
     public GameObject pnl_SignUp;
     public GameObject pnl_SignIn;
+    public GameObject pnl_ResetPassword;
     public GameObject pnl_Lose;
     public GameObject pnl_Win;
 
@@ -68,6 +69,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI txt_SignUp_Password;
     [SerializeField] Button btn_SignUp_Home;
     [SerializeField] Button btn_SignUp_Send;
+    [SerializeField] Button btn_SignUp_SignIn;
 
     [Space(5)]
 
@@ -78,6 +80,16 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI txt_SignIn_Password;
     [SerializeField] Button btn_SignIn_Home;
     [SerializeField] Button btn_SignIn_Send;
+    [SerializeField] Button btn_SignIn_ResetPassword;
+    [SerializeField] Button btn_SignIn_SignUp;
+
+    [Space(5)]
+
+    [Header("Panel / Reset Password")]
+    [SerializeField] TextMeshProUGUI txt_ResetPassword_Header;
+    [SerializeField] TextMeshProUGUI txt_ResetPassword_EMail;
+    [SerializeField] Button btn_ResetPassword_Home;
+    [SerializeField] Button btn_ResetPassword_Send;
 
     [Space(5)]
 
@@ -125,12 +137,19 @@ public class UIManager : MonoBehaviour
 
         // SignUp Panel Add Click Listener
         btn_SignUp_Home.onClick.AddListener(ShowMenuPanel);
+        btn_SignUp_SignIn.onClick.AddListener(ShowSignInPanel);
         btn_SignUp_Send.onClick.AddListener(SendSignUp);
         
         
         // SignIn Panel Add Click Listener
         btn_SignIn_Home.onClick.AddListener(ShowMenuPanel);
+        btn_SignIn_ResetPassword.onClick.AddListener(ShowResetPasswordPanel);
+        btn_SignIn_SignUp.onClick.AddListener(ShowSignUpPanel);
         btn_SignIn_Send.onClick.AddListener(SendSignIn);
+        
+        // Reset Password Panel Add Click Listener
+        btn_ResetPassword_Home.onClick.AddListener(ShowMenuPanel);
+        btn_ResetPassword_Send.onClick.AddListener(SendPassword);
 
 
        /* btn_Lobby_Home.onClick.AddListener(ShowMenuPanel);
@@ -143,9 +162,15 @@ public class UIManager : MonoBehaviour
 
     #region Firebase
 
+    // Authentication
     private void SendSignUp() { AuthManager.SignUp(txt_SignUp_EMail.text, txt_SignUp_Password.text); }
     private void SendSignIn() { AuthManager.SignIn(txt_SignIn_EMail.text, txt_SignIn_Password.text); }
+    private void SendPassword() { AuthManager.ResetPassword(txt_SignIn_EMail.text); }
+
+    // Before Game Begin
     private void SearchGame() { }
+
+    // While Game
     private void Answer() { }
 
     #endregion
@@ -178,6 +203,7 @@ public class UIManager : MonoBehaviour
         Store,
         SignUp,
         SignIn,
+        ResetPassword,
         Lose,
         Win
     }
@@ -189,6 +215,7 @@ public class UIManager : MonoBehaviour
     private void ShowStorePanel() { PanelChanger(Panels.Store); }
     private void ShowSignUpPanel() { PanelChanger(Panels.SignUp); }
     private void ShowSignInPanel() { PanelChanger(Panels.SignIn); }
+    private void ShowResetPasswordPanel() { PanelChanger(Panels.ResetPassword); }
     private void ShowLosePanel() { PanelChanger(Panels.Lose); }
     private void ShowWinPanel() { PanelChanger(Panels.Win); }
 
@@ -201,6 +228,7 @@ public class UIManager : MonoBehaviour
         pnl_Store.SetActive(panels == Panels.Store);
         pnl_SignUp.SetActive(panels == Panels.SignUp);
         pnl_SignIn.SetActive(panels == Panels.SignIn);
+        pnl_ResetPassword.SetActive(panels == Panels.ResetPassword);
         pnl_Lose.SetActive(panels == Panels.Lose);
         pnl_Win.SetActive(panels == Panels.Win);
     }
