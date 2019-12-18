@@ -24,6 +24,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI txt_Menu_Header;
     [SerializeField] Button btn_Menu_Play;
     [SerializeField] Button btn_Menu_Settings;
+    [SerializeField] Button btn_Menu_Store;
     [SerializeField] Button btn_Menu_RateUs;
     [SerializeField] Button btn_Menu_Rank;
 
