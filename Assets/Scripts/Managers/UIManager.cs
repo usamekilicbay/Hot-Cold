@@ -34,6 +34,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI txt_Lobby_Header;
     [SerializeField] Button btn_Lobby_Home;
     [SerializeField] Button btn_Lobby_Settings;
+    [SerializeField] Button btn_Lobby_Refresh;
+    [SerializeField] Button btn_Lobby_Enter;
+    [SerializeField] Button btn_Lobby_Create;
     [SerializeField] Button btn_Lobby_Search_Game;
 
     [Space(5)]
@@ -115,13 +118,23 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        /*// Menu Panel Add Click Listener
+        // Menu Panel Add Click Listener
         btn_Menu_Play.onClick.AddListener(ShowLobbyPanel);
         btn_Menu_Settings.onClick.AddListener(ShowSettingsPanel);
+        btn_Menu_Store.onClick.AddListener(ShowStorePanel);
         btn_Menu_RateUs.onClick.AddListener(RateUs);
         btn_Menu_Rank.onClick.AddListener(GetRank);
 
 
+        // Lobby Panel Add Click Listener
+        btn_Lobby_Home.onClick.AddListener(ShowMenuPanel);
+        btn_Lobby_Refresh.onClick.AddListener(RefreshRoomList);
+        btn_Lobby_Enter.onClick.AddListener(EnterRoom);
+        btn_Lobby_Create.onClick.AddListener(CreateRoom);
+
+
+
+        /*
         // Game Panel Add Click Listener
         btn_Game_Home.onClick.AddListener(ShowMenuPanel);
         btn_Game_Settings.onClick.AddListener(ShowSettingsPanel);
@@ -153,7 +166,7 @@ public class UIManager : MonoBehaviour
         btn_ResetPassword_Send.onClick.AddListener(SendPassword);
 
 
-       /* btn_Lobby_Home.onClick.AddListener(ShowMenuPanel);
+       /* 
         btn_Store_Home.onClick.AddListener(ShowMenuPanel);
         btn_Lose_Home.onClick.AddListener(ShowMenuPanel);
         btn_Win_Home.onClick.AddListener(ShowMenuPanel);*/
@@ -170,6 +183,9 @@ public class UIManager : MonoBehaviour
 
     // Before Game Begin
     private void SearchGame() { }
+    private void RefreshRoomList() { }
+    private void EnterRoom() { }
+    private void CreateRoom() { }
 
     // While Game
     private void Answer() { }
