@@ -32,6 +32,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Panel / Lobby")]
     [SerializeField] TextMeshProUGUI txt_Lobby_Header;
+    [SerializeField] TMP_Dropdown drpdwn_Lobby_RoomList;
     [SerializeField] Button btn_Lobby_Home;
     [SerializeField] Button btn_Lobby_Settings;
     [SerializeField] Button btn_Lobby_Refresh;
@@ -127,6 +128,7 @@ public class UIManager : MonoBehaviour
 
 
         // Lobby Panel Add Click Listener
+        //drpdwn_Lobby_RoomList.onValueChanged.AddListener(LoadRoomList);
         btn_Lobby_Home.onClick.AddListener(ShowMenuPanel);
         btn_Lobby_Refresh.onClick.AddListener(RefreshRoomList);
         btn_Lobby_Enter.onClick.AddListener(EnterRoom);
@@ -182,7 +184,7 @@ public class UIManager : MonoBehaviour
     private void SendPassword() { AuthManager.ResetPassword(txt_SignIn_EMail.text); }
 
     // Before Game Begin
-    private void SearchGame() { }
+    private void LoadRoomList() { }
     private void RefreshRoomList() { }
     private void EnterRoom() { }
     private void CreateRoom() { }
