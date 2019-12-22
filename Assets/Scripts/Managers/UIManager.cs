@@ -34,11 +34,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI txt_Lobby_Header;
     [SerializeField] TMP_Dropdown drpdwn_Lobby_RoomList;
     [SerializeField] Button btn_Lobby_Home;
-    [SerializeField] Button btn_Lobby_Settings;
+    //[SerializeField] Button btn_Lobby_Settings;
     [SerializeField] Button btn_Lobby_Refresh;
     [SerializeField] Button btn_Lobby_Enter;
     [SerializeField] Button btn_Lobby_Create;
-    [SerializeField] Button btn_Lobby_Search_Game;
+    //[SerializeField] Button btn_Lobby_Search_Game;
 
     [Space(5)]
 
@@ -69,8 +69,8 @@ public class UIManager : MonoBehaviour
 
     [Header("Panel / SignUp")]
     [SerializeField] TextMeshProUGUI txt_SignUp_Header;
-    [SerializeField] TextMeshProUGUI txt_SignUp_UserName;
-    [SerializeField] TextMeshProUGUI txt_SignUp_EMail;
+    [SerializeField] TextMeshProUGUI txt_SignUp_Username;
+    [SerializeField] TextMeshProUGUI txt_SignUp_Email;
     [SerializeField] TextMeshProUGUI txt_SignUp_Password;
     [SerializeField] Button btn_SignUp_Home;
     [SerializeField] Button btn_SignUp_Send;
@@ -80,8 +80,8 @@ public class UIManager : MonoBehaviour
 
     [Header("Panel / SignIn")]
     [SerializeField] TextMeshProUGUI txt_SignIn_Header;
-    [SerializeField] TextMeshProUGUI txt_SignIn_UserName;
-    [SerializeField] TextMeshProUGUI txt_SignIn_EMail;
+    [SerializeField] TextMeshProUGUI txt_SignIn_Username;
+    [SerializeField] TextMeshProUGUI txt_SignIn_Email;
     [SerializeField] TextMeshProUGUI txt_SignIn_Password;
     [SerializeField] Button btn_SignIn_Home;
     [SerializeField] Button btn_SignIn_Send;
@@ -92,7 +92,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Panel / Reset Password")]
     [SerializeField] TextMeshProUGUI txt_ResetPassword_Header;
-    [SerializeField] TextMeshProUGUI txt_ResetPassword_EMail;
+    [SerializeField] TextMeshProUGUI txt_ResetPassword_Email;
     [SerializeField] Button btn_ResetPassword_Home;
     [SerializeField] Button btn_ResetPassword_Send;
 
@@ -116,6 +116,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] Button btn_Win_Home;
     [SerializeField] Button btn_Win_Play;
 
+
+    // Script References
+    FirebaseManager firebaseManager;
+    AuthManager authManager;
 
     private void Start()
     {
@@ -168,20 +172,22 @@ public class UIManager : MonoBehaviour
         btn_ResetPassword_Send.onClick.AddListener(SendPassword);
 
 
-       /* 
-        btn_Store_Home.onClick.AddListener(ShowMenuPanel);
-        btn_Lose_Home.onClick.AddListener(ShowMenuPanel);
-        btn_Win_Home.onClick.AddListener(ShowMenuPanel);*/
+        /* 
+         btn_Store_Home.onClick.AddListener(ShowMenuPanel);
+         btn_Lose_Home.onClick.AddListener(ShowMenuPanel);
+         btn_Win_Home.onClick.AddListener(ShowMenuPanel);*/
 
-
+        // Script Specification
+        firebaseManager = FirebaseManager.Instance;
+        authManager = AuthManager.Instance;
     }
 
     #region Firebase
 
     // Authentication
-    private void SendSignUp() { AuthManager.SignUp(txt_SignUp_EMail.text, txt_SignUp_Password.text); }
-    private void SendSignIn() { AuthManager.SignIn(txt_SignIn_EMail.text, txt_SignIn_Password.text); }
-    private void SendPassword() { AuthManager.ResetPassword(txt_SignIn_EMail.text); }
+    private void SendSignUp() { authManager.SignUp(txt_SignUp_Username.text,txt_SignUp_Email.text, txt_SignUp_Password.text); }
+    private void SendSignIn() { authManager.SignIn(txt_SignIn_Email.text, txt_SignIn_Password.text); }
+    private void SendPassword() { authManager.ResetPassword(txt_SignIn_Email.text); }
 
     // Before Game Begin
     private void LoadRoomList() { }

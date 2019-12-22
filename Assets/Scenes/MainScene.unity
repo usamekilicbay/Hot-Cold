@@ -475,7 +475,7 @@ GameObject:
   - component: {fileID: 73348696}
   - component: {fileID: 73348695}
   m_Layer: 5
-  m_Name: E Mail Text
+  m_Name: Email Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -765,7 +765,7 @@ GameObject:
   - component: {fileID: 109596486}
   - component: {fileID: 109596489}
   m_Layer: 5
-  m_Name: User Name InputField (TMP)
+  m_Name: Username InputField (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1451,7 +1451,7 @@ GameObject:
   - component: {fileID: 168196688}
   - component: {fileID: 168196687}
   m_Layer: 5
-  m_Name: User Name InputField (TMP)
+  m_Name: Username InputField (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1638,7 +1638,7 @@ GameObject:
   - component: {fileID: 193042854}
   - component: {fileID: 193042853}
   m_Layer: 5
-  m_Name: E-mail InputField (TMP)
+  m_Name: Email InputField (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2675,7 +2675,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 314718389}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 058cba836c1846c3aa1c5fd2e28aea77, type: 3}
   m_Name: 
@@ -3249,7 +3249,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 421969533}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 058cba836c1846c3aa1c5fd2e28aea77, type: 3}
   m_Name: 
@@ -3291,7 +3291,7 @@ GameObject:
   - component: {fileID: 423070605}
   - component: {fileID: 423070604}
   m_Layer: 5
-  m_Name: E-mail InputField (TMP)
+  m_Name: Email InputField (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4635,7 +4635,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &718910330
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5617,7 +5617,7 @@ GameObject:
   - component: {fileID: 936207812}
   - component: {fileID: 936207815}
   m_Layer: 5
-  m_Name: E-mail InputField (TMP)
+  m_Name: Email InputField (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6509,7 +6509,7 @@ GameObject:
   - component: {fileID: 1157625193}
   - component: {fileID: 1157625192}
   m_Layer: 5
-  m_Name: UserName Text
+  m_Name: Username Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7612,7 +7612,7 @@ GameObject:
   - component: {fileID: 1222421119}
   - component: {fileID: 1222421118}
   m_Layer: 5
-  m_Name: UserName Text
+  m_Name: Username Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7972,7 +7972,7 @@ GameObject:
   - component: {fileID: 1249968064}
   - component: {fileID: 1249968063}
   m_Layer: 5
-  m_Name: E Mail Text
+  m_Name: Email Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9152,7 +9152,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1456465379}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 058cba836c1846c3aa1c5fd2e28aea77, type: 3}
   m_Name: 
@@ -11359,13 +11359,12 @@ MonoBehaviour:
   btn_Menu_Store: {fileID: 1282412136}
   btn_Menu_RateUs: {fileID: 780694126}
   btn_Menu_Rank: {fileID: 549676626}
-  txt_Lobby_Header: {fileID: 0}
-  btn_Lobby_Home: {fileID: 0}
-  btn_Lobby_Settings: {fileID: 0}
-  btn_Lobby_Refresh: {fileID: 0}
-  btn_Lobby_Enter: {fileID: 0}
-  btn_Lobby_Create: {fileID: 0}
-  btn_Lobby_Search_Game: {fileID: 0}
+  txt_Lobby_Header: {fileID: 659274957}
+  drpdwn_Lobby_RoomList: {fileID: 1484876756}
+  btn_Lobby_Home: {fileID: 505972633}
+  btn_Lobby_Refresh: {fileID: 297988348}
+  btn_Lobby_Enter: {fileID: 2032805600}
+  btn_Lobby_Create: {fileID: 83024932}
   txt_Game_Header: {fileID: 0}
   btn_Game_Home: {fileID: 0}
   btn_Game_Settings: {fileID: 0}
@@ -11379,22 +11378,22 @@ MonoBehaviour:
   txt_Store_Header: {fileID: 0}
   btn_Store_Home: {fileID: 0}
   txt_SignUp_Header: {fileID: 406803023}
-  txt_SignUp_UserName: {fileID: 1157625192}
-  txt_SignUp_EMail: {fileID: 1249968063}
+  txt_SignUp_Username: {fileID: 1157625192}
+  txt_SignUp_Email: {fileID: 1249968063}
   txt_SignUp_Password: {fileID: 1078608470}
   btn_SignUp_Home: {fileID: 1692394118}
   btn_SignUp_Send: {fileID: 1603301269}
   btn_SignUp_SignIn: {fileID: 1221902662}
   txt_SignIn_Header: {fileID: 350594025}
-  txt_SignIn_UserName: {fileID: 1222421118}
-  txt_SignIn_EMail: {fileID: 1947303204}
+  txt_SignIn_Username: {fileID: 1222421118}
+  txt_SignIn_Email: {fileID: 1947303204}
   txt_SignIn_Password: {fileID: 1093750831}
   btn_SignIn_Home: {fileID: 122904897}
   btn_SignIn_Send: {fileID: 2003681553}
   btn_SignIn_ResetPassword: {fileID: 1759597311}
   btn_SignIn_SignUp: {fileID: 920527055}
-  txt_ResetPassword_Header: {fileID: 0}
-  txt_ResetPassword_EMail: {fileID: 73348695}
+  txt_ResetPassword_Header: {fileID: 31064298}
+  txt_ResetPassword_Email: {fileID: 73348695}
   btn_ResetPassword_Home: {fileID: 254579333}
   btn_ResetPassword_Send: {fileID: 1738516370}
   txt_Lose_Header: {fileID: 0}
@@ -11455,11 +11454,11 @@ RectTransform:
   m_Father: {fileID: 1623826067}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 50, y: 50}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -50, y: 50}
   m_SizeDelta: {x: 128, y: 128}
-  m_Pivot: {x: 0, y: 0}
+  m_Pivot: {x: 1, y: 0}
 --- !u!114 &1937143652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11762,7 +11761,7 @@ GameObject:
   - component: {fileID: 1947303205}
   - component: {fileID: 1947303204}
   m_Layer: 5
-  m_Name: E Mail Text
+  m_Name: Email Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12194,7 +12193,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2032360725
 RectTransform:
   m_ObjectHideFlags: 0
