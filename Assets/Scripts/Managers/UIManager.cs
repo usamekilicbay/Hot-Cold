@@ -119,6 +119,8 @@ public class UIManager : MonoBehaviour
 
     // Script References
     FirebaseManager firebaseManager;
+
+    FBManager fBManager;
     AuthManager authManager;
 
     private void Start()
@@ -155,22 +157,24 @@ public class UIManager : MonoBehaviour
         sld_Settings_Music_Volume.onValueChanged.AddListener(SetSfxVolume);*/
 
 
-        // SignUp Panel Add Click Listener
+       // SignUp Panel Add Click Listener
         btn_SignUp_Home.onClick.AddListener(ShowMenuPanel);
         btn_SignUp_SignIn.onClick.AddListener(ShowSignInPanel);
-        btn_SignUp_Send.onClick.AddListener(SendSignUp);
+        btn_SignUp_Send.onClick.AddListener(SendSignUpEmailPassword);
         
         
         // SignIn Panel Add Click Listener
         btn_SignIn_Home.onClick.AddListener(ShowMenuPanel);
         btn_SignIn_ResetPassword.onClick.AddListener(ShowResetPasswordPanel);
         btn_SignIn_SignUp.onClick.AddListener(ShowSignUpPanel);
-        btn_SignIn_Send.onClick.AddListener(SendSignIn);
+       // btn_SignIn_Send.onClick.AddListener(SendSignIn);
         
         // Reset Password Panel Add Click Listener
         btn_ResetPassword_Home.onClick.AddListener(ShowMenuPanel);
-        btn_ResetPassword_Send.onClick.AddListener(SendPassword);
+       // btn_ResetPassword_Send.onClick.AddListener(SendPassword);
+       
 
+        
 
         /* 
          btn_Store_Home.onClick.AddListener(ShowMenuPanel);
@@ -179,15 +183,17 @@ public class UIManager : MonoBehaviour
 
         // Script Specification
         firebaseManager = FirebaseManager.Instance;
+
+        fBManager = FBManager.Instance;
         authManager = AuthManager.Instance;
     }
 
     #region Firebase
 
     // Authentication
-    private void SendSignUp() { authManager.SignUp(txt_SignUp_Username.text,txt_SignUp_Email.text, txt_SignUp_Password.text); }
-    private void SendSignIn() { authManager.SignIn(txt_SignIn_Email.text, txt_SignIn_Password.text); }
-    private void SendPassword() { authManager.ResetPassword(txt_SignIn_Email.text); }
+      private void SendSignUpEmailPassword() { fBManager.SignUpEmailPasssword(txt_SignUp_Username.text, txt_SignUp_Email.text, txt_SignUp_Password.text); }
+   // private void SendSignIn() { authManager.SignIn(txt_SignIn_Email.text, txt_SignIn_Password.text); }
+   // private void SendPassword() { authManager.ResetPassword(txt_SignIn_Email.text); }
 
     // Before Game Begin
     private void LoadRoomList() { }

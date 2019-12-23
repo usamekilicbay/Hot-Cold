@@ -12,10 +12,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("Bildin!");
         }
         else if (guessedNumber != trueNumber)
-        {
-            //Debug.Log("Sen cahil bir amipsin");
-            
-
+        {           
             int majority = Mathf.Abs(guessedNumber - trueNumber);
 
             string assistance;
@@ -67,6 +64,7 @@ public class GameManager : MonoBehaviour
             string mainAsistance = $"{nearlyAssistance} {assistance}";
 
             Debug.Log($"Tekrar dene: {mainAsistance}");
+
         }
     }
 }
