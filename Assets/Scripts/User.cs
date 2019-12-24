@@ -1,30 +1,30 @@
 ﻿public class User
 {
     // String variables
-    string username { get; set; }
-    string signUpDate { get; set; }
-    string lastSignInDate { get; set; }
-    string country { get; set; }
-    string language { get; set; }
+    public string username;
+    public string signUpDate;
+    public string lastSignInDate;
+    public string country;
+    public string language;
 
     // Int variables
-    int level { get; set; }
-    int cup { get; set; }
-    int highScore { get; set; }
-    int signInCount { get; set; }
-    int totalPlayTime { get; set; }
-    int totalMatchCount { get; set; }
-    int completedGameCount { get; set; }
-    int abandonedGameCount { get; set; }
-    int winCount { get; set; }
-    int loseCount { get; set; }
-    int energy { get; set; }
-    int gold { get; set; }
-    int diamond { get; set; }
-    int joker { get; set; }
+    public int level;
+    public int cup;
+    public int highScore;
+    public int signInCount;
+    public int totalPlayTime;
+    public int totalMatchCount;
+    public int completedGameCount;
+    public int abandonedGameCount;
+    public int winCount;
+    public int loseCount;
+    public int energy;
+    public int gold;
+    public int diamond;
+    public int joker;
 
     // Bool variables
-    bool signInStatus { get; set; }
+    public bool signInStatus;
 
 
     public User
@@ -60,7 +60,7 @@
         this.lastSignInDate = lastSignInDate;
         this.country = country;
         this.language = language;
-        
+
         // Int
         this.level = level;
         this.cup = cup;
