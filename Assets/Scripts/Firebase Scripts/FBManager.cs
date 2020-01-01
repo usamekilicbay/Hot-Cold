@@ -17,14 +17,26 @@ public class FBManager : Singleton<FBManager>
 {
     //Firebase temel ayarlarımız
     protected Firebase.Auth.FirebaseAuth auth;
-    private Firebase.Auth.FirebaseAuth digerauth;
     protected Dictionary<string, Firebase.Auth.FirebaseUser> userByauth = new Dictionary<string, FirebaseUser>();
-    private Firebase.AppOptions digerAuthOption;
     Firebase.DependencyStatus DepStatus = Firebase.DependencyStatus.UnavailableOther;
     private bool fetchingToken = false;
     private string userID;
 
-    void Start() { FireBaseStart(); /*UpdateUserData("gold", "550");*/ }
+
+
+    // Database References
+    DatabaseReference userReference;
+    DatabaseReference roomReference;
+
+    // Script References
+    UIManager uiManager;
+
+    void Start() 
+    {
+        FireBaseStart();
+        uiManager = FindObjectOfType<UIManager>();
+        /*UpdateUserData("gold", "550");*/
+    }
 
 
     public void FireBaseStart()
@@ -46,13 +58,12 @@ public class FBManager : Singleton<FBManager>
         }
         else { InitalizeFirebase(); }
 
-        /*if (auth.CurrentUser == null)
+       /* if (auth.CurrentUser != null)
         {
             Debug.Log("User Yok!");
-          //StartCoroutine(SignUpAnonym());  //kullanıcı ilk defa giriş yaptı, user kaydedilsin
-            return; //İlk girişse burdan aşağısı çalışmasın
-        }
-        */
+            uiManager.show
+        }*/
+
         Debug.Log("Bağlantı Sağlandı");
         // StartCoroutine(SignInAgain());
     }
@@ -60,13 +71,25 @@ public class FBManager : Singleton<FBManager>
 
     void InitalizeFirebase()
     {
+        //Firebase kullanıcı oturum açma isteği
+        auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
+        //userID = auth.CurrentUser.UserId; 
+
         FirebaseApp app = Firebase.FirebaseApp.DefaultInstance;
+
+        // Database References Declare
+        userReference = FirebaseDatabase.DefaultInstance.GetReference($"Users/UserID/{auth.CurrentUser.UserId}");
+        roomReference = FirebaseDatabase.DefaultInstance.GetReference($"Rooms/RoomID");
+
+
+
         app.SetEditorDatabaseUrl("https://hot-cold-guess-game.firebaseio.com/");
         if (app.Options.DatabaseUrl != null) app.SetEditorDatabaseUrl(app.Options.DatabaseUrl);
 
-        //Firebase kullanıcı oturum açma isteği
-        auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
+        
 
+
+        CreateRoom("Nanda Korrraaaa", "4523666", 3);
         //userID = auth.CurrentUser.UserId;  bunu unutma lazım
         // auth.StateChanged += AuthStateChanged;
         // auth.IdTokenChanged += IdTokenChanged;
@@ -75,6 +98,7 @@ public class FBManager : Singleton<FBManager>
         //  AuthStateChanged(this, null);
 
     }
+
     #region Authentication
     /* void AuthStateChanged(object sender, System.EventArgs eventArgs)
      {
@@ -178,14 +202,16 @@ public class FBManager : Singleton<FBManager>
 
         });
     }
-    #endregion
+	#endregion
 
-    public void CreateUser(string userId, string username)
+	#region User
+
+	public void CreateUser(string userId,string username)
     {
-        Debug.Log(username);
         Debug.Log("Kullanıcı bilgileri kaydedildi");
         //FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://hot-cold-guess-game.firebaseio.com/");
-        DatabaseReference reference = FirebaseDatabase.DefaultInstance.GetReference($"Users/UserID/{userId}");
+
+        userReference = FirebaseDatabase.DefaultInstance.GetReference($"Users/UserID/{userId}");
 
         UserGeneral userGenerals = new UserGeneral
             (
@@ -199,7 +225,7 @@ public class FBManager : Singleton<FBManager>
 
         string generalJson = JsonUtility.ToJson(userGenerals);
         Debug.Log(generalJson);
-        reference.Child("General").SetRawJsonValueAsync(generalJson);
+        userReference.Child("General").SetRawJsonValueAsync(generalJson);
 
         UserProgression userProgressions = new UserProgression
             (
@@ -208,14 +234,13 @@ public class FBManager : Singleton<FBManager>
        
         string progressionJson = JsonUtility.ToJson(userProgressions);
         Debug.Log(progressionJson);
-        reference.Child("Progression").SetRawJsonValueAsync(progressionJson);
+        userReference.Child("Progression").SetRawJsonValueAsync(progressionJson);
     }
 
     public void GetUsers()
     {
-        DatabaseReference reference = FirebaseDatabase.DefaultInstance.GetReference($"Users/UserID/{userID}");
         //Debug.Log(reference.Reference);
-        reference.GetValueAsync().ContinueWith(task =>
+        userReference.GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
             {
@@ -242,8 +267,8 @@ public class FBManager : Singleton<FBManager>
 
     public void GetUserData(string key, object value)
     {
-        DatabaseReference reference = FirebaseDatabase.DefaultInstance.GetReference($"Users/UserID/{userID}/{key}");
-        reference.GetValueAsync().ContinueWith(task =>
+        //userReference = FirebaseDatabase.DefaultInstance.GetReference($"Users/UserID/{userID}/{key}");
+        userReference.GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
             {
@@ -253,11 +278,10 @@ public class FBManager : Singleton<FBManager>
             {
                 DataSnapshot snapshot = task.Result;
 
-                object _value = snapshot.Value;
+                object _value = snapshot.Child(key).Value;
 
                 Debug.Log($"Key = {key}  Value = {_value}");
-                UpdateUserData(key, value);
-
+            //    UpdateUserData(key, value);
             }
         }
         );
@@ -266,10 +290,52 @@ public class FBManager : Singleton<FBManager>
     {
        // Debug.Log($"userId = {userID}  key = {key},value = {value} son hal");
 
-        DatabaseReference reference = FirebaseDatabase.DefaultInstance.GetReference($"Users/UserID/{userID}/{key}");
-        //reference.UpdateChildrenAsync(dictionary);
-        reference.SetValueAsync(value);
+        //userReference = FirebaseDatabase.DefaultInstance.GetReference($"Users/UserID/{userID}/{key}");
+        userReference.Child(key).SetValueAsync(value);
     }
 
+    #endregion
 
+    #region Room
+
+    public void CreateRoom(string roomName, string roomPassword, int scoreLimit)
+    {
+
+        /* Room room = new Room
+             (
+             ""
+             );*/
+
+        Debug.Log(userReference.Child("General").Child("username").Key);
+
+        string roomId = roomReference.Push().Key;
+
+        Dictionary<string, object> roomDictionary = new Dictionary<string, object>();
+        roomDictionary["RoomID"]= roomId;
+        roomDictionary["RoomName"]= roomName;
+        roomDictionary["RoomPassword"]= roomPassword;
+        roomDictionary["CreatorID"]= auth.CurrentUser.UserId;
+       // roomDictionary["CreatorName"]= userReference.Child("General").Child("username").GetValueAsync();
+        roomDictionary["ScoreLimit"]= scoreLimit;
+        roomDictionary["PlayerLimit"]= 0;
+        roomDictionary["Player1"]= "";
+        roomDictionary["Player2"]= "";
+        roomDictionary["SecretNumber"]= 0;
+        roomDictionary["SecretNumberMaksValue"]= 0;
+        roomDictionary["LastGuest"]= 0;
+
+        roomReference.Child(roomId).UpdateChildrenAsync(roomDictionary);
+    }                           
+
+	#endregion
+
+	#region Game
+
+	public void SetNumber(int currentNumber) 
+    {
+       // DatabaseReference reference = FirebaseDatabase.DefaultInstance.GetReference($"Rooms/RoomID/{roomId}/{key}");
+        //reference.SetValueAsync(currentNumber);
+    }
+
+	#endregion
 }

@@ -3,36 +3,37 @@
 public class UserGeneral
 {
     // String variables
-    public string username;
-    public string signUpDate;
-    public string lastSignInDate;
-    public string country;
-    public string language;
+    public string Username;
+    public string SignUpDate;
+    public string LastSignInDate;
+    public string Country;
+    public string Language;
 
     // Bool variables
-    public bool signInStatus;
+    public bool SignInStatus;
 
     public UserGeneral
         (
          // String
-         string username = "",
-         string signUpDate = "",
-         string lastSignInDate = "",
-         string country = "",
-         string language = "",
+         string _username,
+         string _signUpDate,
+         string _lastSignInDate,
+         string _country,
+         string _language,
 
-         bool signInStatus = false
+         // Bool
+         bool _signInStatus
         )
     {
         // String
-        this.username = username;
-        this.signUpDate = signUpDate;
-        this.lastSignInDate = lastSignInDate;
-        this.country = country;
-        this.language = language;
+        Username = _username;
+        SignUpDate = _signUpDate;
+        LastSignInDate = _lastSignInDate;
+        Country = _country;
+        Language = _language;
 
         // Bool
-        this.signInStatus = signInStatus;
+        SignInStatus = _signInStatus;
     }
 }
 
@@ -43,56 +44,56 @@ public class UserGeneral
 public class UserProgression
 {
     // Int variables
-    public int level;
-    public int cup;
-    public int highScore;
-    public int signInCount;
-    public int totalPlayTime;
-    public int totalMatchCount;
-    public int completedGameCount;
-    public int abandonedGameCount;
-    public int winCount;
-    public int loseCount;
-    public int energy;
-    public int gold;
-    public int diamond;
-    public int joker;
+    public int Level;
+    public int Cup;
+    public int HighScore;
+    public int SignInCount;
+    public int TotalPlayTime;
+    public int TotalMatchCount;
+    public int CompletedGameCount;
+    public int AbandonedGameCount;
+    public int WinCount;
+    public int LoseCount;
+    public int Energy;
+    public int Gold;
+    public int Diamond;
+    public int Joker;
 
-    
+
     public UserProgression
         (
         // Int
-        int level = 0,
-        int cup = 0,
-        int highScore = 0,
-        int signInCount = 0,
-        int totalPlayTime = 0,
-        int totalMatchCount = 0,
-        int completedGameCount = 0,
-        int abandonedGameCount = 0,
-        int winCount = 0,
-        int loseCount = 0,
-        int energy = 0,
-        int gold = 0,
-        int diamond = 0,
-        int joker = 0
+        int _level,
+        int _cup,
+        int _highScore,
+        int _signInCount,
+        int _totalPlayTime,
+        int _totalMatchCount,
+        int _completedGameCount,
+        int _abandonedGameCount,
+        int _winCount,
+        int _loseCount,
+        int _energy,
+        int _gold,
+        int _diamond,
+        int _joker
         )
     {
         // Int
-        this.level = level;
-        this.cup = cup;
-        this.highScore = highScore;
-        this.signInCount = signInCount;
-        this.totalPlayTime = totalPlayTime;
-        this.totalMatchCount = totalMatchCount;
-        this.completedGameCount = completedGameCount;
-        this.abandonedGameCount = abandonedGameCount;
-        this.winCount = winCount;
-        this.loseCount = loseCount;
-        this.energy = energy;
-        this.gold = gold;
-        this.diamond = diamond;
-        this.joker = joker;
+        Level = _level;
+        Cup = _cup;
+        HighScore = _highScore;
+        SignInCount = _signInCount;
+        TotalPlayTime = _totalPlayTime;
+        TotalMatchCount = _totalMatchCount;
+        CompletedGameCount = _completedGameCount;
+        AbandonedGameCount = _abandonedGameCount;
+        WinCount = _winCount;
+        LoseCount = _loseCount;
+        Energy = _energy;
+        Gold = _gold;
+        Diamond = _diamond;
+        Joker = _joker;
     }
 }
 
