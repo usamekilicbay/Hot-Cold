@@ -83,13 +83,18 @@ public class FBManager : Singleton<FBManager>
 
 
 
+
         app.SetEditorDatabaseUrl("https://hot-cold-guess-game.firebaseio.com/");
         if (app.Options.DatabaseUrl != null) app.SetEditorDatabaseUrl(app.Options.DatabaseUrl);
 
+
+
+        SetSecretNumber(4562, "-LxZlLsFAZ4iQlVecCgr");
+
+        // CreateRoom("Second Wind", "annen", 3);
+        //GetRoomList();
         
-
-
-        CreateRoom("Nanda Korrraaaa", "4523666", 3);
+        
         //userID = auth.CurrentUser.UserId;  bunu unutma lazım
         // auth.StateChanged += AuthStateChanged;
         // auth.IdTokenChanged += IdTokenChanged;
@@ -322,19 +327,72 @@ public class FBManager : Singleton<FBManager>
         roomDictionary["Player2"]= "";
         roomDictionary["SecretNumber"]= 0;
         roomDictionary["SecretNumberMaksValue"]= 0;
-        roomDictionary["LastGuest"]= 0;
+        roomDictionary["LastEstimation"]= 0;
 
         roomReference.Child(roomId).UpdateChildrenAsync(roomDictionary);
-    }                           
+    }
+
+    public void GetRoomList(TMPro.TMP_Dropdown dropdown) 
+    {
+        roomReference.GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsCanceled)
+            {
+                return;
+            }
+            else if (task.IsFaulted)
+            {
+                return;
+            }
+
+            DataSnapshot snapshot = task.Result;
+
+            List<string> roomList = new List<string>();
+
+            foreach (DataSnapshot r in snapshot.Children)
+            {
+                string roomId = r.Key;
+                string roomName = snapshot.Child(roomId).Child("RoomName").Value.ToString();
+                string roomOwner = snapshot.Child(roomId).Child("CreatorID").Value.ToString();
+
+                roomList.Add(roomName);
+                Debug.Log($"Room ID = {roomId}  Room Creator = {roomOwner}");
+            }
+
+            dropdown.AddOptions(roomList);
+            
+        });
+
+    }
 
 	#endregion
 
 	#region Game
 
-	public void SetNumber(int currentNumber) 
+	public void SetSecretNumber(int currentNumber,string roomId) 
     {
-       // DatabaseReference reference = FirebaseDatabase.DefaultInstance.GetReference($"Rooms/RoomID/{roomId}/{key}");
-        //reference.SetValueAsync(currentNumber);
+        //roomReference.Child(roomId).Child("SecretNumber").SetValueAsync(currentNumber);
+
+        roomReference.Child(roomId).ValueChanged += RoomListener;
+    }
+
+    public void RoomListener(object sender, ValueChangedEventArgs args) 
+    {
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError(args.DatabaseError.Message);
+            return;
+        }
+
+        Debug.Log("Değişiklik algılandı");
+
+        DataSnapshot snapshot = args.Snapshot;
+
+        if (snapshot.HasChild("SecretNumber"))
+        {
+            Debug.Log(snapshot.Child("SecretNumber").Value);
+        }
+
     }
 
 	#endregion

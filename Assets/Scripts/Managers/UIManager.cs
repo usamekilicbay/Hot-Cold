@@ -196,8 +196,8 @@ public class UIManager : Singleton<UIManager>
    // private void SendPassword() { authManager.ResetPassword(txt_SignIn_Email.text); }
 
     // Before Game Begin
-    private void LoadRoomList() { }
-    private void RefreshRoomList() { }
+    private void LoadRoomList() {  }
+    private void RefreshRoomList() { fBManager.GetRoomList(drpdwn_Lobby_RoomList); }
     private void EnterRoom() { }
     private void CreateRoom() { }
 
