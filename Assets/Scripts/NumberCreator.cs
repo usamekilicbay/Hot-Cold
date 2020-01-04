@@ -6,16 +6,22 @@ public class NumberCreator : MonoBehaviour
 {
     [Range(0,10000)]
     public int numberRange;
-    public static int trueNumber;
+    public static int secretNumber;
+
+    // Script References
+    FBManager fBManager;
+
 
     void Start()
     {
+        fBManager = FBManager.Instance;
+
         CreateNumber();
     }
 
     void CreateNumber()
     {
-        trueNumber = Random.Range(0, numberRange);
-        Debug.Log(trueNumber);
+        secretNumber = Random.Range(0, numberRange);
+        fBManager.SetSecretNumber(secretNumber);
     }
 }

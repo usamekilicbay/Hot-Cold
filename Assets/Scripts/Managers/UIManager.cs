@@ -134,7 +134,6 @@ public class UIManager : Singleton<UIManager>
 
 
         // Lobby Panel Add Click Listener
-        //drpdwn_Lobby_RoomList.onValueChanged.AddListener(LoadRoomList);
         btn_Lobby_Home.onClick.AddListener(ShowMenuPanel);
         btn_Lobby_Refresh.onClick.AddListener(RefreshRoomList);
         btn_Lobby_Enter.onClick.AddListener(EnterRoom);
@@ -196,12 +195,15 @@ public class UIManager : Singleton<UIManager>
    // private void SendPassword() { authManager.ResetPassword(txt_SignIn_Email.text); }
 
     // Before Game Begin
-    private void LoadRoomList() {  }
-    private void RefreshRoomList() { fBManager.GetRoomList(drpdwn_Lobby_RoomList); }
-    private void EnterRoom() { }
-    private void CreateRoom() { }
+    //private void CreateRoom() { fBManager.CreateRoom()}
+    private void LoadRoomList() { fBManager.GetRoomList(drpdwn_Lobby_RoomList); }
+    private void RefreshRoomList() { }
+    private void EnterRoom() { fBManager.EnterTheRoom(drpdwn_Lobby_RoomList.options[drpdwn_Lobby_RoomList.value].ToString()); }
 
     // While Game
+
+
+    private void StartTheMatch() { fBManager. }
     private void Answer() { }
 
     #endregion

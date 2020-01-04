@@ -20,9 +20,12 @@ public class FBManager : Singleton<FBManager>
     protected Dictionary<string, Firebase.Auth.FirebaseUser> userByauth = new Dictionary<string, FirebaseUser>();
     Firebase.DependencyStatus DepStatus = Firebase.DependencyStatus.UnavailableOther;
     private bool fetchingToken = false;
+
+
+
+    // Private Variables
+    private string roomID;
     private string userID;
-
-
 
     // Database References
     DatabaseReference userReference;
@@ -31,7 +34,7 @@ public class FBManager : Singleton<FBManager>
     // Script References
     UIManager uiManager;
 
-    void Start() 
+    void Start()
     {
         FireBaseStart();
         uiManager = FindObjectOfType<UIManager>();
@@ -58,11 +61,11 @@ public class FBManager : Singleton<FBManager>
         }
         else { InitalizeFirebase(); }
 
-       /* if (auth.CurrentUser != null)
-        {
-            Debug.Log("User Yok!");
-            uiManager.show
-        }*/
+        /* if (auth.CurrentUser != null)
+         {
+             Debug.Log("User Yok!");
+             uiManager.show
+         }*/
 
         Debug.Log("Bağlantı Sağlandı");
         // StartCoroutine(SignInAgain());
@@ -89,12 +92,12 @@ public class FBManager : Singleton<FBManager>
 
 
 
-        SetSecretNumber(4562, "-LxZlLsFAZ4iQlVecCgr");
+        //SetSecretNumber(4562, "-LxZlLsFAZ4iQlVecCgr");
 
         // CreateRoom("Second Wind", "annen", 3);
         //GetRoomList();
-        
-        
+
+
         //userID = auth.CurrentUser.UserId;  bunu unutma lazım
         // auth.StateChanged += AuthStateChanged;
         // auth.IdTokenChanged += IdTokenChanged;
@@ -207,11 +210,11 @@ public class FBManager : Singleton<FBManager>
 
         });
     }
-	#endregion
+    #endregion
 
-	#region User
+    #region User
 
-	public void CreateUser(string userId,string username)
+    public void CreateUser(string userId, string username)
     {
         Debug.Log("Kullanıcı bilgileri kaydedildi");
         //FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://hot-cold-guess-game.firebaseio.com/");
@@ -234,9 +237,9 @@ public class FBManager : Singleton<FBManager>
 
         UserProgression userProgressions = new UserProgression
             (
-            0,0,0,1,0,0,0,0,0,0,10,100,10,5
+            0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 10, 100, 10, 5
             );
-       
+
         string progressionJson = JsonUtility.ToJson(userProgressions);
         Debug.Log(progressionJson);
         userReference.Child("Progression").SetRawJsonValueAsync(progressionJson);
@@ -286,14 +289,14 @@ public class FBManager : Singleton<FBManager>
                 object _value = snapshot.Child(key).Value;
 
                 Debug.Log($"Key = {key}  Value = {_value}");
-            //    UpdateUserData(key, value);
+                //    UpdateUserData(key, value);
             }
         }
         );
     }
     public void UpdateUserData(string key, object value)
     {
-       // Debug.Log($"userId = {userID}  key = {key},value = {value} son hal");
+        // Debug.Log($"userId = {userID}  key = {key},value = {value} son hal");
 
         //userReference = FirebaseDatabase.DefaultInstance.GetReference($"Users/UserID/{userID}/{key}");
         userReference.Child(key).SetValueAsync(value);
@@ -305,31 +308,41 @@ public class FBManager : Singleton<FBManager>
 
     public void CreateRoom(string roomName, string roomPassword, int scoreLimit)
     {
-
-        /* Room room = new Room
-             (
-             ""
-             );*/
-
         Debug.Log(userReference.Child("General").Child("username").Key);
 
-        string roomId = roomReference.Push().Key;
+        userID = auth.CurrentUser.UserId;
+        string username = userReference.Child(userID).Child("Username").GetValueAsync().ToString();
 
-        Dictionary<string, object> roomDictionary = new Dictionary<string, object>();
-        roomDictionary["RoomID"]= roomId;
-        roomDictionary["RoomName"]= roomName;
-        roomDictionary["RoomPassword"]= roomPassword;
-        roomDictionary["CreatorID"]= auth.CurrentUser.UserId;
-       // roomDictionary["CreatorName"]= userReference.Child("General").Child("username").GetValueAsync();
-        roomDictionary["ScoreLimit"]= scoreLimit;
-        roomDictionary["PlayerLimit"]= 0;
-        roomDictionary["Player1"]= "";
-        roomDictionary["Player2"]= "";
-        roomDictionary["SecretNumber"]= 0;
-        roomDictionary["SecretNumberMaksValue"]= 0;
-        roomDictionary["LastEstimation"]= 0;
+        roomID = roomReference.Push().Key;
 
-        roomReference.Child(roomId).UpdateChildrenAsync(roomDictionary);
+        Dictionary<string, object> roomDictionary = new Dictionary<string, object>
+        {
+            ["RoomID"] = roomID,
+            ["RoomName"] = roomName,
+            ["RoomPassword"] = roomPassword,
+            ["Player1-ID"] = userID,
+            ["Player2-ID"] = "",
+            ["ScoreLimit"] = scoreLimit,
+            ["PlayerLimit"] = 0,
+            ["Player1-Username"] = username,
+            ["Player2-Username"] = "",
+            ["SecretNumber"] = 0,
+            ["SecretNumberMaxValue"] = 0,
+            ["LastEstimation"] = 0,
+            ["WhoseTurn"] = ""
+        };
+        
+        roomReference.Child(roomID).UpdateChildrenAsync(roomDictionary);
+    }
+
+    public void EnterTheRoom(string roomId)
+    {
+        userID = auth.CurrentUser.UserId;
+        roomID = roomId;
+        string username = userReference.Child(userID).Child("Username").GetValueAsync().ToString();
+
+        roomReference.Child(roomId).Child("Player2-ID").SetValueAsync(userID);
+        roomReference.Child(roomId).Child("Player2-UserName").SetValueAsync(username);
     }
 
     public void GetRoomList(TMPro.TMP_Dropdown dropdown) 
@@ -353,7 +366,7 @@ public class FBManager : Singleton<FBManager>
             {
                 string roomId = r.Key;
                 string roomName = snapshot.Child(roomId).Child("RoomName").Value.ToString();
-                string roomOwner = snapshot.Child(roomId).Child("CreatorID").Value.ToString();
+                string roomOwner = snapshot.Child(roomId).Child("Player1-ID").Value.ToString();
 
                 roomList.Add(roomName);
                 Debug.Log($"Room ID = {roomId}  Room Creator = {roomOwner}");
@@ -362,20 +375,36 @@ public class FBManager : Singleton<FBManager>
             dropdown.AddOptions(roomList);
             
         });
-
     }
 
-	#endregion
+    #endregion
 
-	#region Game
+    #region Game
 
-	public void SetSecretNumber(int currentNumber,string roomId) 
+	public void SetSecretNumber(int currentNumber) 
     {
-        //roomReference.Child(roomId).Child("SecretNumber").SetValueAsync(currentNumber);
-
-        roomReference.Child(roomId).ValueChanged += RoomListener;
+        roomReference.Child(roomID).Child("SecretNumber").SetValueAsync(currentNumber);
     }
 
+    public int GetSecretNumber() 
+    {
+        return int.Parse(roomReference.Child(roomID).Child("SecretNumber").GetValueAsync().ToString());
+    }
+
+    public void Estimate(int estimation) 
+    {
+        int secretNumber = GetSecretNumber();
+
+        if (estimation == secretNumber)
+        {
+            Debug.Log("Kazandın!");
+        }
+        else
+        {
+
+        }
+    }
+ 
     public void RoomListener(object sender, ValueChangedEventArgs args) 
     {
         if (args.DatabaseError != null)
@@ -388,9 +417,9 @@ public class FBManager : Singleton<FBManager>
 
         DataSnapshot snapshot = args.Snapshot;
 
-        if (snapshot.HasChild("SecretNumber"))
+        if (snapshot.HasChild("LastEstimation"))
         {
-            Debug.Log(snapshot.Child("SecretNumber").Value);
+            Debug.Log(snapshot.Child("LastEstimation").Value);
         }
 
     }

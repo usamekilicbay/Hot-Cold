@@ -4,26 +4,35 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static void ControlAnswer(int guessedNumber)
+
+    FBManager fBManager;
+
+    private void Start()
     {
-        int trueNumber = NumberCreator.trueNumber;
-        if (guessedNumber == trueNumber)
+        fBManager = FBManager.Instance;    
+    }
+
+    public  void ControlAnswer(int guessedNumber)
+    {
+        int secretNumber = fBManager.GetSecretNumber();
+
+        if (guessedNumber == secretNumber)
         {
             Debug.Log("Bildin!");
         }
-        else if (guessedNumber != trueNumber)
+        else if (guessedNumber != secretNumber)
         {           
-            int majority = Mathf.Abs(guessedNumber - trueNumber);
+            int majority = Mathf.Abs(guessedNumber - secretNumber);
 
             string assistance;
             string nearlyAssistance;
             Debug.Log(majority);
 
-            if (guessedNumber < trueNumber)
+            if (guessedNumber < secretNumber)
             {
                 assistance = "Büyük";                
             }
-            else if (guessedNumber > trueNumber)
+            else if (guessedNumber > secretNumber)
             {
                 assistance = "Küçük";
             }
