@@ -16,7 +16,7 @@ public class NumberCreator : MonoBehaviour
     {
         fBManager = FBManager.Instance;
 
-        CreateNumber();
+    //    CreateNumber();
     }
 
     void CreateNumber()

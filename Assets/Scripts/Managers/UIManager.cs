@@ -9,6 +9,7 @@ public class UIManager : Singleton<UIManager>
     [Header("<PANELS>")]
     public GameObject pnl_Menu;
     public GameObject pnl_Lobby;
+    public GameObject pnl_CreateRoom;
     public GameObject pnl_Game;
     public GameObject pnl_Settings;
     public GameObject pnl_Store;
@@ -38,6 +39,21 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] Button btn_Lobby_Refresh;
     [SerializeField] Button btn_Lobby_Enter;
     [SerializeField] Button btn_Lobby_Create;
+    //[SerializeField] Button btn_Lobby_Search_Game;
+
+
+    [Space(5)]
+
+    [Header("Panel / Create Room")]
+    [SerializeField] TextMeshProUGUI txt_CreateRoom_Header;
+    //[SerializeField] TMP_Dropdown drpdwn_Lobby_RoomList;
+    [SerializeField] TextMeshProUGUI txt_CreateRoom_RoomName;
+    [SerializeField] TextMeshProUGUI txt_CreateRoom_RoomPassword;
+    [SerializeField] Button btn_CreateRoom_Home;
+    [SerializeField] Button btn_CreateRoom_Create;
+    //[SerializeField] Button btn_Lobby_Settings;
+    //[SerializeField] Button btn_Lobby_Refresh;
+    //[SerializeField] Button btn_CreateRoom_Enter;
     //[SerializeField] Button btn_Lobby_Search_Game;
 
     [Space(5)]
@@ -136,10 +152,13 @@ public class UIManager : Singleton<UIManager>
         // Lobby Panel Add Click Listener
         btn_Lobby_Home.onClick.AddListener(ShowMenuPanel);
         btn_Lobby_Refresh.onClick.AddListener(RefreshRoomList);
-        btn_Lobby_Enter.onClick.AddListener(EnterRoom);
-        btn_Lobby_Create.onClick.AddListener(CreateRoom);
+       // btn_Lobby_Enter.onClick.AddListener(EnterRoom);
+        btn_Lobby_Create.onClick.AddListener(ShowCreateRoomPanel);
+       
 
-
+        // Create Room Panel Add Click Listener
+        btn_CreateRoom_Home.onClick.AddListener(ShowMenuPanel);
+        btn_CreateRoom_Create.onClick.AddListener(CreateRoom);
 
         /*
         // Game Panel Add Click Listener
@@ -195,15 +214,15 @@ public class UIManager : Singleton<UIManager>
    // private void SendPassword() { authManager.ResetPassword(txt_SignIn_Email.text); }
 
     // Before Game Begin
-    //private void CreateRoom() { fBManager.CreateRoom()}
-    private void LoadRoomList() { fBManager.GetRoomList(drpdwn_Lobby_RoomList); }
+    private void CreateRoom() { fBManager.CreateRoom(txt_CreateRoom_RoomName.text, txt_CreateRoom_RoomPassword.text); }
+    private void LoadRoomList() { fBManager.AddRoomListToDropdown(drpdwn_Lobby_RoomList); }
     private void RefreshRoomList() { }
-    private void EnterRoom() { fBManager.EnterTheRoom(drpdwn_Lobby_RoomList.options[drpdwn_Lobby_RoomList.value].ToString()); }
+    //private void EnterRoom() { fBManager.EnterTheRoom(drpdwn_Lobby_RoomList.options[drpdwn_Lobby_RoomList.value].ToString()); }
 
     // While Game
 
 
-    private void StartTheMatch() { fBManager. }
+  //  private void StartTheMatch() { fBManager. }
     private void Answer() { }
 
     #endregion
@@ -231,6 +250,7 @@ public class UIManager : Singleton<UIManager>
     {
         Menu,
         Lobby,
+        CreateRoom,
         Game,
         Settings,
         Store,
@@ -243,6 +263,7 @@ public class UIManager : Singleton<UIManager>
 
     private void ShowMenuPanel() { PanelChanger(Panels.Menu); }
     private void ShowLobbyPanel() { PanelChanger(Panels.Lobby); }
+    private void ShowCreateRoomPanel() { PanelChanger(Panels.CreateRoom); }
     private void ShowGamePanel() { PanelChanger(Panels.Game); }
     private void ShowSettingsPanel() { PanelChanger(Panels.Settings); }
     private void ShowStorePanel() { PanelChanger(Panels.Store); }

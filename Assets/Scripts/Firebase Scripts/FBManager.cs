@@ -26,6 +26,7 @@ public class FBManager : Singleton<FBManager>
     // Private Variables
     private string roomID;
     private string userID;
+    private string username;
 
     // Database References
     DatabaseReference userReference;
@@ -76,7 +77,7 @@ public class FBManager : Singleton<FBManager>
     {
         //Firebase kullanıcı oturum açma isteği
         auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-        //userID = auth.CurrentUser.UserId; 
+        userID = auth.CurrentUser.UserId; 
 
         FirebaseApp app = Firebase.FirebaseApp.DefaultInstance;
 
@@ -90,7 +91,7 @@ public class FBManager : Singleton<FBManager>
         app.SetEditorDatabaseUrl("https://hot-cold-guess-game.firebaseio.com/");
         if (app.Options.DatabaseUrl != null) app.SetEditorDatabaseUrl(app.Options.DatabaseUrl);
 
-
+        GetUserData();
 
         //SetSecretNumber(4562, "-LxZlLsFAZ4iQlVecCgr");
 
@@ -107,7 +108,8 @@ public class FBManager : Singleton<FBManager>
 
     }
 
-    #region Authentication
+
+    #region --------------------------------------------AUTHENTICATION--------------------------------------------------------------
     /* void AuthStateChanged(object sender, System.EventArgs eventArgs)
      {
          Firebase.Auth.FirebaseAuth senderAuth = sender as Firebase.Auth.FirebaseAuth;
@@ -212,7 +214,8 @@ public class FBManager : Singleton<FBManager>
     }
     #endregion
 
-    #region User
+
+    #region --------------------------------------------USER--------------------------------------------------------------
 
     public void CreateUser(string userId, string username)
     {
@@ -273,23 +276,23 @@ public class FBManager : Singleton<FBManager>
         );
     }
 
-    public void GetUserData(string key, object value)
+    public void GetUserData()
     {
-        //userReference = FirebaseDatabase.DefaultInstance.GetReference($"Users/UserID/{userID}/{key}");
-        userReference.GetValueAsync().ContinueWith(task =>
+
+        Debug.Log("anana hüküm vereyim");
+        userReference.Child("General").Child("Username").GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
             {
-                LogTaskCompletion(task, "Kullanıcı verileri çekme işlemi");
+                //LogTaskCompletion(task, "Kullanıcı verileri çekme işlemi");
+                Debug.Log("başarısız oldun kel");
             }
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
 
-                object _value = snapshot.Child(key).Value;
-
-                Debug.Log($"Key = {key}  Value = {_value}");
-                //    UpdateUserData(key, value);
+                username = snapshot.Value.ToString();
+                Debug.Log(username);
             }
         }
         );
@@ -304,48 +307,120 @@ public class FBManager : Singleton<FBManager>
 
     #endregion
 
-    #region Room
+    #region --------------------------------------------ROOM--------------------------------------------------------------
 
-    public void CreateRoom(string roomName, string roomPassword, int scoreLimit)
+    public void CreateRoom(string roomName, string roomPassword = "")
     {
-        Debug.Log(userReference.Child("General").Child("username").Key);
 
-        userID = auth.CurrentUser.UserId;
-        string username = userReference.Child(userID).Child("Username").GetValueAsync().ToString();
+        //userID = auth.CurrentUser.UserId;
+
+        /*string usernae = "";
+
+        userReference.Child(userID).Child("General").Child("Username").GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsFaulted)
+            {
+                Debug.Log("strange");
+                return;
+            }
+
+            Debug.Log("doctrin");
+            DataSnapshot snapshot = task.Result;
+
+            usernae = snapshot.Value.ToString();
+        });*/
+       
 
         roomID = roomReference.Push().Key;
 
-        Dictionary<string, object> roomDictionary = new Dictionary<string, object>
+        // Generals
+        Dictionary<string, object> roomGeneralDictionary = new Dictionary<string, object>
         {
             ["RoomID"] = roomID,
             ["RoomName"] = roomName,
             ["RoomPassword"] = roomPassword,
             ["Player1-ID"] = userID,
-            ["Player2-ID"] = "",
-            ["ScoreLimit"] = scoreLimit,
-            ["PlayerLimit"] = 0,
             ["Player1-Username"] = username,
+            ["Player2-ID"] = "",
             ["Player2-Username"] = "",
+            ["ScoreLimit"] = 1,
+            ["PlayerLimit"] = 0
+        };
+        
+        roomReference.Child(roomID).Child("General").UpdateChildrenAsync(roomGeneralDictionary);
+
+
+        // Progressions
+        Dictionary<string, object> roomProgressionDictionary = new Dictionary<string, object>
+        {            
             ["SecretNumber"] = 0,
             ["SecretNumberMaxValue"] = 0,
             ["LastEstimation"] = 0,
             ["WhoseTurn"] = ""
         };
-        
-        roomReference.Child(roomID).UpdateChildrenAsync(roomDictionary);
+
+        roomReference.Child(roomID).Child("Progression").UpdateChildrenAsync(roomProgressionDictionary);
     }
 
-    public void EnterTheRoom(string roomId)
+    public void GetRoomIDAndPassword(string roomName) 
     {
-        userID = auth.CurrentUser.UserId;
-        roomID = roomId;
-        string username = userReference.Child(userID).Child("Username").GetValueAsync().ToString();
+        roomReference.GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsCanceled)
+            {
+                return;
+            }
+            else if (task.IsFaulted)
+            {
+                return;
+            }
 
-        roomReference.Child(roomId).Child("Player2-ID").SetValueAsync(userID);
-        roomReference.Child(roomId).Child("Player2-UserName").SetValueAsync(username);
+            DataSnapshot snapshot = task.Result;
+
+            foreach (DataSnapshot roomId in snapshot.Children)
+            {
+                if (roomId.Child("General").Child("RoomName").Value.ToString() == roomName)
+                {
+                    roomID = roomId.Key.ToString();
+                }
+            }
+
+        });
     }
 
-    public void GetRoomList(TMPro.TMP_Dropdown dropdown) 
+    public void EnterTheRoom(string roomName, string roomPassword)
+    {
+        GetRoomIDAndPassword(roomName);
+
+        string correctRoomPassword = "";
+
+        roomReference.Child(roomID).Child("General").Child("RoomPassword").GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsFaulted)
+            {
+                return;
+            }
+
+            DataSnapshot snapshot = task.Result;
+
+            correctRoomPassword = snapshot.Value.ToString();
+        });
+
+        if (roomPassword == correctRoomPassword)
+        {
+            Debug.Log("bacı katili");
+
+            roomReference.Child(roomID).Child("General").Child("Player2-ID").SetValueAsync(userID);
+            roomReference.Child(roomID).Child("General").Child("Player2-UserName").SetValueAsync(username);
+        }
+
+        else
+        {
+            Debug.Log("Oda ismi ile şifre uyuşmuyor, tekrar deneyin...");
+        }
+    }
+
+    public void AddRoomListToDropdown(TMPro.TMP_Dropdown dropdown) 
     {
         roomReference.GetValueAsync().ContinueWith(task =>
         {
@@ -379,11 +454,11 @@ public class FBManager : Singleton<FBManager>
 
     #endregion
 
-    #region Game
+    #region --------------------------------------------GAME--------------------------------------------------------------
 
 	public void SetSecretNumber(int currentNumber) 
     {
-        roomReference.Child(roomID).Child("SecretNumber").SetValueAsync(currentNumber);
+        roomReference.Child(roomID).Child("Progression").Child("SecretNumber").SetValueAsync(currentNumber);
     }
 
     public int GetSecretNumber() 

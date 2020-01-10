@@ -13,6 +13,6 @@ public class PlayerGuessManager : MonoBehaviour
     }
     public void GetGuess(string getNumber)
     {
-        GameManager.ControlAnswer(int.Parse(getNumber));
+      //  GameManager.ControlAnswer(int.Parse(getNumber));
     }   
 }
