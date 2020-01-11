@@ -142,7 +142,7 @@ public class UIManager : Singleton<UIManager>
     private void Start()
     {
         // Menu Panel Add Click Listener
-        btn_Menu_Play.onClick.AddListener(ShowLobbyPanel);
+        btn_Menu_Play.onClick.AddListener(QuickGame);
         btn_Menu_Settings.onClick.AddListener(ShowSettingsPanel);
         btn_Menu_Store.onClick.AddListener(ShowStorePanel);
         btn_Menu_RateUs.onClick.AddListener(RateUs);
@@ -215,6 +215,7 @@ public class UIManager : Singleton<UIManager>
 
     // Before Game Begin
     private void CreateRoom() { fBManager.CreateRoom(txt_CreateRoom_RoomName.text, txt_CreateRoom_RoomPassword.text); }
+    private void QuickGame() { fBManager.QuickGame(); }
     private void LoadRoomList() { fBManager.AddRoomListToDropdown(drpdwn_Lobby_RoomList); }
     private void RefreshRoomList() { }
     //private void EnterRoom() { fBManager.EnterTheRoom(drpdwn_Lobby_RoomList.options[drpdwn_Lobby_RoomList.value].ToString()); }
@@ -251,6 +252,7 @@ public class UIManager : Singleton<UIManager>
         Menu,
         Lobby,
         CreateRoom,
+        EnterRoom,
         Game,
         Settings,
         Store,

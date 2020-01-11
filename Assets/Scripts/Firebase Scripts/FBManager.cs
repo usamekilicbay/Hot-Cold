@@ -82,7 +82,7 @@ public class FBManager : Singleton<FBManager>
         FirebaseApp app = Firebase.FirebaseApp.DefaultInstance;
 
         // Database References Declare
-        userReference = FirebaseDatabase.DefaultInstance.GetReference($"Users/UserID/{auth.CurrentUser.UserId}");
+        userReference = FirebaseDatabase.DefaultInstance.GetReference($"Users/UserID/{userID}");
         roomReference = FirebaseDatabase.DefaultInstance.GetReference($"Rooms/RoomID");
 
 
@@ -278,8 +278,6 @@ public class FBManager : Singleton<FBManager>
 
     public void GetUserData()
     {
-
-        Debug.Log("anana hüküm vereyim");
         userReference.Child("General").Child("Username").GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
@@ -297,72 +295,110 @@ public class FBManager : Singleton<FBManager>
         }
         );
     }
-    public void UpdateUserData(string key, object value)
+    public void UpdateUserData(string key, object value, string path)
     {
-        // Debug.Log($"userId = {userID}  key = {key},value = {value} son hal");
-
-        //userReference = FirebaseDatabase.DefaultInstance.GetReference($"Users/UserID/{userID}/{key}");
-        userReference.Child(key).SetValueAsync(value);
+        userReference.Child(path).Child(key).SetValueAsync(value);
     }
 
     #endregion
 
     #region --------------------------------------------ROOM--------------------------------------------------------------
 
-    public void CreateRoom(string roomName, string roomPassword = "")
+    bool canPlay = true;
+
+    public void QuickGame()
     {
-
-        //userID = auth.CurrentUser.UserId;
-
-        /*string usernae = "";
-
-        userReference.Child(userID).Child("General").Child("Username").GetValueAsync().ContinueWith(task =>
+        roomReference.GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
             {
-                Debug.Log("strange");
-                return;
+                Debug.Log("Oyun bulma işlemi hata verdi!");
             }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
 
-            Debug.Log("doctrin");
-            DataSnapshot snapshot = task.Result;
+                if (snapshot.HasChildren)
+                {
+                    if (canPlay)
+                    {
+                        foreach (DataSnapshot rooms in snapshot.Children)
+                        {
+                            bool penetrability = bool.Parse(rooms.Child("General").Child("Penetrability").Value.ToString());
 
-            usernae = snapshot.Value.ToString();
-        });*/
-       
-
-        roomID = roomReference.Push().Key;
-
-        // Generals
-        Dictionary<string, object> roomGeneralDictionary = new Dictionary<string, object>
-        {
-            ["RoomID"] = roomID,
-            ["RoomName"] = roomName,
-            ["RoomPassword"] = roomPassword,
-            ["Player1-ID"] = userID,
-            ["Player1-Username"] = username,
-            ["Player2-ID"] = "",
-            ["Player2-Username"] = "",
-            ["ScoreLimit"] = 1,
-            ["PlayerLimit"] = 0
-        };
-        
-        roomReference.Child(roomID).Child("General").UpdateChildrenAsync(roomGeneralDictionary);
-
-
-        // Progressions
-        Dictionary<string, object> roomProgressionDictionary = new Dictionary<string, object>
-        {            
-            ["SecretNumber"] = 0,
-            ["SecretNumberMaxValue"] = 0,
-            ["LastEstimation"] = 0,
-            ["WhoseTurn"] = ""
-        };
-
-        roomReference.Child(roomID).Child("Progression").UpdateChildrenAsync(roomProgressionDictionary);
+                            if (penetrability)
+                            {
+                                roomReference.Child(rooms.Key).Child("General").Child("Player2-ID").SetValueAsync(userID);
+                                roomReference.Child(rooms.Key).Child("General").Child("Player2-Username").SetValueAsync(username);
+                                canPlay = false;
+                                Debug.Log("Odaya giriş başarılı!");
+                            }
+                            else
+                            {
+                                CreateRoom();
+                                Debug.Log("Girilebilir bir oda bulunamadı, oda oluşturuluyor...");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("Zaten bir odaya dahilsiniz tekrar giriş yapamazsınız");
+                    }
+                }
+                else if (!snapshot.HasChildren)
+                {
+                    CreateRoom();
+                    Debug.Log("Yeni oda oluşturuldu, oyuncu bekleniyor");
+                }
+            }
+        });
     }
 
-    public void GetRoomIDAndPassword(string roomName) 
+    public void CreateRoom(string roomName = "", string roomPassword = "")
+    {
+        if (canPlay)
+        {
+            roomID = roomReference.Push().Key;
+
+            // General
+            Dictionary<string, object> roomGeneralDictionary = new Dictionary<string, object>
+            {
+              /*["RoomName"] = roomName,
+                ["RoomPassword"] = roomPassword,*/
+                ["RoomID"] = roomID,
+                ["Player1-ID"] = userID,
+                ["Player1-Username"] = username,
+                ["Player2-ID"] = "",
+                ["Player2-Username"] = "",
+                ["ScoreLimit"] = 1,
+                ["PlayerLimit"] = 2,
+                ["Penetrability"] = true
+            };
+
+            roomReference.Child(roomID).Child("General").UpdateChildrenAsync(roomGeneralDictionary);
+
+
+            // Progression
+            Dictionary<string, object> roomProgressionDictionary = new Dictionary<string, object>
+            {
+                ["SecretNumber"] = 0,
+                ["SecretNumberMaxValue"] = 0,
+                ["LastEstimation"] = 0,
+                ["WhoseTurn"] = ""
+            };
+
+            roomReference.Child(roomID).Child("Progression").UpdateChildrenAsync(roomProgressionDictionary);
+
+            canPlay = false;
+        }
+        else
+        {
+            Debug.Log("Zaten kurulmuş bir odanız var!");
+        }
+    }
+    
+
+    public void GetRoomID(string roomName) 
     {
         roomReference.GetValueAsync().ContinueWith(task =>
         {
@@ -388,9 +424,12 @@ public class FBManager : Singleton<FBManager>
         });
     }
 
+
+
+
     public void EnterTheRoom(string roomName, string roomPassword)
     {
-        GetRoomIDAndPassword(roomName);
+        GetRoomID(roomName);
 
         string correctRoomPassword = "";
 
@@ -406,17 +445,28 @@ public class FBManager : Singleton<FBManager>
             correctRoomPassword = snapshot.Value.ToString();
         });
 
-        if (roomPassword == correctRoomPassword)
+        if (correctRoomPassword != "")
         {
-            Debug.Log("bacı katili");
+            if (roomPassword == correctRoomPassword)
+            {
+                Debug.Log("bacı katili");
 
+                roomReference.Child(roomID).Child("General").Child("Player2-ID").SetValueAsync(userID);
+                roomReference.Child(roomID).Child("General").Child("Player2-UserName").SetValueAsync(username);
+                return;
+            }
+            else
+            {
+                Debug.Log("Oda ismi ile şifre uyuşmuyor, tekrar deneyin...");
+                return;
+            }
+        }
+        else if (correctRoomPassword == "")
+        {
+            Debug.Log("şifresiz giriş");
             roomReference.Child(roomID).Child("General").Child("Player2-ID").SetValueAsync(userID);
             roomReference.Child(roomID).Child("General").Child("Player2-UserName").SetValueAsync(username);
-        }
-
-        else
-        {
-            Debug.Log("Oda ismi ile şifre uyuşmuyor, tekrar deneyin...");
+            return;
         }
     }
 
