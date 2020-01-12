@@ -16,6 +16,7 @@ public class UIManager : Singleton<UIManager>
     public GameObject pnl_SignUp;
     public GameObject pnl_SignIn;
     public GameObject pnl_ResetPassword;
+    public GameObject pnl_User;
     public GameObject pnl_Lose;
     public GameObject pnl_Win;
 
@@ -27,7 +28,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] Button btn_Menu_Settings;
     [SerializeField] Button btn_Menu_Store;
     [SerializeField] Button btn_Menu_RateUs;
-    [SerializeField] Button btn_Menu_Rank;
+    [SerializeField] Button btn_Menu_User;
 
     [Space(5)]
 
@@ -60,6 +61,8 @@ public class UIManager : Singleton<UIManager>
 
     [Header("Panel / Game")]
     [SerializeField] TextMeshProUGUI txt_Game_Header;
+    [SerializeField] TextMeshProUGUI txt_Game_LastEstimation;
+    [SerializeField] TextMeshProUGUI txt_Game_MyEstimation;
     [SerializeField] Button btn_Game_Home;
     [SerializeField] Button btn_Game_Settings;
     [SerializeField] Button btn_Game_Answer;
@@ -70,6 +73,7 @@ public class UIManager : Singleton<UIManager>
     [Header("Panel / Settings")]
     [SerializeField] TextMeshProUGUI txt_Settings_Header;
     [SerializeField] Button btn_Settings_Home;
+    [SerializeField] Button btn_Settings_Login;
     [SerializeField] Button btn_Settings_Vibration_On;
     [SerializeField] Button btn_Settings_Vibration_Off;
     [SerializeField] Slider sld_Settings_Music_Volume;
@@ -114,6 +118,28 @@ public class UIManager : Singleton<UIManager>
 
     [Space(5)]
 
+    [Header("Panel / User")]
+    [SerializeField] TextMeshProUGUI txt_User_LastSignIn;
+    [SerializeField] TextMeshProUGUI txt_User_SignUpDate;
+    [SerializeField] TextMeshProUGUI txt_User_SignInStatus;
+    [SerializeField] TextMeshProUGUI txt_User_Username;
+    [SerializeField] TextMeshProUGUI txt_User_Level;
+    [SerializeField] TextMeshProUGUI txt_User_Rank;
+    [SerializeField] TextMeshProUGUI txt_User_Cup;
+    [SerializeField] TextMeshProUGUI txt_User_TotalPlayTime;
+    [SerializeField] TextMeshProUGUI txt_User_TotalMatchCount;
+    [SerializeField] TextMeshProUGUI txt_User_AbandonedGames;
+    [SerializeField] TextMeshProUGUI txt_User_CompletedGames;
+    [SerializeField] TextMeshProUGUI txt_User_Losses;
+    [SerializeField] TextMeshProUGUI txt_User_Wins;
+    [SerializeField] TextMeshProUGUI txt_User_WinningStreak;
+    [SerializeField] Button btn_User_Home;
+    [SerializeField] Button btn_User_SignOut;
+
+
+
+    [Space(5)]
+
     [Header("Panel / Lose")]
     [SerializeField] TextMeshProUGUI txt_Lose_Header;
     [SerializeField] TextMeshProUGUI txt_Lose_Outcome;
@@ -146,7 +172,7 @@ public class UIManager : Singleton<UIManager>
         btn_Menu_Settings.onClick.AddListener(ShowSettingsPanel);
         btn_Menu_Store.onClick.AddListener(ShowStorePanel);
         btn_Menu_RateUs.onClick.AddListener(RateUs);
-        btn_Menu_Rank.onClick.AddListener(GetRank);
+        btn_Menu_User.onClick.AddListener(ShowUserPanel);
 
 
         // Lobby Panel Add Click Listener
@@ -160,19 +186,20 @@ public class UIManager : Singleton<UIManager>
         btn_CreateRoom_Home.onClick.AddListener(ShowMenuPanel);
         btn_CreateRoom_Create.onClick.AddListener(CreateRoom);
 
-        /*
+        
         // Game Panel Add Click Listener
         btn_Game_Home.onClick.AddListener(ShowMenuPanel);
-        btn_Game_Settings.onClick.AddListener(ShowSettingsPanel);
+        //btn_Game_Settings.onClick.AddListener(ShowSettingsPanel);
         btn_Game_Answer.onClick.AddListener(Answer);
 
-
+        
         // Settings Panel Add Click Listener
         btn_Settings_Home.onClick.AddListener(ShowMenuPanel);
-        btn_Settings_Vibration_Off.onClick.AddListener(VibrationOff);
-        btn_Settings_Vibration_On.onClick.AddListener(VibrationOn);
+        btn_Settings_Home.onClick.AddListener(ShowMenuPanel);
+       /* btn_Settings_Vibration_Off.onClick.AddListener(VibrationOff);
+        btn_Settings_Vibration_On.onClick.AddListener(VibrationOn);*/
         sld_Settings_Music_Volume.onValueChanged.AddListener(SetMusicVolume);
-        sld_Settings_Music_Volume.onValueChanged.AddListener(SetSfxVolume);*/
+        sld_Settings_Music_Volume.onValueChanged.AddListener(SetSfxVolume);
 
 
        // SignUp Panel Add Click Listener
@@ -189,9 +216,11 @@ public class UIManager : Singleton<UIManager>
         
         // Reset Password Panel Add Click Listener
         btn_ResetPassword_Home.onClick.AddListener(ShowMenuPanel);
-       // btn_ResetPassword_Send.onClick.AddListener(SendPassword);
-       
+        // btn_ResetPassword_Send.onClick.AddListener(SendPassword);
 
+        // User Panel Add Click Listener
+        btn_User_Home.onClick.AddListener(ShowUserPanel);
+        //btn_User_SignOut.onClick.AddListener(ShowSignInPanel);
         
 
         /* 
@@ -222,9 +251,9 @@ public class UIManager : Singleton<UIManager>
 
     // While Game
 
-
   //  private void StartTheMatch() { fBManager. }
     private void Answer() { }
+    public void ShowEstimation(string lastEstimation) { txt_Game_LastEstimation.SetText(lastEstimation); }
 
     #endregion
 
@@ -252,16 +281,19 @@ public class UIManager : Singleton<UIManager>
         Menu,
         Lobby,
         CreateRoom,
-        EnterRoom,
         Game,
         Settings,
         Store,
         SignUp,
         SignIn,
         ResetPassword,
+        User,
         Lose,
         Win
     }
+
+    public void ShowGamePanelBridge() { ShowGamePanel(); }
+
 
     private void ShowMenuPanel() { PanelChanger(Panels.Menu); }
     private void ShowLobbyPanel() { PanelChanger(Panels.Lobby); }
@@ -272,6 +304,7 @@ public class UIManager : Singleton<UIManager>
     private void ShowSignUpPanel() { PanelChanger(Panels.SignUp); }
     private void ShowSignInPanel() { PanelChanger(Panels.SignIn); }
     private void ShowResetPasswordPanel() { PanelChanger(Panels.ResetPassword); }
+    private void ShowUserPanel() { PanelChanger(Panels.User); }
     private void ShowLosePanel() { PanelChanger(Panels.Lose); }
     private void ShowWinPanel() { PanelChanger(Panels.Win); }
 
@@ -285,6 +318,7 @@ public class UIManager : Singleton<UIManager>
         pnl_SignUp.SetActive(panels == Panels.SignUp);
         pnl_SignIn.SetActive(panels == Panels.SignIn);
         pnl_ResetPassword.SetActive(panels == Panels.ResetPassword);
+        pnl_User.SetActive(panels == Panels.User);
         pnl_Lose.SetActive(panels == Panels.Lose);
         pnl_Win.SetActive(panels == Panels.Win);
     }

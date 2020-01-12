@@ -5,8 +5,8 @@ using UnityEngine;
 public class NumberCreator : MonoBehaviour
 {
     [Range(0,10000)]
-    public int numberRange;
-    public static int secretNumber;
+    [SerializeField] private int numberRange;
+    [SerializeField] private static int secretNumber;
 
     // Script References
     FBManager fBManager;
@@ -19,7 +19,7 @@ public class NumberCreator : MonoBehaviour
     //    CreateNumber();
     }
 
-    void CreateNumber()
+    public void CreateNumber()
     {
         secretNumber = Random.Range(0, numberRange);
         fBManager.SetSecretNumber(secretNumber);

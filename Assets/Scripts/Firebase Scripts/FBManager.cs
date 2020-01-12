@@ -34,11 +34,13 @@ public class FBManager : Singleton<FBManager>
 
     // Script References
     UIManager uiManager;
+    NumberCreator numberCreator;
 
     void Start()
     {
         FireBaseStart();
         uiManager = FindObjectOfType<UIManager>();
+        numberCreator = FindObjectOfType<NumberCreator>();
         /*UpdateUserData("gold", "550");*/
     }
 
@@ -305,6 +307,7 @@ public class FBManager : Singleton<FBManager>
     #region --------------------------------------------ROOM--------------------------------------------------------------
 
     bool canPlay = true;
+    bool canStart = false;
 
     public void QuickGame()
     {
@@ -331,6 +334,15 @@ public class FBManager : Singleton<FBManager>
                                 roomReference.Child(rooms.Key).Child("General").Child("Player2-ID").SetValueAsync(userID);
                                 roomReference.Child(rooms.Key).Child("General").Child("Player2-Username").SetValueAsync(username);
                                 canPlay = false;
+                                roomID = rooms.Key;
+
+                                canStart = true;
+
+                                if (canStart)
+                                {
+                                    StartGame();
+                                }
+
                                 Debug.Log("Odaya giriş başarılı!");
                             }
                             else
@@ -506,6 +518,12 @@ public class FBManager : Singleton<FBManager>
 
     #region --------------------------------------------GAME--------------------------------------------------------------
 
+    public void StartGame() 
+    {
+        numberCreator.CreateNumber();
+        uiManager.ShowGamePanelBridge();
+    }
+
 	public void SetSecretNumber(int currentNumber) 
     {
         roomReference.Child(roomID).Child("Progression").Child("SecretNumber").SetValueAsync(currentNumber);
@@ -526,11 +544,16 @@ public class FBManager : Singleton<FBManager>
         }
         else
         {
-
+            Listen();
         }
     }
- 
-    public void RoomListener(object sender, ValueChangedEventArgs args) 
+
+    void Listen() 
+    {
+        roomReference.Child(roomID).Child("Progression").Child("LastEstimation").ValueChanged += GetEstimation;
+    }
+
+    public void GetEstimation(object sender, ValueChangedEventArgs args) 
     {
         if (args.DatabaseError != null)
         {
@@ -542,11 +565,16 @@ public class FBManager : Singleton<FBManager>
 
         DataSnapshot snapshot = args.Snapshot;
 
-        if (snapshot.HasChild("LastEstimation"))
+        SetEstimation(snapshot.Value.ToString());
+       /* if (snapshot.HasChild("LastEstimation"))
         {
             Debug.Log(snapshot.Child("LastEstimation").Value);
         }
-
+        */
+    }
+    void SetEstimation(string lastEstimation)
+    {
+        uiManager.ShowEstimation(lastEstimation);
     }
 
 	#endregion
