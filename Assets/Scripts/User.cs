@@ -5,35 +5,35 @@ public class UserGeneral
     // String variables
     public string Username;
     public string SignUpDate;
-    public string LastSignInDate;
+    public string LastSeen;
     public string Country;
     public string Language;
-
-    // Bool variables
+    // Bool Variables
     public bool SignInStatus;
+    public bool Intermateable;
 
     public UserGeneral
         (
          // String
          string _username,
          string _signUpDate,
-         string _lastSignInDate,
+         string _lastSeen,
          string _country,
          string _language,
-
          // Bool
-         bool _signInStatus
+         bool _signInStatus,
+         bool _intermateable
         )
     {
         // String
         Username = _username;
         SignUpDate = _signUpDate;
-        LastSignInDate = _lastSignInDate;
+        LastSeen = _lastSeen;
         Country = _country;
         Language = _language;
-
         // Bool
         SignInStatus = _signInStatus;
+        Intermateable = _intermateable;
     }
 }
 
@@ -46,50 +46,65 @@ public class UserProgression
     // Int variables
     public int Level;
     public int Cup;
+    public int Rank;
+    public int TotalPlayTime;
+    public int TotalMatches;
+    public int CompletedMatches;
+    public int AbandonedMatches;
+    public int Wins;
+    public int Losses;
+    public int WinningStreak;
     public int HighScore;
     public int SignInCount;
-    public int TotalPlayTime;
-    public int TotalMatchCount;
-    public int CompletedGameCount;
-    public int AbandonedGameCount;
-    public int WinCount;
-    public int LoseCount;
-    public int Energy;
-    public int Gold;
-    public int Diamond;
-    public int Joker;
-
 
     public UserProgression
         (
         // Int
         int _level,
         int _cup,
-        int _highScore,
-        int _signInCount,
+        int _rank,
         int _totalPlayTime,
-        int _totalMatchCount,
-        int _completedGameCount,
-        int _abandonedGameCount,
-        int _winCount,
-        int _loseCount,
+        int _totalMatches,
+        int _completedMatches,
+        int _abandonedMatches,
+        int _wins,
+        int _losses,
+        int _winningStreak,
+        int _highScore,
+        int _signInCount
+        )
+    {
+        // Int
+        Level = _level;
+        Cup = _cup;
+        Rank = _rank;
+        TotalPlayTime = _totalPlayTime;
+        TotalMatches = _totalMatches;
+        CompletedMatches = _completedMatches;
+        AbandonedMatches = _abandonedMatches;
+        Wins = _wins;
+        Losses = _losses;
+        WinningStreak = _winningStreak;
+        HighScore = _highScore;
+        SignInCount = _signInCount;
+    }
+}
+
+public class UserConsumable
+{
+    public int Energy;
+    public int Gold;
+    public int Diamond;
+    public int Joker;
+
+    public UserConsumable
+        (
         int _energy,
         int _gold,
         int _diamond,
         int _joker
         )
     {
-        // Int
-        Level = _level;
-        Cup = _cup;
-        HighScore = _highScore;
-        SignInCount = _signInCount;
-        TotalPlayTime = _totalPlayTime;
-        TotalMatchCount = _totalMatchCount;
-        CompletedGameCount = _completedGameCount;
-        AbandonedGameCount = _abandonedGameCount;
-        WinCount = _winCount;
-        LoseCount = _loseCount;
         Energy = _energy;
         Gold = _gold;
         Diamond = _diamond;

@@ -1346,7 +1346,7 @@ GameObject:
   - component: {fileID: 126475427}
   - component: {fileID: 126475426}
   m_Layer: 5
-  m_Name: SignIn Status Text (TMP)
+  m_Name: Last Seen Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1364,7 +1364,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1131583628}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1822,7 +1822,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &146848788
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1935,7 +1935,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Love breaker
+  m_text: Username
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
   m_sharedMaterial: {fileID: 2147374, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
@@ -1963,7 +1963,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 114.15
+  m_fontSize: 134.95
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2004,10 +2004,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 157193603}
-    characterCount: 12
+    characterCount: 8
     spriteCount: 0
-    spaceCount: 1
-    wordCount: 2
+    spaceCount: 0
+    wordCount: 1
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -5561,7 +5561,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1131583628}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -6337,7 +6337,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.18828177, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -7899,7 +7899,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &780694124
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7916,7 +7916,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -600}
+  m_AnchoredPosition: {x: -500, y: -600}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &780694125
@@ -9855,7 +9855,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1131583628
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9871,12 +9871,12 @@ RectTransform:
   - {fileID: 1893221308}
   - {fileID: 428975994}
   - {fileID: 1404381194}
-  - {fileID: 126475425}
   - {fileID: 505436256}
+  - {fileID: 126475425}
   - {fileID: 1786752060}
   - {fileID: 1729397293}
-  - {fileID: 1356133026}
   - {fileID: 1434746494}
+  - {fileID: 1356133026}
   - {fileID: 836605598}
   - {fileID: 1387817685}
   - {fileID: 204533583}
@@ -13066,7 +13066,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1131583628}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -14027,7 +14027,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1131583628}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -15932,7 +15932,7 @@ GameObject:
   - component: {fileID: 1729397295}
   - component: {fileID: 1729397294}
   m_Layer: 5
-  m_Name: Total Match Text (TMP)
+  m_Name: Total Matches Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17613,14 +17613,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pnl_Menu: {fileID: 146848787}
   pnl_Lobby: {fileID: 718910329}
-  pnl_CreateRoom: {fileID: 0}
+  pnl_CreateRoom: {fileID: 701105658}
   pnl_Game: {fileID: 301438835}
   pnl_Settings: {fileID: 1623826066}
   pnl_Store: {fileID: 533232274}
   pnl_SignUp: {fileID: 2032360724}
   pnl_SignIn: {fileID: 1060628676}
   pnl_ResetPassword: {fileID: 253875539}
-  pnl_User: {fileID: 0}
+  pnl_User: {fileID: 1131583627}
   pnl_Lose: {fileID: 1852628473}
   pnl_Win: {fileID: 268530245}
   txt_Menu_Header: {fileID: 1164096274}
@@ -17674,19 +17674,18 @@ MonoBehaviour:
   txt_ResetPassword_Email: {fileID: 73348695}
   btn_ResetPassword_Home: {fileID: 254579333}
   btn_ResetPassword_Send: {fileID: 1738516370}
-  txt_User_LastSignIn: {fileID: 0}
-  txt_User_SignUpDate: {fileID: 505436258}
-  txt_User_SignInStatus: {fileID: 126475426}
-  txt_User_Username: {fileID: 157193603}
   txt_User_Level: {fileID: 1893221309}
-  txt_User_Rank: {fileID: 1404381195}
   txt_User_Cup: {fileID: 428975995}
+  txt_User_Rank: {fileID: 1404381195}
+  txt_User_Username: {fileID: 157193603}
+  txt_User_SignUpDate: {fileID: 505436258}
+  txt_User_LastSeen: {fileID: 126475426}
   txt_User_TotalPlayTime: {fileID: 1786752061}
-  txt_User_TotalMatchCount: {fileID: 1729397294}
-  txt_User_AbandonedGames: {fileID: 1356133027}
-  txt_User_CompletedGames: {fileID: 1434746495}
-  txt_User_Losses: {fileID: 1387817686}
+  txt_User_TotalMatches: {fileID: 1729397294}
+  txt_User_CompletedMathces: {fileID: 1434746495}
+  txt_User_AbandonedMathces: {fileID: 1356133027}
   txt_User_Wins: {fileID: 836605599}
+  txt_User_Losses: {fileID: 1387817686}
   txt_User_WinningStreak: {fileID: 204533584}
   btn_User_Home: {fileID: 1452222051}
   btn_User_SignOut: {fileID: 716012512}

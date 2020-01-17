@@ -10,8 +10,7 @@ using Firebase.Database;
 //Task yani görev olayları sistemden alındığı için, kütüphane ekliyoruz
 using System.Threading;
 using System.Threading.Tasks;
-
-
+using UnityEngine.Events;
 
 public class FBManager : Singleton<FBManager>
 {
@@ -39,9 +38,12 @@ public class FBManager : Singleton<FBManager>
     void Start()
     {
         FireBaseStart();
-        uiManager = FindObjectOfType<UIManager>();
+        uiManager = UIManager.Instance;
         numberCreator = FindObjectOfType<NumberCreator>();
         /*UpdateUserData("gold", "550");*/
+
+        // Action Maker
+        SetAction();
     }
 
 
@@ -79,12 +81,14 @@ public class FBManager : Singleton<FBManager>
     {
         //Firebase kullanıcı oturum açma isteği
         auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-        userID = auth.CurrentUser.UserId; 
+
 
         FirebaseApp app = Firebase.FirebaseApp.DefaultInstance;
 
         // Database References Declare
-        userReference = FirebaseDatabase.DefaultInstance.GetReference($"Users/UserID/{userID}");
+        if (auth.CurrentUser != null) GetUserID();
+
+
         roomReference = FirebaseDatabase.DefaultInstance.GetReference($"Rooms/RoomID");
 
 
@@ -93,15 +97,6 @@ public class FBManager : Singleton<FBManager>
         app.SetEditorDatabaseUrl("https://hot-cold-guess-game.firebaseio.com/");
         if (app.Options.DatabaseUrl != null) app.SetEditorDatabaseUrl(app.Options.DatabaseUrl);
 
-        GetUserData();
-
-        //SetSecretNumber(4562, "-LxZlLsFAZ4iQlVecCgr");
-
-        // CreateRoom("Second Wind", "annen", 3);
-        //GetRoomList();
-
-
-        //userID = auth.CurrentUser.UserId;  bunu unutma lazım
         // auth.StateChanged += AuthStateChanged;
         // auth.IdTokenChanged += IdTokenChanged;
 
@@ -209,23 +204,50 @@ public class FBManager : Singleton<FBManager>
 
             FirebaseUser newUser = task.Result;
 
-            CreateUser(newUser.UserId, username);
+            GetUserID();
 
-
+            CreateUser(username);
         });
     }
+
+
+    public void SignInEmailPassword(string email, string password)
+    {
+        auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(task =>
+             {
+                 if (task.IsFaulted)
+                 {
+                     Debug.Log("Giriş işlemi başarısız");
+                 }
+                 else if (task.IsCompleted)
+                 {
+                     uiManager.ShowMenuPanelBridge();
+                 }
+             });
+    }
+
+
+    public void GetUserID()
+    {
+        userID = auth.CurrentUser.UserId;
+        SetUserReference();
+    }
+
+    public void SetUserReference()
+    {
+        userReference = FirebaseDatabase.DefaultInstance.GetReference($"Users/UserID/{userID}");
+        //CreateUser("Papillon The Fallen");
+    }
+
     #endregion
 
 
     #region --------------------------------------------USER--------------------------------------------------------------
 
-    public void CreateUser(string userId, string username)
+    public void CreateUser(string username)
     {
-        Debug.Log("Kullanıcı bilgileri kaydedildi");
-        //FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://hot-cold-guess-game.firebaseio.com/");
 
-        userReference = FirebaseDatabase.DefaultInstance.GetReference($"Users/UserID/{userId}");
-
+        // General
         UserGeneral userGenerals = new UserGeneral
             (
             username,
@@ -233,6 +255,7 @@ public class FBManager : Singleton<FBManager>
             System.DateTime.Now.ToString("dd/MM/yyyy"),
             "Türkiye",
             "Türkçe",
+            true,
             true
             );
 
@@ -240,19 +263,31 @@ public class FBManager : Singleton<FBManager>
         Debug.Log(generalJson);
         userReference.Child("General").SetRawJsonValueAsync(generalJson);
 
+
+        // Progression
         UserProgression userProgressions = new UserProgression
-            (
-            0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 10, 100, 10, 5
-            );
+          (
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1
+          );
 
         string progressionJson = JsonUtility.ToJson(userProgressions);
         Debug.Log(progressionJson);
         userReference.Child("Progression").SetRawJsonValueAsync(progressionJson);
+
+
+        // Consumables
+        UserConsumable userConsumable = new UserConsumable
+            (
+            10, 100, 10, 5
+            );
+
+        string consumableJson = JsonUtility.ToJson(userConsumable);
+        Debug.Log(consumableJson);
+        userReference.Child("Consumable").SetRawJsonValueAsync(consumableJson);
     }
 
     public void GetUsers()
     {
-        //Debug.Log(reference.Reference);
         userReference.GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
@@ -278,30 +313,84 @@ public class FBManager : Singleton<FBManager>
         );
     }
 
+    private UnityAction<Dictionary<string, object>> trigger;
+    void SetAction()
+    {
+        trigger += (dictionary) => uiManager.GetOwnInfos(dictionary);
+    }
+
+    bool deneme = true;
     public void GetUserData()
     {
-        userReference.Child("General").Child("Username").GetValueAsync().ContinueWith(task =>
+        Dictionary<string, object> userInfoDictionary = new Dictionary<string, object>();
+
+        userReference.GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
             {
                 //LogTaskCompletion(task, "Kullanıcı verileri çekme işlemi");
-                Debug.Log("başarısız oldun kel");
+                Debug.Log("başarısız veri çekme işlemi");
             }
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
 
-                username = snapshot.Value.ToString();
-                Debug.Log(username);
+                userInfoDictionary["Level"] = snapshot.Child("Progression").Child("Level").Value;
+                userInfoDictionary["Cup"] = snapshot.Child("Progression").Child("Cup").Value;
+                userInfoDictionary["Rank"] = snapshot.Child("Progression").Child("Rank").Value;
+                userInfoDictionary["Username"] = snapshot.Child("General").Child("Username").Value;
+                userInfoDictionary["SignUpDate"] = snapshot.Child("General").Child("SignUpDate").Value;
+                userInfoDictionary["LastSeen"] = snapshot.Child("General").Child("LastSeen").Value;
+                userInfoDictionary["TotalPlayTime"] = snapshot.Child("Progression").Child("TotalPlayTime").Value;
+                userInfoDictionary["TotalMatches"] = snapshot.Child("Progression").Child("TotalMatches").Value;
+                userInfoDictionary["CompletedMatches"] = snapshot.Child("Progression").Child("CompletedMatches").Value;
+                userInfoDictionary["AbandonedMatches"] = snapshot.Child("Progression").Child("AbandonedMatches").Value;
+                userInfoDictionary["Wins"] = snapshot.Child("Progression").Child("Wins").Value;
+                userInfoDictionary["Losses"] = snapshot.Child("Progression").Child("Losses").Value;
+                userInfoDictionary["WinningStreak"] = snapshot.Child("Progression").Child("WinningStreak").Value;
+                userInfoDictionary["SignInStatus"] = snapshot.Child("General").Child("SignInStatus").Value;
+
+
+                /* uiManager.GetOwnInfos
+                    (
+                        userInfoDictionary["Level"].ToString(),
+                        userInfoDictionary["Cup"].ToString(),
+                        userInfoDictionary["Rank"].ToString(),
+                        userInfoDictionary["Username"].ToString(),
+                        userInfoDictionary["signUpDate"].ToString(),
+                        userInfoDictionary["LastSeen"].ToString(),
+                        userInfoDictionary["TotalPlayTime"].ToString(),
+                        userInfoDictionary["CompletedMatches"].ToString(),
+                        userInfoDictionary["AbandonedMatches"].ToString(),
+                        userInfoDictionary["Wins"].ToString(),
+                        userInfoDictionary["Losses"].ToString(),
+                        userInfoDictionary["WinningStreak"].ToString(),
+                        bool.Parse(userInfoDictionary["SignInStatus"].ToString())
+             */
+                deneme = true;
             }
-        }
-        );
+        });
+            GetUserDataControl();
     }
+
+    bool GetUserDataControl() 
+    {
+        return deneme;
+    }
+
+    IEnumerator GetOwnInfosBridge(Dictionary<string, object> dictionary)
+    {
+        yield return new WaitUntil(GetUserDataControl);
+        Debug.Log(dictionary["Level"]);
+        Debug.Log(dictionary["Cup"]);
+        uiManager.GetOwnInfos(dictionary);
+    }
+
     public void UpdateUserData(string key, object value, string path)
     {
         userReference.Child(path).Child(key).SetValueAsync(value);
     }
-
+    
     #endregion
 
     #region --------------------------------------------ROOM--------------------------------------------------------------
@@ -461,8 +550,6 @@ public class FBManager : Singleton<FBManager>
         {
             if (roomPassword == correctRoomPassword)
             {
-                Debug.Log("bacı katili");
-
                 roomReference.Child(roomID).Child("General").Child("Player2-ID").SetValueAsync(userID);
                 roomReference.Child(roomID).Child("General").Child("Player2-UserName").SetValueAsync(username);
                 return;
@@ -515,6 +602,7 @@ public class FBManager : Singleton<FBManager>
     }
 
     #endregion
+
 
     #region --------------------------------------------GAME--------------------------------------------------------------
 

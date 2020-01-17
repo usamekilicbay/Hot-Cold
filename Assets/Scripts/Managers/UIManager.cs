@@ -119,19 +119,18 @@ public class UIManager : Singleton<UIManager>
     [Space(5)]
 
     [Header("Panel / User")]
-    [SerializeField] TextMeshProUGUI txt_User_LastSignIn;
-    [SerializeField] TextMeshProUGUI txt_User_SignUpDate;
-    [SerializeField] TextMeshProUGUI txt_User_SignInStatus;
-    [SerializeField] TextMeshProUGUI txt_User_Username;
     [SerializeField] TextMeshProUGUI txt_User_Level;
-    [SerializeField] TextMeshProUGUI txt_User_Rank;
     [SerializeField] TextMeshProUGUI txt_User_Cup;
+    [SerializeField] TextMeshProUGUI txt_User_Rank;
+    [SerializeField] TextMeshProUGUI txt_User_Username;
+    [SerializeField] TextMeshProUGUI txt_User_SignUpDate;
+    [SerializeField] TextMeshProUGUI txt_User_LastSeen;
     [SerializeField] TextMeshProUGUI txt_User_TotalPlayTime;
-    [SerializeField] TextMeshProUGUI txt_User_TotalMatchCount;
-    [SerializeField] TextMeshProUGUI txt_User_AbandonedGames;
-    [SerializeField] TextMeshProUGUI txt_User_CompletedGames;
-    [SerializeField] TextMeshProUGUI txt_User_Losses;
+    [SerializeField] TextMeshProUGUI txt_User_TotalMatches;
+    [SerializeField] TextMeshProUGUI txt_User_CompletedMathces;
+    [SerializeField] TextMeshProUGUI txt_User_AbandonedMathces;
     [SerializeField] TextMeshProUGUI txt_User_Wins;
+    [SerializeField] TextMeshProUGUI txt_User_Losses;
     [SerializeField] TextMeshProUGUI txt_User_WinningStreak;
     [SerializeField] Button btn_User_Home;
     [SerializeField] Button btn_User_SignOut;
@@ -169,10 +168,10 @@ public class UIManager : Singleton<UIManager>
     {
         // Menu Panel Add Click Listener
         btn_Menu_Play.onClick.AddListener(QuickGame);
-        btn_Menu_Settings.onClick.AddListener(ShowSettingsPanel);
+        btn_Menu_Settings.onClick.AddListener(ShowUserPanel);
         btn_Menu_Store.onClick.AddListener(ShowStorePanel);
         btn_Menu_RateUs.onClick.AddListener(RateUs);
-        btn_Menu_User.onClick.AddListener(ShowUserPanel);
+        btn_Menu_User.onClick.AddListener(GetUserDataBridge);
 
 
         // Lobby Panel Add Click Listener
@@ -212,14 +211,14 @@ public class UIManager : Singleton<UIManager>
         btn_SignIn_Home.onClick.AddListener(ShowMenuPanel);
         btn_SignIn_ResetPassword.onClick.AddListener(ShowResetPasswordPanel);
         btn_SignIn_SignUp.onClick.AddListener(ShowSignUpPanel);
-       // btn_SignIn_Send.onClick.AddListener(SendSignIn);
+        btn_SignIn_Send.onClick.AddListener(SendSignIn);
         
         // Reset Password Panel Add Click Listener
         btn_ResetPassword_Home.onClick.AddListener(ShowMenuPanel);
         // btn_ResetPassword_Send.onClick.AddListener(SendPassword);
 
         // User Panel Add Click Listener
-        btn_User_Home.onClick.AddListener(ShowUserPanel);
+        btn_User_Home.onClick.AddListener(ShowMenuPanel);
         //btn_User_SignOut.onClick.AddListener(ShowSignInPanel);
         
 
@@ -239,7 +238,7 @@ public class UIManager : Singleton<UIManager>
 
     // Authentication
       private void SendSignUpEmailPassword() { fBManager.SignUpEmailPasssword(txt_SignUp_Username.text, txt_SignUp_Email.text, txt_SignUp_Password.text); }
-   // private void SendSignIn() { authManager.SignIn(txt_SignIn_Email.text, txt_SignIn_Password.text); }
+      private void SendSignIn() { fBManager.SignInEmailPassword(txt_SignIn_Email.text, txt_SignIn_Password.text); }
    // private void SendPassword() { authManager.ResetPassword(txt_SignIn_Email.text); }
 
     // Before Game Begin
@@ -254,6 +253,84 @@ public class UIManager : Singleton<UIManager>
   //  private void StartTheMatch() { fBManager. }
     private void Answer() { }
     public void ShowEstimation(string lastEstimation) { txt_Game_LastEstimation.SetText(lastEstimation); }
+
+    
+    // GetInfo
+    public void GetOwnInfos
+        (
+        Dictionary<string, object> dictionary
+        /* string level,
+           string cup,
+           string rank,
+           string username,
+           string signUpDate,
+           string lastSeen,
+           string totalPlayTime,
+           string totalMatches,
+           string completedMatches,
+           string abandonedMatches,
+           string wins,
+           string losses,
+           string winningStreak,
+           bool signInStatus */
+        )
+    {
+
+        Debug.Log(dictionary["Username"]);
+        Debug.Log(dictionary["SignUpDate"]);
+        Debug.Log(dictionary["Level"]);
+        Debug.Log(dictionary["Rank"]);
+
+        // Set text manuel text atama
+        //txt_User_Level.SetText("Level Deneme");
+        //txt_User_Cup.SetText("Kupa Deneme");
+
+        // Normal text atama
+        //txt_User_Cup.text = "Kupa Deneme";
+        //txt_User_Level.text = "Level Deneme";
+
+        // Set Text ile dictionary'den veri alma
+
+        // text ile dictionaryden veri alma
+        // txt_User_Level.text = dictionary["Level"];
+        // txt_User_Cup.text = dictionary["Cup"];
+
+        txt_User_Level.SetText(dictionary["Level"].ToString());
+        txt_User_Cup.SetText(dictionary["Cup"].ToString());
+        txt_User_Rank.SetText(dictionary["Rank"].ToString());
+        txt_User_Username.SetText(dictionary["Username"].ToString());
+        txt_User_SignUpDate.SetText(dictionary["SignUpDate"].ToString());
+        if (bool.Parse(dictionary["SignInStatus"].ToString())) { txt_User_LastSeen.SetText("Online"); }
+        else { txt_User_LastSeen.SetText(dictionary["LastSeen"].ToString()); }
+        txt_User_TotalPlayTime.SetText(dictionary["TotalPlayTime"].ToString());
+        txt_User_TotalMatches.SetText(dictionary["TotalMatches"].ToString());
+        txt_User_CompletedMathces.SetText(dictionary["CompletedMatches"].ToString());
+        txt_User_AbandonedMathces.SetText(dictionary["AbandonedMatches"].ToString());
+        txt_User_Wins.SetText(dictionary["Wins"].ToString());
+        txt_User_Losses.SetText(dictionary["Losses"].ToString());
+        txt_User_WinningStreak.SetText(dictionary["WinningStreak"].ToString());
+
+
+
+        /* txt_User_Level.text = level;
+           txt_User_Cup.SetText(cup);
+           txt_User_Rank.SetText(rank);
+           txt_User_Username.SetText(username);
+           txt_User_SignUpDate.SetText(signUpDate);
+           if (signInStatus) { txt_User_LastSeen.SetText("Online"); }
+           else { txt_User_LastSeen.SetText(lastSeen); }
+           txt_User_TotalPlayTime.SetText(totalPlayTime);
+           txt_User_TotalMatches.SetText(totalMatches);
+           txt_User_CompletedMathces.SetText(completedMatches);
+           txt_User_AbandonedMathces.SetText(abandonedMatches);
+           txt_User_Wins.SetText(wins);
+           txt_User_Losses.SetText(losses);
+           txt_User_WinningStreak.SetText(winningStreak); */
+
+
+        Debug.Log("tamamlandı");
+        ShowUserPanel();
+    }
 
     #endregion
 
@@ -274,6 +351,18 @@ public class UIManager : Singleton<UIManager>
     private void GetRank() { }
     #endregion
 
+    #region Bridges
+
+    // Panel Bridges
+    public void ShowMenuPanelBridge() { ShowMenuPanel(); }
+    public void ShowUserPanelBridge() { ShowUserPanel(); }
+    public void ShowGamePanelBridge() { ShowGamePanel(); }
+    
+        
+    public void GetUserDataBridge() { fBManager.GetUserData(); }
+
+    #endregion
+
     #region Panels
 
     private enum Panels
@@ -291,8 +380,6 @@ public class UIManager : Singleton<UIManager>
         Lose,
         Win
     }
-
-    public void ShowGamePanelBridge() { ShowGamePanel(); }
 
 
     private void ShowMenuPanel() { PanelChanger(Panels.Menu); }
