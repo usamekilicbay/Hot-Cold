@@ -1816,6 +1816,7 @@ GameObject:
   - component: {fileID: 146848788}
   - component: {fileID: 146848790}
   - component: {fileID: 146848789}
+  - component: {fileID: 146848791}
   m_Layer: 5
   m_Name: Menu Panel
   m_TagString: Untagged
@@ -1880,6 +1881,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 146848787}
   m_CullTransparentMesh: 0
+--- !u!114 &146848791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146848787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba6e873ab00573e4b9a7b6bb6dbf9f6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  txt_Menu_Header: {fileID: 1164096274}
+  btn_Menu_Play: {fileID: 143084953}
+  btn_Menu_Settings: {fileID: 772144453}
+  btn_Menu_Store: {fileID: 1282412136}
+  btn_Menu_RateUs: {fileID: 780694126}
+  btn_Menu_User: {fileID: 549676626}
 --- !u!1 &157193601
 GameObject:
   m_ObjectHideFlags: 0
@@ -3341,8 +3360,9 @@ GameObject:
   - component: {fileID: 253875540}
   - component: {fileID: 253875542}
   - component: {fileID: 253875541}
+  - component: {fileID: 253875543}
   m_Layer: 5
-  m_Name: Reset Password Panel
+  m_Name: ResetPassword Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3407,6 +3427,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 253875539}
   m_CullTransparentMesh: 0
+--- !u!114 &253875543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 253875539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5af1d2050a30b1f4cb271074dd4f281f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  txt_ResetPassword_Header: {fileID: 31064298}
+  txt_ResetPassword_Email: {fileID: 73348695}
+  btn_ResetPassword_Home: {fileID: 254579333}
+  btn_ResetPassword_Send: {fileID: 1738516370}
 --- !u!1 &254579330
 GameObject:
   m_ObjectHideFlags: 0
@@ -4025,6 +4061,7 @@ GameObject:
   - component: {fileID: 301438836}
   - component: {fileID: 301438838}
   - component: {fileID: 301438837}
+  - component: {fileID: 301438839}
   m_Layer: 5
   m_Name: Game Panel
   m_TagString: Untagged
@@ -4092,6 +4129,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 301438835}
   m_CullTransparentMesh: 0
+--- !u!114 &301438839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 301438835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09a5ae21e6b2a44419c3492c7a033b37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  txt_Game_Header: {fileID: 0}
+  txt_Game_LastEstimation: {fileID: 1918799613}
+  txt_Game_MyEstimation: {fileID: 1878771565}
+  btn_Game_Home: {fileID: 1111926886}
+  btn_Game_Answer: {fileID: 141371447}
 --- !u!1 &305608783
 GameObject:
   m_ObjectHideFlags: 0
@@ -6284,7 +6338,7 @@ GameObject:
   - component: {fileID: 549676626}
   - component: {fileID: 549676623}
   m_Layer: 5
-  m_Name: User Button
+  m_Name: UserProfile Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7279,6 +7333,92 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &688880408
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 688880410}
+  - component: {fileID: 688880409}
+  m_Layer: 0
+  m_Name: Lunar Console
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &688880409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 688880408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 086be258345234a029dca36e7ef25dc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_settings:
+    exceptionWarning:
+      displayMode: 3
+    logOverlay:
+      enabled: 0
+      maxVisibleLines: 3
+      timeout: 1
+      colors:
+        exception:
+          foreground:
+            serializedVersion: 2
+            rgba: 4282795754
+          background:
+            serializedVersion: 2
+            rgba: 4280163870
+        error:
+          foreground:
+            serializedVersion: 2
+            rgba: 4282795754
+          background:
+            serializedVersion: 2
+            rgba: 4280163870
+        warning:
+          foreground:
+            serializedVersion: 2
+            rgba: 4282436555
+          background:
+            serializedVersion: 2
+            rgba: 4280163870
+        debug:
+          foreground:
+            serializedVersion: 2
+            rgba: 4294958491
+          background:
+            serializedVersion: 2
+            rgba: 4280163870
+    capacity: 4096
+    trim: 512
+    gesture: 1
+    removeRichTextTags: 0
+    sortActions: 1
+    sortVariables: 1
+    emails: []
+--- !u!4 &688880410
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 688880408}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &701105658
 GameObject:
   m_ObjectHideFlags: 0
@@ -9200,6 +9340,7 @@ GameObject:
   - component: {fileID: 1060628677}
   - component: {fileID: 1060628679}
   - component: {fileID: 1060628678}
+  - component: {fileID: 1060628680}
   m_Layer: 5
   m_Name: SignIn Panel
   m_TagString: Untagged
@@ -9270,6 +9411,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1060628676}
   m_CullTransparentMesh: 0
+--- !u!114 &1060628680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060628676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a8352a007e080747b053146101b82cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  txt_SignIn_Header: {fileID: 350594025}
+  txt_SignIn_Username: {fileID: 1222421118}
+  txt_SignIn_Email: {fileID: 1947303204}
+  txt_SignIn_Password: {fileID: 1093750831}
+  btn_SignIn_Home: {fileID: 122904897}
+  btn_SignIn_Send: {fileID: 2003681553}
+  btn_SignIn_ResetPassword: {fileID: 1759597311}
+  btn_SignIn_SignUp: {fileID: 920527055}
 --- !u!1 &1078608468
 GameObject:
   m_ObjectHideFlags: 0
@@ -9850,7 +10011,7 @@ GameObject:
   - component: {fileID: 1131583630}
   - component: {fileID: 1131583629}
   m_Layer: 5
-  m_Name: User Panel
+  m_Name: UserProfile Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15245,6 +15406,7 @@ GameObject:
   - component: {fileID: 1623826067}
   - component: {fileID: 1623826069}
   - component: {fileID: 1623826068}
+  - component: {fileID: 1623826070}
   m_Layer: 5
   m_Name: Settings Panel
   m_TagString: Untagged
@@ -15312,6 +15474,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1623826066}
   m_CullTransparentMesh: 0
+--- !u!114 &1623826070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1623826066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60dda7d425270f4409da1f250936b65d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  txt_Settings_Header: {fileID: 213257547}
+  btn_Settings_Home: {fileID: 1531307390}
+  btn_Settings_Login: {fileID: 0}
+  btn_Settings_Vibration_On: {fileID: 0}
+  btn_Settings_Vibration_Off: {fileID: 0}
+  sld_Settings_Music_Volume: {fileID: 1126100704}
+  sld_Settings_SFX_Volume: {fileID: 1364476400}
 --- !u!1 &1630592679
 GameObject:
   m_ObjectHideFlags: 0
@@ -17001,6 +17182,86 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1852628473}
   m_CullTransparentMesh: 0
+--- !u!1 &1856215324
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1856215326}
+  - component: {fileID: 1856215325}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1856215325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856215324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c39f78dee653a7748a3ea70cf219305d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pnl_Menu: {fileID: 146848787}
+  pnl_Lobby: {fileID: 718910329}
+  pnl_CreateRoom: {fileID: 701105658}
+  pnl_Game: {fileID: 301438835}
+  pnl_Settings: {fileID: 1623826066}
+  pnl_Store: {fileID: 533232274}
+  pnl_SignUp: {fileID: 2032360724}
+  pnl_SignIn: {fileID: 1060628676}
+  pnl_ResetPassword: {fileID: 253875539}
+  pnl_UserProfile: {fileID: 1131583627}
+  pnl_Lose: {fileID: 1852628473}
+  pnl_Win: {fileID: 268530245}
+  txt_Lobby_Header: {fileID: 659274957}
+  drpdwn_Lobby_RoomList: {fileID: 1484876756}
+  btn_Lobby_Home: {fileID: 505972633}
+  btn_Lobby_Refresh: {fileID: 297988348}
+  btn_Lobby_Enter: {fileID: 2032805600}
+  btn_Lobby_Create: {fileID: 83024932}
+  txt_CreateRoom_Header: {fileID: 442690551}
+  txt_CreateRoom_RoomName: {fileID: 1237699930}
+  txt_CreateRoom_RoomPassword: {fileID: 2002492405}
+  btn_CreateRoom_Home: {fileID: 1265197083}
+  btn_CreateRoom_Create: {fileID: 533976320}
+  txt_Store_Header: {fileID: 0}
+  btn_Store_Home: {fileID: 0}
+  txt_Lose_Header: {fileID: 0}
+  txt_Lose_Outcome: {fileID: 0}
+  txt_Lose_PlayerScore: {fileID: 0}
+  txt_Lose_RivalScore: {fileID: 0}
+  btn_Lose_Home: {fileID: 0}
+  btn_Lose_Play: {fileID: 0}
+  txt_Win_Header: {fileID: 0}
+  txt_Win_Outcome: {fileID: 0}
+  txt_Win_PlayerScore: {fileID: 0}
+  txt_Win_RivalScore: {fileID: 0}
+  btn_Win_Home: {fileID: 0}
+  btn_Win_Play: {fileID: 0}
+--- !u!4 &1856215326
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856215324}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1878771563
 GameObject:
   m_ObjectHideFlags: 0
@@ -17551,7 +17812,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1935565916}
   - component: {fileID: 1935565915}
-  - component: {fileID: 1935565918}
   - component: {fileID: 1935565917}
   - component: {fileID: 1935565919}
   m_Layer: 0
@@ -17599,108 +17859,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 281ae371e86766745a851e2cc1d22b96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1935565918
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1935565914}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c39f78dee653a7748a3ea70cf219305d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pnl_Menu: {fileID: 146848787}
-  pnl_Lobby: {fileID: 718910329}
-  pnl_CreateRoom: {fileID: 701105658}
-  pnl_Game: {fileID: 301438835}
-  pnl_Settings: {fileID: 1623826066}
-  pnl_Store: {fileID: 533232274}
-  pnl_SignUp: {fileID: 2032360724}
-  pnl_SignIn: {fileID: 1060628676}
-  pnl_ResetPassword: {fileID: 253875539}
-  pnl_User: {fileID: 1131583627}
-  pnl_Lose: {fileID: 1852628473}
-  pnl_Win: {fileID: 268530245}
-  txt_Menu_Header: {fileID: 1164096274}
-  btn_Menu_Play: {fileID: 143084953}
-  btn_Menu_Settings: {fileID: 772144453}
-  btn_Menu_Store: {fileID: 1282412136}
-  btn_Menu_RateUs: {fileID: 780694126}
-  btn_Menu_User: {fileID: 549676626}
-  txt_Lobby_Header: {fileID: 659274957}
-  drpdwn_Lobby_RoomList: {fileID: 1484876756}
-  btn_Lobby_Home: {fileID: 505972633}
-  btn_Lobby_Refresh: {fileID: 297988348}
-  btn_Lobby_Enter: {fileID: 2032805600}
-  btn_Lobby_Create: {fileID: 83024932}
-  txt_CreateRoom_Header: {fileID: 442690551}
-  txt_CreateRoom_RoomName: {fileID: 1237699930}
-  txt_CreateRoom_RoomPassword: {fileID: 2002492405}
-  btn_CreateRoom_Home: {fileID: 1265197083}
-  btn_CreateRoom_Create: {fileID: 533976320}
-  txt_Game_Header: {fileID: 0}
-  txt_Game_LastEstimation: {fileID: 1918799613}
-  txt_Game_MyEstimation: {fileID: 1878771565}
-  btn_Game_Home: {fileID: 1111926886}
-  btn_Game_Settings: {fileID: 0}
-  btn_Game_Answer: {fileID: 141371447}
-  txt_Settings_Header: {fileID: 213257547}
-  btn_Settings_Home: {fileID: 1531307390}
-  btn_Settings_Login: {fileID: 0}
-  btn_Settings_Vibration_On: {fileID: 0}
-  btn_Settings_Vibration_Off: {fileID: 0}
-  sld_Settings_Music_Volume: {fileID: 1126100704}
-  sld_Settings_SFX_Volume: {fileID: 1364476400}
-  txt_Store_Header: {fileID: 0}
-  btn_Store_Home: {fileID: 0}
-  txt_SignUp_Header: {fileID: 406803023}
-  txt_SignUp_Username: {fileID: 1157625192}
-  txt_SignUp_Email: {fileID: 1249968063}
-  txt_SignUp_Password: {fileID: 1078608470}
-  btn_SignUp_Home: {fileID: 1692394118}
-  btn_SignUp_Send: {fileID: 1603301269}
-  btn_SignUp_SignIn: {fileID: 1221902662}
-  txt_SignIn_Header: {fileID: 350594025}
-  txt_SignIn_Username: {fileID: 1222421118}
-  txt_SignIn_Email: {fileID: 1947303204}
-  txt_SignIn_Password: {fileID: 1093750831}
-  btn_SignIn_Home: {fileID: 122904897}
-  btn_SignIn_Send: {fileID: 2003681553}
-  btn_SignIn_ResetPassword: {fileID: 1759597311}
-  btn_SignIn_SignUp: {fileID: 920527055}
-  txt_ResetPassword_Header: {fileID: 31064298}
-  txt_ResetPassword_Email: {fileID: 73348695}
-  btn_ResetPassword_Home: {fileID: 254579333}
-  btn_ResetPassword_Send: {fileID: 1738516370}
-  txt_User_Level: {fileID: 1893221309}
-  txt_User_Cup: {fileID: 428975995}
-  txt_User_Rank: {fileID: 1404381195}
-  txt_User_Username: {fileID: 157193603}
-  txt_User_SignUpDate: {fileID: 505436258}
-  txt_User_LastSeen: {fileID: 126475426}
-  txt_User_TotalPlayTime: {fileID: 1786752061}
-  txt_User_TotalMatches: {fileID: 1729397294}
-  txt_User_CompletedMathces: {fileID: 1434746495}
-  txt_User_AbandonedMathces: {fileID: 1356133027}
-  txt_User_Wins: {fileID: 836605599}
-  txt_User_Losses: {fileID: 1387817686}
-  txt_User_WinningStreak: {fileID: 204533584}
-  btn_User_Home: {fileID: 1452222051}
-  btn_User_SignOut: {fileID: 716012512}
-  txt_Lose_Header: {fileID: 0}
-  txt_Lose_Outcome: {fileID: 0}
-  txt_Lose_PlayerScore: {fileID: 0}
-  txt_Lose_RivalScore: {fileID: 0}
-  btn_Lose_Home: {fileID: 0}
-  btn_Lose_Play: {fileID: 0}
-  txt_Win_Header: {fileID: 0}
-  txt_Win_Outcome: {fileID: 0}
-  txt_Win_PlayerScore: {fileID: 0}
-  txt_Win_RivalScore: {fileID: 0}
-  btn_Win_Home: {fileID: 0}
-  btn_Win_Play: {fileID: 0}
 --- !u!114 &1935565919
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18635,6 +18793,7 @@ GameObject:
   - component: {fileID: 2032360725}
   - component: {fileID: 2032360727}
   - component: {fileID: 2032360726}
+  - component: {fileID: 2032360728}
   m_Layer: 5
   m_Name: SignUp Panel
   m_TagString: Untagged
@@ -18704,6 +18863,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2032360724}
   m_CullTransparentMesh: 0
+--- !u!114 &2032360728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2032360724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c99c43e0c3fef84c9284ff3809eebb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  txt_SignUp_Header: {fileID: 406803023}
+  txt_SignUp_Username: {fileID: 1157625192}
+  txt_SignUp_Email: {fileID: 1249968063}
+  txt_SignUp_Password: {fileID: 1078608470}
+  btn_SignUp_Home: {fileID: 1692394118}
+  btn_SignUp_Send: {fileID: 1603301269}
+  btn_SignUp_SignIn: {fileID: 1221902662}
 --- !u!1 &2032805597
 GameObject:
   m_ObjectHideFlags: 0

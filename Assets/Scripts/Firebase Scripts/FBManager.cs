@@ -8,9 +8,9 @@ using Firebase.Auth;
 using Firebase.Database;
 
 //Task yani görev olayları sistemden alındığı için, kütüphane ekliyoruz
-using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine.Events;
+using System;
+using System.Threading.Tasks;
 
 public class FBManager : Singleton<FBManager>
 {
@@ -35,21 +35,42 @@ public class FBManager : Singleton<FBManager>
     UIManager uiManager;
     NumberCreator numberCreator;
 
-    void Start()
+   
+    private void OnEnable()
     {
         FireBaseStart();
         uiManager = UIManager.Instance;
         numberCreator = FindObjectOfType<NumberCreator>();
-        /*UpdateUserData("gold", "550");*/
 
-        // Action Maker
-        SetAction();
+        ActionManager.Instance.SignUpEmailPassword += SignUpEmailPasssword;
+        ActionManager.Instance.SignInEmailPassword += SignInEmailPassword;
+
+        ActionManager.Instance.QuickGame += CallQuickGame;
+
+        ActionManager.Instance.UserProfile += GetUserData;
+    
     }
 
+    private void OnDisable()
+    {
+        ActionManager.Instance.SignUpEmailPassword -= SignUpEmailPasssword;
+        ActionManager.Instance.SignInEmailPassword -= SignInEmailPassword;
+       
+        ActionManager.Instance.QuickGame -= CallQuickGame;
+
+        ActionManager.Instance.UserProfile -= GetUserData;
+    }
 
     public void FireBaseStart()
     {
         DepStatus = Firebase.FirebaseApp.CheckDependencies();
+
+        if (DepStatus == DependencyStatus.Available)
+        {
+            InitalizeFirebase();
+            return;
+        }
+
         if (DepStatus != Firebase.DependencyStatus.Available)
         {
             Firebase.FirebaseApp.FixDependenciesAsync().ContinueWith
@@ -79,19 +100,23 @@ public class FBManager : Singleton<FBManager>
 
     void InitalizeFirebase()
     {
-        //Firebase kullanıcı oturum açma isteği
-        auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-
-
+        Debug.Log("firebase");
         FirebaseApp app = Firebase.FirebaseApp.DefaultInstance;
+        auth = FirebaseAuth.DefaultInstance;
 
-        // Database References Declare
+        Debug.Log("Initial firebase");
+
+        if (auth == null)
+        {
+            Debug.Log("Auth null");
+        }
+
+        // Database Reference Declare
         if (auth.CurrentUser != null) GetUserID();
+        else uiManager.ShowSignInPanel();
 
 
         roomReference = FirebaseDatabase.DefaultInstance.GetReference($"Rooms/RoomID");
-
-
 
 
         app.SetEditorDatabaseUrl("https://hot-cold-guess-game.firebaseio.com/");
@@ -145,7 +170,7 @@ public class FBManager : Singleton<FBManager>
 
          }
      }*/
-
+     
     bool LogTaskCompletion(Task task, string operation)
     {
         bool complete = false;
@@ -193,20 +218,28 @@ public class FBManager : Singleton<FBManager>
         {
             if (task.IsCanceled)
             {
+                //LogTaskCompletion(task, "Giriş işlemi iptal edildi");
                 Debug.Log("Giriş işlemi iptal edildi");
                 return;
             }
-            if (task.IsFaulted)
+            else if (task.IsFaulted)
             {
-                Debug.Log("Kayıt işlemi başarısız oldu!");
+               // LogTaskCompletion(task, "Kayıt işlemi başarısız oldu!");
+               Debug.Log("Kayıt işlemi başarısız oldu!");
                 return;
             }
+            else if (task.IsCompleted) 
+            {
+               // LogTaskCompletion(task, "Kayıt işlemi başarıyla tamamlandı!");
+               Debug.Log("Kayıt işlemi başarıyla tamamlandı!");
 
-            FirebaseUser newUser = task.Result;
+                FirebaseUser newUser = task.Result;
 
-            GetUserID();
+                GetUserID();
 
-            CreateUser(username);
+                CreateUser(username);
+            }
+            
         });
     }
 
@@ -221,7 +254,7 @@ public class FBManager : Singleton<FBManager>
                  }
                  else if (task.IsCompleted)
                  {
-                     uiManager.ShowMenuPanelBridge();
+                     uiManager.ShowMenuPanel();
                  }
              });
     }
@@ -230,13 +263,13 @@ public class FBManager : Singleton<FBManager>
     public void GetUserID()
     {
         userID = auth.CurrentUser.UserId;
+        Debug.Log("User Id " + userID);
         SetUserReference();
     }
 
     public void SetUserReference()
     {
         userReference = FirebaseDatabase.DefaultInstance.GetReference($"Users/UserID/{userID}");
-        //CreateUser("Papillon The Fallen");
     }
 
     #endregion
@@ -292,7 +325,7 @@ public class FBManager : Singleton<FBManager>
         {
             if (task.IsFaulted)
             {
-                LogTaskCompletion(task, "Kullanıcı verileri çekme işlemi");
+     //           LogTaskCompletion(task, "Kullanıcı verileri çekme işlemi");
             }
             else if (task.IsCompleted)
             {
@@ -313,77 +346,40 @@ public class FBManager : Singleton<FBManager>
         );
     }
 
-    private UnityAction<Dictionary<string, object>> trigger;
-    void SetAction()
+    public void CallGetUserData()
     {
-        trigger += (dictionary) => uiManager.GetOwnInfos(dictionary);
+       // StartCoroutine(GetUserData());
     }
 
-    bool deneme = true;
-    public void GetUserData()
+    private void GetUserData()
     {
+        Task<DataSnapshot> task = userReference.GetValueAsync();  
+
+       // yield return new WaitUntil(() => task.IsCanceled || task.IsCompleted || task.IsFaulted);
+
         Dictionary<string, object> userInfoDictionary = new Dictionary<string, object>();
 
-        userReference.GetValueAsync().ContinueWith(task =>
+        if (task.IsCompleted)
         {
-            if (task.IsFaulted)
-            {
-                //LogTaskCompletion(task, "Kullanıcı verileri çekme işlemi");
-                Debug.Log("başarısız veri çekme işlemi");
-            }
-            else if (task.IsCompleted)
-            {
-                DataSnapshot snapshot = task.Result;
+            DataSnapshot snapshot = task.Result;
 
-                userInfoDictionary["Level"] = snapshot.Child("Progression").Child("Level").Value;
-                userInfoDictionary["Cup"] = snapshot.Child("Progression").Child("Cup").Value;
-                userInfoDictionary["Rank"] = snapshot.Child("Progression").Child("Rank").Value;
-                userInfoDictionary["Username"] = snapshot.Child("General").Child("Username").Value;
-                userInfoDictionary["SignUpDate"] = snapshot.Child("General").Child("SignUpDate").Value;
-                userInfoDictionary["LastSeen"] = snapshot.Child("General").Child("LastSeen").Value;
-                userInfoDictionary["TotalPlayTime"] = snapshot.Child("Progression").Child("TotalPlayTime").Value;
-                userInfoDictionary["TotalMatches"] = snapshot.Child("Progression").Child("TotalMatches").Value;
-                userInfoDictionary["CompletedMatches"] = snapshot.Child("Progression").Child("CompletedMatches").Value;
-                userInfoDictionary["AbandonedMatches"] = snapshot.Child("Progression").Child("AbandonedMatches").Value;
-                userInfoDictionary["Wins"] = snapshot.Child("Progression").Child("Wins").Value;
-                userInfoDictionary["Losses"] = snapshot.Child("Progression").Child("Losses").Value;
-                userInfoDictionary["WinningStreak"] = snapshot.Child("Progression").Child("WinningStreak").Value;
-                userInfoDictionary["SignInStatus"] = snapshot.Child("General").Child("SignInStatus").Value;
+            userInfoDictionary["Level"] = snapshot.Child("Progression").Child("Level").Value;
+            userInfoDictionary["Cup"] = snapshot.Child("Progression").Child("Cup").Value;
+            userInfoDictionary["Rank"] = snapshot.Child("Progression").Child("Rank").Value;
+            userInfoDictionary["Username"] = snapshot.Child("General").Child("Username").Value;
+            userInfoDictionary["SignUpDate"] = snapshot.Child("General").Child("SignUpDate").Value;
+            userInfoDictionary["LastSeen"] = snapshot.Child("General").Child("LastSeen").Value;
+            userInfoDictionary["TotalPlayTime"] = snapshot.Child("Progression").Child("TotalPlayTime").Value;
+            userInfoDictionary["TotalMatches"] = snapshot.Child("Progression").Child("TotalMatches").Value;
+            userInfoDictionary["CompletedMatches"] = snapshot.Child("Progression").Child("CompletedMatches").Value;
+            userInfoDictionary["AbandonedMatches"] = snapshot.Child("Progression").Child("AbandonedMatches").Value;
+            userInfoDictionary["Wins"] = snapshot.Child("Progression").Child("Wins").Value;
+            userInfoDictionary["Losses"] = snapshot.Child("Progression").Child("Losses").Value;
+            userInfoDictionary["WinningStreak"] = snapshot.Child("Progression").Child("WinningStreak").Value;
+            userInfoDictionary["SignInStatus"] = snapshot.Child("General").Child("SignInStatus").Value;
 
-
-                /* uiManager.GetOwnInfos
-                    (
-                        userInfoDictionary["Level"].ToString(),
-                        userInfoDictionary["Cup"].ToString(),
-                        userInfoDictionary["Rank"].ToString(),
-                        userInfoDictionary["Username"].ToString(),
-                        userInfoDictionary["signUpDate"].ToString(),
-                        userInfoDictionary["LastSeen"].ToString(),
-                        userInfoDictionary["TotalPlayTime"].ToString(),
-                        userInfoDictionary["CompletedMatches"].ToString(),
-                        userInfoDictionary["AbandonedMatches"].ToString(),
-                        userInfoDictionary["Wins"].ToString(),
-                        userInfoDictionary["Losses"].ToString(),
-                        userInfoDictionary["WinningStreak"].ToString(),
-                        bool.Parse(userInfoDictionary["SignInStatus"].ToString())
-             */
-                deneme = true;
-            }
-        });
-            GetUserDataControl();
-    }
-
-    bool GetUserDataControl() 
-    {
-        return deneme;
-    }
-
-    IEnumerator GetOwnInfosBridge(Dictionary<string, object> dictionary)
-    {
-        yield return new WaitUntil(GetUserDataControl);
-        Debug.Log(dictionary["Level"]);
-        Debug.Log(dictionary["Cup"]);
-        uiManager.GetOwnInfos(dictionary);
+           // uiManager.(userInfoDictionary);
+        }
     }
 
     public void UpdateUserData(string key, object value, string path)
@@ -393,66 +389,70 @@ public class FBManager : Singleton<FBManager>
     
     #endregion
 
+
     #region --------------------------------------------ROOM--------------------------------------------------------------
 
     bool canPlay = true;
     bool canStart = false;
 
-    public void QuickGame()
+    public void CallQuickGame() { StartCoroutine(QuickGame()); }
+
+    private IEnumerator QuickGame()
     {
-        roomReference.GetValueAsync().ContinueWith(task =>
+        Task<DataSnapshot> task = roomReference.GetValueAsync();
+
+        yield return new WaitUntil(() => task.IsCanceled || task.IsCompleted || task.IsFaulted);
+
+        if (task.IsFaulted)
         {
-            if (task.IsFaulted)
-            {
-                Debug.Log("Oyun bulma işlemi hata verdi!");
-            }
-            else if (task.IsCompleted)
-            {
-                DataSnapshot snapshot = task.Result;
+            Debug.Log("Oyun bulma işlemi hata verdi!");
+        }
+        else if (task.IsCompleted)
+        {
+            DataSnapshot snapshot = task.Result;
 
-                if (snapshot.HasChildren)
+            if (snapshot.HasChildren)
+            {
+                if (canPlay)
                 {
-                    if (canPlay)
+                    foreach (DataSnapshot rooms in snapshot.Children)
                     {
-                        foreach (DataSnapshot rooms in snapshot.Children)
+                        bool penetrability = bool.Parse(rooms.Child("General").Child("Penetrability").Value.ToString());
+
+                        if (penetrability)
                         {
-                            bool penetrability = bool.Parse(rooms.Child("General").Child("Penetrability").Value.ToString());
+                            roomReference.Child(rooms.Key).Child("General").Child("Player2-ID").SetValueAsync(userID);
+                            roomReference.Child(rooms.Key).Child("General").Child("Player2-Username").SetValueAsync(username);
+                            canPlay = false;
+                            roomID = rooms.Key;
 
-                            if (penetrability)
+                            canStart = true;
+
+                            if (canStart)
                             {
-                                roomReference.Child(rooms.Key).Child("General").Child("Player2-ID").SetValueAsync(userID);
-                                roomReference.Child(rooms.Key).Child("General").Child("Player2-Username").SetValueAsync(username);
-                                canPlay = false;
-                                roomID = rooms.Key;
-
-                                canStart = true;
-
-                                if (canStart)
-                                {
-                                    StartGame();
-                                }
-
-                                Debug.Log("Odaya giriş başarılı!");
+                                StartGame();
                             }
-                            else
-                            {
-                                CreateRoom();
-                                Debug.Log("Girilebilir bir oda bulunamadı, oda oluşturuluyor...");
-                            }
+
+                            Debug.Log("Odaya giriş başarılı!");
+                        }
+                        else
+                        {
+                            CreateRoom();
+                            Debug.Log("Girilebilir bir oda bulunamadı, oda oluşturuluyor...");
                         }
                     }
-                    else
-                    {
-                        Debug.Log("Zaten bir odaya dahilsiniz tekrar giriş yapamazsınız");
-                    }
                 }
-                else if (!snapshot.HasChildren)
+                else
                 {
-                    CreateRoom();
-                    Debug.Log("Yeni oda oluşturuldu, oyuncu bekleniyor");
+                    Debug.Log("Zaten bir odaya dahilsiniz tekrar giriş yapamazsınız");
                 }
             }
-        });
+            else if (!snapshot.HasChildren)
+            {
+                CreateRoom();
+                Debug.Log("Yeni oda oluşturuldu, oyuncu bekleniyor");
+            }
+        }
     }
 
     public void CreateRoom(string roomName = "", string roomPassword = "")
@@ -606,10 +606,10 @@ public class FBManager : Singleton<FBManager>
 
     #region --------------------------------------------GAME--------------------------------------------------------------
 
-    public void StartGame() 
+    void StartGame() 
     {
         numberCreator.CreateNumber();
-        uiManager.ShowGamePanelBridge();
+      //  uiManager.ShowGamePanelBridge();
     }
 
 	public void SetSecretNumber(int currentNumber) 
@@ -662,7 +662,7 @@ public class FBManager : Singleton<FBManager>
     }
     void SetEstimation(string lastEstimation)
     {
-        uiManager.ShowEstimation(lastEstimation);
+       // uiManager.ShowEstimation(lastEstimation);
     }
 
 	#endregion
