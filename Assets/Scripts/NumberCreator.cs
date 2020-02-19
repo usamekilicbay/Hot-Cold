@@ -5,23 +5,23 @@ using UnityEngine;
 public class NumberCreator : MonoBehaviour
 {
     [Range(0,10000)]
-    [SerializeField] private int numberRange;
-    [SerializeField] private static int secretNumber;
+    [SerializeField] private static int numberRange = 1000;
+    private static int secretNumber;
 
-    // Script References
-    FBManager fBManager;
-
-
-    void Start()
+    private void OnEnable()
     {
-        fBManager = FBManager.Instance;
-
-    //    CreateNumber();
+        //ActionManager.Instance.CreateSecretNumber += CreateNumber;
     }
 
-    public void CreateNumber()
+    private void OnDisable()
+    {
+        //ActionManager.Instance.CreateSecretNumber -= CreateNumber;
+    }
+
+    public static int CreateNumber()
     {
         secretNumber = Random.Range(0, numberRange);
-        fBManager.SetSecretNumber(secretNumber);
+
+        return secretNumber;
     }
 }

@@ -3,34 +3,38 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-public class UserProfile : Singleton<UserProfile>
+public class UserProfileUI : MonoBehaviour
 {
     [Header("User Profile")]
-    [SerializeField] TextMeshProUGUI txt_User_Level;
-    [SerializeField] TextMeshProUGUI txt_User_Cup;
-    [SerializeField] TextMeshProUGUI txt_User_Rank;
-    [SerializeField] TextMeshProUGUI txt_User_Username;
-    [SerializeField] TextMeshProUGUI txt_User_SignUpDate;
-    [SerializeField] TextMeshProUGUI txt_User_LastSeen;
-    [SerializeField] TextMeshProUGUI txt_User_TotalPlayTime;
-    [SerializeField] TextMeshProUGUI txt_User_TotalMatches;
-    [SerializeField] TextMeshProUGUI txt_User_CompletedMathces;
-    [SerializeField] TextMeshProUGUI txt_User_AbandonedMathces;
-    [SerializeField] TextMeshProUGUI txt_User_Wins;
-    [SerializeField] TextMeshProUGUI txt_User_Losses;
-    [SerializeField] TextMeshProUGUI txt_User_WinningStreak;
-    [SerializeField] Button btn_User_Home;
-    [SerializeField] Button btn_User_SignOut;
+    [SerializeField] private TextMeshProUGUI txt_User_Level;
+    [SerializeField] private TextMeshProUGUI txt_User_Cup;
+    [SerializeField] private TextMeshProUGUI txt_User_Rank;
+    [SerializeField] private TextMeshProUGUI txt_User_Username;
+    [SerializeField] private TextMeshProUGUI txt_User_SignUpDate;
+    [SerializeField] private TextMeshProUGUI txt_User_LastSeen;
+    [SerializeField] private TextMeshProUGUI txt_User_TotalPlayTime;
+    [SerializeField] private TextMeshProUGUI txt_User_TotalMatches;
+    [SerializeField] private TextMeshProUGUI txt_User_CompletedMathces;
+    [SerializeField] private TextMeshProUGUI txt_User_AbandonedMathces;
+    [SerializeField] private TextMeshProUGUI txt_User_Wins;
+    [SerializeField] private TextMeshProUGUI txt_User_Losses;
+    [SerializeField] private TextMeshProUGUI txt_User_WinningStreak;
+    [SerializeField] private Button btn_User_Home;
+    [SerializeField] private Button btn_User_SignOut;
 
 
-    private void OnEnable()
+    private void Start()
     {
         OnClickAddListener();
+        Debug.Log("Bu sayılır mı ?");
+        ActionManager.Instance.GetCurrentUserProfile += GetCurrentUserProfile;
+
+        GetCurrentUserProfile(CurrentUserProfileKeeper.UserProfileSetter());
     }
 
     private void OnDisable()
     {
-        
+      //  ActionManager.Instance.GetCurrentUserProfile -= GetCurrentUserProfile;
     }
 
     private void OnClickAddListener()
@@ -39,23 +43,23 @@ public class UserProfile : Singleton<UserProfile>
         btn_User_SignOut.onClick.AddListener(UIManager.Instance.ShowSignInPanel);
     }
 
-    public void GetOwnInfos(Dictionary<string, object> dictionary)
+    public void GetCurrentUserProfile(Dictionary<string, object> _dictionary)
     {
-        txt_User_Level.SetText(dictionary["Level"].ToString());
-        txt_User_Cup.SetText(dictionary["Cup"].ToString());
-        txt_User_Rank.SetText(dictionary["Rank"].ToString());
-        txt_User_Username.SetText(dictionary["Username"].ToString());
-        txt_User_SignUpDate.SetText(dictionary["SignUpDate"].ToString());
-        if (bool.Parse(dictionary["SignInStatus"].ToString())) { txt_User_LastSeen.SetText("Online"); }
-        else { txt_User_LastSeen.SetText(dictionary["LastSeen"].ToString()); }
-        txt_User_TotalPlayTime.SetText(dictionary["TotalPlayTime"].ToString());
-        txt_User_TotalMatches.SetText(dictionary["TotalMatches"].ToString());
-        txt_User_CompletedMathces.SetText(dictionary["CompletedMatches"].ToString());
-        txt_User_AbandonedMathces.SetText(dictionary["AbandonedMatches"].ToString());
-        txt_User_Wins.SetText(dictionary["Wins"].ToString());
-        txt_User_Losses.SetText(dictionary["Losses"].ToString());
-        txt_User_WinningStreak.SetText(dictionary["WinningStreak"].ToString());
+        txt_User_Level.SetText(_dictionary["Level"].ToString());
+        txt_User_Cup.SetText(_dictionary["Cup"].ToString());
+        txt_User_Rank.SetText(_dictionary["Rank"].ToString());
+        txt_User_Username.SetText(_dictionary["Username"].ToString());
+        txt_User_SignUpDate.SetText(_dictionary["SignUpDate"].ToString());
+        if (bool.Parse(_dictionary["SignInStatus"].ToString())) { txt_User_LastSeen.SetText("Online"); }
+        else { txt_User_LastSeen.SetText(_dictionary["LastSeen"].ToString()); }
+        txt_User_TotalPlayTime.SetText(_dictionary["TotalPlayTime"].ToString());
+        txt_User_TotalMatches.SetText(_dictionary["TotalMatches"].ToString());
+        txt_User_CompletedMathces.SetText(_dictionary["CompletedMatches"].ToString());
+        txt_User_AbandonedMathces.SetText(_dictionary["AbandonedMatches"].ToString());
+        txt_User_Wins.SetText(_dictionary["Wins"].ToString());
+        txt_User_Losses.SetText(_dictionary["Losses"].ToString());
+        txt_User_WinningStreak.SetText(_dictionary["WinningStreak"].ToString());
 
-        UIManager.Instance.ShowUserProfilePanel();
+        //UIManager.Instance.ShowUserProfilePanel();
     }
 }

@@ -76,11 +76,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] Button btn_Win_Play;
 
 
-    // Script References
-    FirebaseManager firebaseManager;
-
-    FBManager fBManager;
-    AuthManager authManager;
+    
 
     private void Start()
     {
@@ -95,7 +91,7 @@ public class UIManager : Singleton<UIManager>
 
         // Create Room Panel Add Click Listener
         btn_CreateRoom_Home.onClick.AddListener(ShowMenuPanel);
-        btn_CreateRoom_Create.onClick.AddListener(CreateRoom);
+       // btn_CreateRoom_Create.onClick.AddListener(CreateRoom);
 
 
       
@@ -105,10 +101,7 @@ public class UIManager : Singleton<UIManager>
          btn_Win_Home.onClick.AddListener(ShowMenuPanel);*/
 
         // Script Specification
-        firebaseManager = FirebaseManager.Instance;
-
-        fBManager = FBManager.Instance;
-        authManager = AuthManager.Instance;
+      
     }
 
     #region Firebase
@@ -119,9 +112,9 @@ public class UIManager : Singleton<UIManager>
    // private void SendPassword() { authManager.ResetPassword(txt_SignIn_Email.text); }
 
     // Before Game Begin
-    private void CreateRoom() { fBManager.CreateRoom(txt_CreateRoom_RoomName.text, txt_CreateRoom_RoomPassword.text); }
+   // private void CreateRoom() { fBManager.CreateRoom(txt_CreateRoom_RoomName.text, txt_CreateRoom_RoomPassword.text); }
     
-    private void LoadRoomList() { fBManager.AddRoomListToDropdown(drpdwn_Lobby_RoomList); }
+   // private void LoadRoomList() { fBManager.AddRoomListToDropdown(drpdwn_Lobby_RoomList); }
     private void RefreshRoomList() { }
     //private void EnterRoom() { fBManager.EnterTheRoom(drpdwn_Lobby_RoomList.options[drpdwn_Lobby_RoomList.value].ToString()); }
 

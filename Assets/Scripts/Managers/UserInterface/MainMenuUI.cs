@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainMenuUI : Singleton<MainMenuUI>
+public class MainMenuUI : MonoBehaviour
 {
     [Header("Panel / Menu")]
     [SerializeField] TextMeshProUGUI txt_Menu_Header;
@@ -16,6 +16,7 @@ public class MainMenuUI : Singleton<MainMenuUI>
 
     private void OnEnable()
     {
+        Debug.Log("Peki ya bu?");
         OnClickAddListener();
     }
 
@@ -26,10 +27,11 @@ public class MainMenuUI : Singleton<MainMenuUI>
 
     private void OnClickAddListener() 
     {
-        btn_Menu_Play.onClick.AddListener(ActionManager.Instance.QuickGame);
+        btn_Menu_Play.onClick.AddListener(() => ActionManager.Instance.QuickGame());
         btn_Menu_Settings.onClick.AddListener(UIManager.Instance.ShowSettingsPanel);
         btn_Menu_Store.onClick.AddListener(UIManager.Instance.ShowStorePanel);
-        btn_Menu_User.onClick.AddListener(ActionManager.Instance.UserProfile);
+        btn_Menu_User.onClick.AddListener(UIManager.Instance.ShowUserProfilePanel);
+        //btn_Menu_User.onClick.AddListener(() => ActionManager.Instance.CallCurrentUserProfile());
         //btn_Menu_RateUs.onClick.AddListener(RateUs);
     }
 

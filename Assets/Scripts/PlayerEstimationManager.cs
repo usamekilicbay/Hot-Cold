@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-public class PlayerGuessManager : MonoBehaviour
+public class PlayerEstimationManager : MonoBehaviour
 {
 
     [SerializeField] TMP_InputField inputField;

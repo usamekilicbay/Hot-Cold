@@ -4,35 +4,37 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
-    FBManager fBManager;
-
-    private void Start()
+    int secretNumber;
+    private void OnEnable()
     {
-        fBManager = FBManager.Instance;    
+        ActionManager.Instance.ControlAnswer += ControlAnswer;
+        secretNumber = CurrentRoomInfoKeeper.secretNumber;
     }
 
-    public  void ControlAnswer(int guessedNumber)
+    private void OnDisable()
     {
-        int secretNumber = fBManager.GetSecretNumber();
+        ActionManager.Instance.ControlAnswer -= ControlAnswer;
+    }
 
-        if (guessedNumber == secretNumber)
+    public  void ControlAnswer(int _estimatedNumber)
+    {
+        if (_estimatedNumber == secretNumber)
         {
             Debug.Log("Bildin!");
         }
-        else if (guessedNumber != secretNumber)
+        else if (_estimatedNumber != secretNumber)
         {           
-            int majority = Mathf.Abs(guessedNumber - secretNumber);
+            int majority = Mathf.Abs(_estimatedNumber - secretNumber);
 
             string assistance;
             string nearlyAssistance;
             Debug.Log(majority);
 
-            if (guessedNumber < secretNumber)
+            if (_estimatedNumber < secretNumber)
             {
                 assistance = "Büyük";                
             }
-            else if (guessedNumber > secretNumber)
+            else if (_estimatedNumber > secretNumber)
             {
                 assistance = "Küçük";
             }
@@ -74,6 +76,8 @@ public class GameManager : MonoBehaviour
 
             Debug.Log($"Tekrar dene: {mainAsistance}");
 
+            ActionManager.Instance.SendEstimation(_estimatedNumber);
+            
         }
     }
 }

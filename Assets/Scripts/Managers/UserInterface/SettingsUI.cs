@@ -27,7 +27,7 @@ public class SettingsUI : Singleton<SettingsUI>
 
     void OnClickAddListener()
     {
-        //btn_Settings_Home.onClick.AddListener(ShowMenuPanel);
+        btn_Settings_Home.onClick.AddListener(UIManager.Instance.ShowMenuPanel);
         //btn_Settings_Home.onClick.AddListener(ShowMenuPanel);
         //btn_Settings_Vibration_Off.onClick.AddListener(VibrationOff);
         //btn_Settings_Vibration_On.onClick.AddListener(VibrationOn);

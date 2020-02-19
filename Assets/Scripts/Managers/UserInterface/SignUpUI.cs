@@ -26,8 +26,8 @@ public class SignUpUI : Singleton<SignUpUI>
 
     private void OnClickAddListener()
     {
-        //btn_SignUp_Home.onClick.AddListener(ShowMenuPanel);
-        //btn_SignUp_SignIn.onClick.AddListener(ShowSignInPanel);
+        btn_SignUp_Home.onClick.AddListener(UIManager.Instance.ShowMenuPanel);
+        btn_SignUp_SignIn.onClick.AddListener(UIManager.Instance.ShowSignInPanel);
         btn_SignUp_Send.onClick.AddListener(() => ActionManager.Instance.SignUpEmailPassword(txt_SignUp_Username.text, txt_SignUp_Email.text, txt_SignUp_Password.text));
     }
 
