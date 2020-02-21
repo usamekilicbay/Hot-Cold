@@ -26,10 +26,9 @@ public class UserProfileUI : MonoBehaviour
     private void Start()
     {
         OnClickAddListener();
-        Debug.Log("Bu sayılır mı ?");
-        ActionManager.Instance.GetCurrentUserProfile += GetCurrentUserProfile;
+       // ActionManager.Instance.GetCurrentUserProfile += GetCurrentUserProfile;
 
-        GetCurrentUserProfile(CurrentUserProfileKeeper.UserProfileSetter());
+        GetCurrentUserProfile();
     }
 
     private void OnDisable()
@@ -43,23 +42,21 @@ public class UserProfileUI : MonoBehaviour
         btn_User_SignOut.onClick.AddListener(UIManager.Instance.ShowSignInPanel);
     }
 
-    public void GetCurrentUserProfile(Dictionary<string, object> _dictionary)
+    public void GetCurrentUserProfile()
     {
-        txt_User_Level.SetText(_dictionary["Level"].ToString());
-        txt_User_Cup.SetText(_dictionary["Cup"].ToString());
-        txt_User_Rank.SetText(_dictionary["Rank"].ToString());
-        txt_User_Username.SetText(_dictionary["Username"].ToString());
-        txt_User_SignUpDate.SetText(_dictionary["SignUpDate"].ToString());
-        if (bool.Parse(_dictionary["SignInStatus"].ToString())) { txt_User_LastSeen.SetText("Online"); }
-        else { txt_User_LastSeen.SetText(_dictionary["LastSeen"].ToString()); }
-        txt_User_TotalPlayTime.SetText(_dictionary["TotalPlayTime"].ToString());
-        txt_User_TotalMatches.SetText(_dictionary["TotalMatches"].ToString());
-        txt_User_CompletedMathces.SetText(_dictionary["CompletedMatches"].ToString());
-        txt_User_AbandonedMathces.SetText(_dictionary["AbandonedMatches"].ToString());
-        txt_User_Wins.SetText(_dictionary["Wins"].ToString());
-        txt_User_Losses.SetText(_dictionary["Losses"].ToString());
-        txt_User_WinningStreak.SetText(_dictionary["WinningStreak"].ToString());
+        txt_User_Username.SetText(CurrentUserProfileKeeper.Username);
+        if (bool.Parse(CurrentUserProfileKeeper.SignInStatus.ToString())) txt_User_SignUpDate.SetText(CurrentUserProfileKeeper.SignUpDate.ToString());
+        else txt_User_LastSeen.SetText("Online");
 
-        //UIManager.Instance.ShowUserProfilePanel();
+        txt_User_Level.SetText(CurrentUserProfileKeeper.Level.ToString());
+        txt_User_Cup.SetText(CurrentUserProfileKeeper.Cup.ToString());
+        txt_User_Rank.SetText(CurrentUserProfileKeeper.Rank.ToString());
+        txt_User_TotalPlayTime.SetText(CurrentUserProfileKeeper.TotalPlayTime.ToString());
+        txt_User_TotalMatches.SetText(CurrentUserProfileKeeper.TotalMatches.ToString());
+        txt_User_CompletedMathces.SetText(CurrentUserProfileKeeper.CompletedMatches.ToString());
+        txt_User_AbandonedMathces.SetText(CurrentUserProfileKeeper.AbandonedMatches.ToString());
+        txt_User_Wins.SetText(CurrentUserProfileKeeper.Wins.ToString());
+        txt_User_Losses.SetText(CurrentUserProfileKeeper.Losses.ToString());
+        txt_User_WinningStreak.SetText(CurrentUserProfileKeeper.WinningStreak.ToString());
     }
 }

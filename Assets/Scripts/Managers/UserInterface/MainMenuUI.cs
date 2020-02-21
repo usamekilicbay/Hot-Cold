@@ -16,7 +16,6 @@ public class MainMenuUI : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log("Peki ya bu?");
         OnClickAddListener();
     }
 
