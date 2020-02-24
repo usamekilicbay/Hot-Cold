@@ -76,7 +76,15 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] Button btn_Win_Play;
 
 
-    
+    private void OnEnable()
+    {
+        ActionManager.Instance.ShowUserProfilePanel += ShowUserProfilePanel;
+    }
+
+    private void OnDisable()
+    {
+        ActionManager.Instance.ShowUserProfilePanel -= ShowUserProfilePanel;
+    }
 
     private void Start()
     {

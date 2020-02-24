@@ -8,42 +8,23 @@ using UnityEngine;
 
 public class FirebaseAuthenticationManager : FBManager
 {
-
     private void OnEnable()
     {
-        ActionManager.Instance.SignUpEmailPassword += SignUpEmailPassword;
-        ActionManager.Instance.SignInEmailPassword += SignInEmailPassword;
+        ActionManager.Instance.SignUpWithEmailPassword += CallSignUpWithEmailPassword;
+        ActionManager.Instance.SignInWithEmailPassword += CallSignInWithEmailPassword;
+        ActionManager.Instance.ResetPasswordWithMail += CallResetPasswordWithMail;
+        ActionManager.Instance.SignOut += SignOut;
+        ActionManager.Instance.SignOut += DeleteUser;
     }
 
     private void OnDisable()
     {
-        ActionManager.Instance.SignUpEmailPassword -= SignUpEmailPassword;
-        ActionManager.Instance.SignInEmailPassword -= SignInEmailPassword;
+        ActionManager.Instance.SignUpWithEmailPassword -= CallSignUpWithEmailPassword;
+        ActionManager.Instance.SignInWithEmailPassword -= CallSignInWithEmailPassword;
+        ActionManager.Instance.ResetPasswordWithMail -= CallResetPasswordWithMail;
+        ActionManager.Instance.SignOut -= SignOut;
+        ActionManager.Instance.SignOut -= DeleteUser;
     }
-
-    void AuthStateChanged(object sender, System.EventArgs eventArgs)
-    {
-        FirebaseAuth senderAuth = sender as FirebaseAuth;
-        FirebaseUser user = null;
-        if (senderAuth == auth && senderAuth.CurrentUser != user)
-        {
-            bool signedIn = user != senderAuth.CurrentUser && senderAuth.CurrentUser != null;
-
-            if (!signedIn && user != null)
-            {
-                Debug.Log("Çıkış yapan kullanıcı:" + user.UserId);
-                UIManager.Instance.ShowSignInPanel();
-            }
-            user = senderAuth.CurrentUser;
-            userByauth[senderAuth.App.Name] = user;
-            if (signedIn)
-            {
-                Debug.Log("Giriş yapan kullanıcı:" + user.UserId);
-                UIManager.Instance.ShowMenuPanel();
-            }
-        }
-    }
-
 
 
     /* void IdTokenChanged(object sender, System.EventArgs eventArgs)
@@ -78,80 +59,150 @@ public class FirebaseAuthenticationManager : FBManager
         return complete;
     }
 
-    /*private void SignInAnonym(Task<Firebase.Auth.FirebaseUser> authTask)
-     {
-         if (LogTaskCompletion(authTask, "Giriş Yapıldı")) ;
-     }*/
-
-    //Kullanıcımız oyuna yeniden girdi
-    IEnumerator SignInAgain()
-    {
-        Debug.Log("Tekrar Giriş yapıldı....");
-        //SignUp(auth.CurrentUser.UserId.ToString());
-        yield return new WaitForSeconds(2.0f);
-
-    }
-
-    private void SignUpEmailPassword(string username, string email, string password)
-    {
-
-        auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(task =>
-        {
-            if (task.IsCanceled)
-            {
-                //LogTaskCompletion(task, "Giriş işlemi iptal edildi");
-                Debug.Log("Giriş işlemi iptal edildi");
-                return;
-            }
-            else if (task.IsFaulted)
-            {
-                // LogTaskCompletion(task, "Kayıt işlemi başarısız oldu!");
-                Debug.Log("Kayıt işlemi başarısız oldu!");
-                return;
-            }
-            else if (task.IsCompleted)
-            {
-                // LogTaskCompletion(task, "Kayıt işlemi başarıyla tamamlandı!");
-                Debug.Log("Kayıt işlemi başarıyla tamamlandı!");
-
-                FirebaseUser newUser = task.Result;
-                //newUser. BUNU İNCELE
-                SetUserReference();
-
-               // CreateUser(username);
-            }
-
-        });
-    }
-
-
-    private void SignInEmailPassword(string email, string password)
-    {
-        auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(task =>
-        {
-            if (task.IsFaulted)
-            {
-                Debug.Log("Giriş işlemi başarısız");
-            }
-            else if (task.IsCompleted)
-            {
-                UIManager.Instance.ShowMenuPanel();
-            }
-        });
-    }
-
-
-   /* private void GetUserID()
-    {
-        userID = auth.CurrentUser.UserId;
-        Debug.Log("User Id " + userID);
-        SetUserReference();
-    }*/
-
     private void SetUserReference()
     {
         userReference = FirebaseDatabase.DefaultInstance.GetReference($"Users/UserID/{auth.CurrentUser.UserId}");
-
-        //StartCoroutine(GetCurrentUserProfile());
     }
+
+	#region Sign Up
+
+	private void CallSignUpWithEmailPassword(SignUpStruct sign)//string _username, string _email, string _password, string _confirmPassword, string _language) 
+    {
+
+        if (sign.Password.Equals(sign.ConfirmPassword))
+        {
+            StartCoroutine(SignUpEmailPassword(sign.Username, sign.Email, sign.Password, sign.Language));
+        }
+        else
+        {
+            Debug.Log("Eşleşmeyen şifre!");
+        }
+    }
+
+    private IEnumerator SignUpEmailPassword(string _username, string _email, string _password, string _language)
+    {
+        Task task = auth.CreateUserWithEmailAndPasswordAsync(_email, _password);
+
+        yield return new WaitUntil(() => task.IsCanceled || task.IsFaulted || task.IsCompleted);
+
+        if (task.IsCanceled)
+        {
+            //LogTaskCompletion(task, "Giriş işlemi iptal edildi");
+            Debug.Log("Giriş işlemi iptal edildi");
+        }
+        else if (task.IsFaulted)
+        {
+            // LogTaskCompletion(task, "Kayıt işlemi başarısız oldu!");
+            Debug.Log("Kayıt işlemi başarısız oldu!");
+        }
+        else if (task.IsCompleted)
+        {
+            // LogTaskCompletion(task, "Kayıt işlemi başarıyla tamamlandı!");
+            Debug.Log("Kayıt işlemi başarıyla tamamlandı!");
+            SetUserReference();
+
+            ActionManager.Instance.CreatUserProfile(_username, _language);
+            ActionManager.Instance.CallCurrentUserProfile();
+        }
+    }
+
+	#endregion
+
+	#region Sign In
+
+	private void CallSignInWithEmailPassword(string _email,string _password) 
+    {
+        StartCoroutine(SignInEmailPassword(_email, _password));
+    }
+
+    private IEnumerator SignInEmailPassword(string _email, string _password)
+    {
+        Task task = auth.SignInWithEmailAndPasswordAsync(_email, _password);
+
+        yield return new WaitUntil(() => task.IsCanceled || task.IsFaulted || task.IsCompleted);
+
+        if (task.IsCanceled)
+        {
+            Debug.Log("Giriş işlemi iptal edildi");
+        }
+        else if (task.IsFaulted)
+        {
+            Debug.Log("Giriş işlemi başarısız");
+        }
+        else if (task.IsCompleted)
+        {
+            SetUserReference();
+
+            Debug.Log("Giriş işlemi başarılı");
+            ActionManager.Instance.CallCurrentUserProfile();
+        }
+    }
+
+    #endregion
+
+    #region Reset Password
+
+    private void CallResetPasswordWithMail(string _email) 
+    {
+        StartCoroutine(ResetPassword(_email));
+    }
+
+    private IEnumerator ResetPassword(string _email)
+    {
+        Task task = auth.SendPasswordResetEmailAsync(_email);
+
+        yield return new WaitUntil(() => task.IsCanceled || task.IsFaulted || task.IsCompleted);
+
+        if (task.IsCanceled)
+        {
+            Debug.Log("Şifre sıfırlama işlemi iptal edildi.");
+        }
+        else if (task.IsFaulted)
+        {
+            Debug.Log("Şifre sıfırlama işlemi başarısız oldu.");
+        }
+        else if (task.IsCompleted)
+        {
+            Debug.Log("Şifre sıfırlama bağlantısı gönderildi.");
+        }
+    }
+
+    #endregion
+
+    #region Sign Out
+
+    private void SignOut() 
+    {
+        auth.SignOut();
+    }
+
+    #endregion
+
+    #region Delete User
+
+    private void DeleteUser() 
+    {
+        auth.CurrentUser.DeleteAsync();
+    }
+
+	#endregion
+
+	/*Credential credential = GoogleAuthProvider.GetCredential(googleIdToken, googleAccessToken);
+    auth.SignInWithCredentialAsync(credential).ContinueWith(task => {
+        if (task.IsCanceled)
+        {
+            Debug.LogError("SignInWithCredentialAsync was canceled.");
+            return;
+        }
+        if (task.IsFaulted)
+        {
+            Debug.LogError("SignInWithCredentialAsync encountered an error: " + task.Exception);
+            return;
+        }
+
+        Firebase.Auth.FirebaseUser newUser = task.Result;
+        Debug.LogFormat("User signed in successfully: {0} ({1})",
+            newUser.DisplayName, newUser.UserId);
+    });*/
+
 }

@@ -5,33 +5,30 @@ using UnityEngine.Events;
 
 public class ActionManager : Singleton<ActionManager>
 {
-    
+    // Prepare Game
     public UnityAction QuickGame;
 
-    public UnityAction<string, string, string> SignUpEmailPassword;
-    public UnityAction<string, string> SignInEmailPassword;
+    // Authentication
+    public UnityAction<SignUpStruct> SignUpWithEmailPassword;
+    public UnityAction<string, string> SignInWithEmailPassword;
+    public UnityAction<string> ResetPasswordWithMail;
+    public UnityAction DeleteUser;
+    public UnityAction SignOut;
 
-    public UnityAction<Dictionary<string, object>> GetCurrentUserProfile;
+    // User
     public UnityAction CallCurrentUserProfile;
+    public UnityAction<string,string> CreatUserProfile;
+    public UnityAction DeleteUserProfile;
 
-
+    // Game
+    public UnityAction<string> ShowWhoseTurn;
     public UnityAction<string> ShowLastEstimation;
     public UnityAction<int> SendEstimation;
     public UnityAction<int> ControlAnswer;
 
     public UnityAction CreateSecretNumber;
 
-   // public UnityAction<>
-    
-    
-    
-    
-    public UnityAction<UIManager.Panels> showMainMenuPanelTrigger;
-    public UnityAction<UIManager.Panels> showGamePanelTrigger;
-    public UnityAction<UIManager.Panels> showSettingsPanelTrigger;
-    public UnityAction<UIManager.Panels> showStorePanelTrigger;
-    public UnityAction<UIManager.Panels> showSignInPanelTrigger;
-    public UnityAction<UIManager.Panels> showSignUpPanelTrigger;
-    public UnityAction<UIManager.Panels> showResetPasswordPanelTrigger;
-    public UnityAction<UIManager.Panels> showUserProfilePanelTrigger;
+    // Panels
+    public UnityAction ShowUserProfilePanel;
+    public UnityAction ShowMenuPanel;
 }

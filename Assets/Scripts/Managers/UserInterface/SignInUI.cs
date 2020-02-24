@@ -30,6 +30,6 @@ public class SignInUI : Singleton<SignInUI>
         btn_SignIn_Home.onClick.AddListener(UIManager.Instance.ShowMenuPanel);
         btn_SignIn_ResetPassword.onClick.AddListener(UIManager.Instance.ShowResetPasswordPanel);
         btn_SignIn_SignUp.onClick.AddListener(UIManager.Instance.ShowSignUpPanel);
-        btn_SignIn_Send.onClick.AddListener(() => ActionManager.Instance.SignInEmailPassword(txt_SignIn_Email.text, txt_SignIn_Password.text));
+        btn_SignIn_Send.onClick.AddListener(() => ActionManager.Instance.SignInWithEmailPassword(txt_SignIn_Email.text, txt_SignIn_Password.text));
     }
 }

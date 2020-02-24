@@ -39,10 +39,10 @@ public class UserProfileUI : MonoBehaviour
     private void OnClickAddListener()
     {
         btn_User_Home.onClick.AddListener(UIManager.Instance.ShowMenuPanel);
-        btn_User_SignOut.onClick.AddListener(UIManager.Instance.ShowSignInPanel);
+        btn_User_SignOut.onClick.AddListener(SignOut);
     }
 
-    public void GetCurrentUserProfile()
+    private void GetCurrentUserProfile()
     {
         txt_User_Username.SetText(CurrentUserProfileKeeper.Username);
         if (bool.Parse(CurrentUserProfileKeeper.SignInStatus.ToString())) txt_User_SignUpDate.SetText(CurrentUserProfileKeeper.SignUpDate.ToString());
@@ -58,5 +58,12 @@ public class UserProfileUI : MonoBehaviour
         txt_User_Wins.SetText(CurrentUserProfileKeeper.Wins.ToString());
         txt_User_Losses.SetText(CurrentUserProfileKeeper.Losses.ToString());
         txt_User_WinningStreak.SetText(CurrentUserProfileKeeper.WinningStreak.ToString());
+    }
+
+    private void SignOut() 
+    {
+        ActionManager.Instance.DeleteUser();
+        //ActionManager.Instance.SignOut();
+        //ActionManager.Instance.DeleteUserProfile();
     }
 }

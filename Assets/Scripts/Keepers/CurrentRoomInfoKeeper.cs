@@ -5,6 +5,7 @@
 	public static int scoreLimit;
 	public static int answerTimeLimit;
 
+	public static string roomID;
 	public static string rivalUsername;
 	public static string rivalID;
 	public static string whoseTurn;

@@ -13,7 +13,6 @@ public class ResetPasswordUI : Singleton<ResetPasswordUI>
 
     private void OnEnable()
     {
-        
     }
 
     private void OnDisable()
@@ -24,6 +23,11 @@ public class ResetPasswordUI : Singleton<ResetPasswordUI>
     void OnClickAddListener()
     {
         //btn_ResetPassword_Home.onClick.AddListener(ShowMenuPanel);
-        //btn_ResetPassword_Send.onClick.AddListener(SendPassword);
+        btn_ResetPassword_Send.onClick.AddListener(ResetPassword);
+    }
+
+    private void ResetPassword() 
+    {
+        ActionManager.Instance.ResetPasswordWithMail(txt_ResetPassword_Email.text);
     }
 }

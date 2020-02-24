@@ -7,20 +7,22 @@ using UnityEngine;
 
 public class FirebaseUserManager : FBManager
 {
-
     private void OnEnable()
     {
+        ActionManager.Instance.CreatUserProfile += CreateUserProfile;
         ActionManager.Instance.CallCurrentUserProfile += CallGetCurrentUserProfile;
+        ActionManager.Instance.DeleteUserProfile += DeleteUserProfile;
     }
 
     private void OnDisable()
     {
+        ActionManager.Instance.CreatUserProfile -= CreateUserProfile;
         ActionManager.Instance.CallCurrentUserProfile -= CallGetCurrentUserProfile;
+        ActionManager.Instance.DeleteUserProfile -= DeleteUserProfile;
     }
 
-    private void CreateUser(string username)
+    private void CreateUserProfile(string username, string language)
     {
-
         // General
         UserGeneral userGenerals = new UserGeneral
             (
@@ -28,7 +30,7 @@ public class FirebaseUserManager : FBManager
             System.DateTime.Now.ToString("dd/MM/yyyy"),
             System.DateTime.Now.ToString("dd/MM/yyyy"),
             "Türkiye",
-            "Türkçe",
+            language,
             true,
             true
             );
@@ -90,7 +92,7 @@ public class FirebaseUserManager : FBManager
     public void CallGetCurrentUserProfile()
     {
         Debug.Log("Geldik inebilirsin");
-        //  StartCoroutine(GetCurrentUserProfile());
+        StartCoroutine(GetCurrentUserProfile());
     }
 
     private IEnumerator GetCurrentUserProfile()
@@ -102,7 +104,7 @@ public class FirebaseUserManager : FBManager
         if (task.IsCompleted)
         {
             DataSnapshot snapshot = task.Result;
-
+       
             // String General 
             CurrentUserProfileKeeper.Username = snapshot.Child("General").Child("Username").Value.ToString();
             CurrentUserProfileKeeper.Country = snapshot.Child("General").Child("Country").Value.ToString();
@@ -126,13 +128,25 @@ public class FirebaseUserManager : FBManager
             CurrentUserProfileKeeper.Wins = int.Parse(snapshot.Child("Progression").Child("Wins").Value.ToString());
             CurrentUserProfileKeeper.Losses = int.Parse(snapshot.Child("Progression").Child("Losses").Value.ToString());
             CurrentUserProfileKeeper.WinningStreak = int.Parse(snapshot.Child("Progression").Child("WinningStreak").Value.ToString());
+            
+            // Int Consumable
+            CurrentUserProfileKeeper.Gold = int.Parse(snapshot.Child("Consumable").Child("Gold").ToString());
 
-
-
-           
+            ActionManager.Instance.ShowUserProfilePanel();
         }
 
        // LogTaskCompletion(task, "Şimdiki kullanıcı bilgileri çekme ");
+    }
+
+    private void DeleteUserProfile() 
+    {
+        Task task = userReference.RemoveValueAsync();
+
+       /* if (task.IsCompleted)
+        {
+            DataSnapshot snapshot = task.res
+
+        }*/
     }
 
     private void UpdateUserData(string key, object value, string path)
@@ -140,4 +154,5 @@ public class FirebaseUserManager : FBManager
         userReference.Child(path).Child(key).SetValueAsync(value);
     }
 
+    
 }
