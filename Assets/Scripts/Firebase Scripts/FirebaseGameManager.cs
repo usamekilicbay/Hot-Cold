@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class FirebaseGameManager : FBManager
+public class FirebaseGameManager : FirebaseBaseManager
 {
     private void OnEnable()
     {

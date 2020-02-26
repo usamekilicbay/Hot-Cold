@@ -45,8 +45,16 @@ public class UserProfileUI : MonoBehaviour
     private void GetCurrentUserProfile()
     {
         txt_User_Username.SetText(CurrentUserProfileKeeper.Username);
-        if (bool.Parse(CurrentUserProfileKeeper.SignInStatus.ToString())) txt_User_SignUpDate.SetText(CurrentUserProfileKeeper.SignUpDate.ToString());
-        else txt_User_LastSeen.SetText("Online");
+        txt_User_SignUpDate.SetText(CurrentUserProfileKeeper.SignUpDate.ToString());
+
+        if (bool.Parse(CurrentUserProfileKeeper.SignInStatus.ToString()))
+        {
+            txt_User_LastSeen.SetText("Online");//LocalizationKeeper.Online);
+        }
+        else
+        {
+            txt_User_LastSeen.SetText(CurrentUserProfileKeeper.LastSeen.ToString());
+        }
 
         txt_User_Level.SetText(CurrentUserProfileKeeper.Level.ToString());
         txt_User_Cup.SetText(CurrentUserProfileKeeper.Cup.ToString());
@@ -62,8 +70,8 @@ public class UserProfileUI : MonoBehaviour
 
     private void SignOut() 
     {
-        ActionManager.Instance.DeleteUser();
-        //ActionManager.Instance.SignOut();
+       // ActionManager.Instance.DeleteUser();
+        ActionManager.Instance.SignOut();
         //ActionManager.Instance.DeleteUserProfile();
     }
 }

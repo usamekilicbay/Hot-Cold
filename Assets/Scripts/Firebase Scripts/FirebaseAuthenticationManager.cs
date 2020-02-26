@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 
-public class FirebaseAuthenticationManager : FBManager
+public class FirebaseAuthenticationManager : FirebaseBaseManager
 {
     private void OnEnable()
     {
@@ -14,7 +14,7 @@ public class FirebaseAuthenticationManager : FBManager
         ActionManager.Instance.SignInWithEmailPassword += CallSignInWithEmailPassword;
         ActionManager.Instance.ResetPasswordWithMail += CallResetPasswordWithMail;
         ActionManager.Instance.SignOut += SignOut;
-        ActionManager.Instance.SignOut += DeleteUser;
+        ActionManager.Instance.DeleteUser += DeleteUser;
     }
 
     private void OnDisable()
@@ -23,7 +23,7 @@ public class FirebaseAuthenticationManager : FBManager
         ActionManager.Instance.SignInWithEmailPassword -= CallSignInWithEmailPassword;
         ActionManager.Instance.ResetPasswordWithMail -= CallResetPasswordWithMail;
         ActionManager.Instance.SignOut -= SignOut;
-        ActionManager.Instance.SignOut -= DeleteUser;
+        ActionManager.Instance.DeleteUser -= DeleteUser;
     }
 
 
@@ -59,10 +59,7 @@ public class FirebaseAuthenticationManager : FBManager
         return complete;
     }
 
-    private void SetUserReference()
-    {
-        userReference = FirebaseDatabase.DefaultInstance.GetReference($"Users/UserID/{auth.CurrentUser.UserId}");
-    }
+    
 
 	#region Sign Up
 
@@ -88,21 +85,21 @@ public class FirebaseAuthenticationManager : FBManager
         if (task.IsCanceled)
         {
             //LogTaskCompletion(task, "Giriş işlemi iptal edildi");
-            Debug.Log("Giriş işlemi iptal edildi");
+            Debug.LogWarning(ConstantKeeper.Authentications.SignUp + ConstantKeeper.Debugs.IsCanceled);
         }
         else if (task.IsFaulted)
         {
             // LogTaskCompletion(task, "Kayıt işlemi başarısız oldu!");
-            Debug.Log("Kayıt işlemi başarısız oldu!");
+            Debug.LogError(ConstantKeeper.Authentications.SignUp + ConstantKeeper.Debugs.IsFaulted);
         }
         else if (task.IsCompleted)
         {
             // LogTaskCompletion(task, "Kayıt işlemi başarıyla tamamlandı!");
-            Debug.Log("Kayıt işlemi başarıyla tamamlandı!");
+            Debug.Log(ConstantKeeper.Authentications.SignUp + ConstantKeeper.Debugs.IsCompleted);
             SetUserReference();
 
             ActionManager.Instance.CreatUserProfile(_username, _language);
-            ActionManager.Instance.CallCurrentUserProfile();
+            ActionManager.Instance.CallGetCurrentUserProfile();
         }
     }
 
@@ -119,22 +116,24 @@ public class FirebaseAuthenticationManager : FBManager
     {
         Task task = auth.SignInWithEmailAndPasswordAsync(_email, _password);
 
+       // string log = 
+
         yield return new WaitUntil(() => task.IsCanceled || task.IsFaulted || task.IsCompleted);
 
         if (task.IsCanceled)
         {
-            Debug.Log("Giriş işlemi iptal edildi");
+            Debug.LogWarning(ConstantKeeper.Authentications.SignIn + ConstantKeeper.Debugs.IsCanceled);
         }
         else if (task.IsFaulted)
         {
-            Debug.Log("Giriş işlemi başarısız");
+            Debug.LogError(ConstantKeeper.Authentications.SignIn + ConstantKeeper.Debugs.IsFaulted);
         }
         else if (task.IsCompleted)
         {
             SetUserReference();
 
-            Debug.Log("Giriş işlemi başarılı");
-            ActionManager.Instance.CallCurrentUserProfile();
+            Debug.Log(ConstantKeeper.Authentications.SignIn + ConstantKeeper.Debugs.IsCompleted);
+            ActionManager.Instance.CallGetCurrentUserProfile();
         }
     }
 
@@ -155,15 +154,15 @@ public class FirebaseAuthenticationManager : FBManager
 
         if (task.IsCanceled)
         {
-            Debug.Log("Şifre sıfırlama işlemi iptal edildi.");
+            Debug.LogWarning(ConstantKeeper.Authentications.ResetPassword + ConstantKeeper.Debugs.IsCanceled);
         }
         else if (task.IsFaulted)
         {
-            Debug.Log("Şifre sıfırlama işlemi başarısız oldu.");
+            Debug.LogError(ConstantKeeper.Authentications.ResetPassword + ConstantKeeper.Debugs.IsFaulted);
         }
         else if (task.IsCompleted)
         {
-            Debug.Log("Şifre sıfırlama bağlantısı gönderildi.");
+            Debug.Log(ConstantKeeper.Authentications.ResetPassword + ConstantKeeper.Debugs.IsCompleted);
         }
     }
 
@@ -174,15 +173,37 @@ public class FirebaseAuthenticationManager : FBManager
     private void SignOut() 
     {
         auth.SignOut();
+        
+        Debug.Log(ConstantKeeper.Authentications.SignOut + ConstantKeeper.Debugs.IsCompleted);
+        ActionManager.Instance.ShowSignInPanel();
     }
 
     #endregion
 
     #region Delete User
 
-    private void DeleteUser() 
+    private void DeleteUser()
     {
         auth.CurrentUser.DeleteAsync();
+        //FirebaseUser user = auth.CurrentUser;
+        /*auth.CurrentUser.DeleteAsync().ContinueWith(task =>
+           {
+               Debug.Log("Kullanıcı silme işlemi deneniyor");
+
+               if (task.IsCanceled)
+               {
+                   Debug.Log("Kullanıcı silme işlemi iptal edildi.");
+               }
+               else if (task.IsFaulted)
+               {
+                   Debug.Log("Kullanıcı silme işlemi başarısız oldu.");
+               }
+               else if (task.IsCompleted)
+               {
+                   Debug.Log("Kullanıcı silme işlemi başarıyla tamamlandı.");
+               }
+           });*/
+
     }
 
 	#endregion

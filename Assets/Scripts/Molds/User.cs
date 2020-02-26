@@ -8,6 +8,7 @@ public class UserGeneral
     public string LastSeen;
     public string Country;
     public string Language;
+    
     // Bool Variables
     public bool SignInStatus;
     public bool Intermateable;
@@ -20,6 +21,7 @@ public class UserGeneral
          string _lastSeen,
          string _country,
          string _language,
+         
          // Bool
          bool _signInStatus,
          bool _intermateable
@@ -31,6 +33,7 @@ public class UserGeneral
         LastSeen = _lastSeen;
         Country = _country;
         Language = _language;
+        
         // Bool
         SignInStatus = _signInStatus;
         Intermateable = _intermateable;
@@ -90,24 +93,28 @@ public class UserProgression
     }
 }
 
+#endregion
+
+#region Consumable
+
 public class UserConsumable
 {
     public int Energy;
-    public int Gold;
-    public int Diamond;
+    public int Papcoin;
+    public int Gem;
     public int Joker;
 
     public UserConsumable
         (
         int _energy,
-        int _gold,
-        int _diamond,
+        int papcoin,
+        int _gem,
         int _joker
         )
     {
         Energy = _energy;
-        Gold = _gold;
-        Diamond = _diamond;
+        Papcoin = papcoin;
+        Gem = _gem;
         Joker = _joker;
     }
 }

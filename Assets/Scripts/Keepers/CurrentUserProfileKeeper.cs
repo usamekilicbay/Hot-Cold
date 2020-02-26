@@ -29,8 +29,8 @@ public static class CurrentUserProfileKeeper
 
     // Consumable Int Variables
     public static int Energy;
-    public static int Gold;
-    public static int Diamond;
+    public static int Papcoin;
+    public static int Gem;
     public static int Joker;
 
 }

@@ -1,10 +1,11 @@
-﻿using Firebase.Database;
+﻿using ConstantKeeper;
+using Firebase.Database;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class FirebaseRoomManager : FBManager
+public class FirebaseRoomManager : FirebaseBaseManager
 {
     bool canPlay = true;
     bool canStart = false;
@@ -31,7 +32,7 @@ public class FirebaseRoomManager : FBManager
 
     private void SetRoomReference()
     {
-        roomReference = FirebaseDatabase.DefaultInstance.GetReference($"Rooms/RoomID");
+        roomReference = FirebaseDatabase.DefaultInstance.GetReference($"{RoomPaths.Rooms}/{RoomPaths.RoomID}");
     }
 
     public void CallQuickGame()
@@ -59,7 +60,7 @@ public class FirebaseRoomManager : FBManager
                 {
                     foreach (DataSnapshot rooms in snapshot.Children)
                     {
-                        bool penetrability = bool.Parse(rooms.Child("General").Child("Penetrability").Value.ToString());
+                        bool penetrability = bool.Parse(rooms.Child(RoomPaths.General).Child("Penetrability").Value.ToString());
 
                         if (penetrability)
                         {
@@ -99,29 +100,29 @@ public class FirebaseRoomManager : FBManager
                 /*["RoomName"] = roomName,
                   ["RoomPassword"] = roomPassword,*/
                 ["CurrentRoomInfoKeeper.roomID"] = CurrentRoomInfoKeeper.roomID,
-                ["P1-ID"] = auth.CurrentUser.UserId,
-                ["P1-Username"] = CurrentUserProfileKeeper.Username,
-                ["P2-ID"] = "",
-                ["P2-Username"] = "",
-                ["ScoreLimit"] = 1,
-                ["AnswerTimeLimit"] = 5,
-                ["PlayerLimit"] = 2,
-                ["SecretNumber"] = 0,
-                ["SecretNumberMaxValue"] = 1000,
-                ["Penetrability"] = true
+                [RoomPaths.P1_ID] = auth.CurrentUser.UserId,
+                [RoomPaths.P1_Username] = CurrentUserProfileKeeper.Username,
+                [RoomPaths.P2_ID] = "",
+                [RoomPaths.P2_Username] = "",
+                [RoomPaths.ScoreLimit] = 1,
+                [RoomPaths.AnswerTimeLimit] = 5,
+                [RoomPaths.PlayerLimit] = 2,
+                [RoomPaths.SecretNumber] = 0,
+                [RoomPaths.SecretNumberMaxValue] = 1000,
+                [RoomPaths.Penetrability] = true
             };
 
-            roomReference.Child("General").UpdateChildrenAsync(roomGeneralDictionary);
+            roomReference.Child(RoomPaths.General).UpdateChildrenAsync(roomGeneralDictionary);
 
 
             // Progression
             Dictionary<string, object> roomProgressionDictionary = new Dictionary<string, object>
             {
-                ["LastEstimation"] = 0,
-                ["WhoseTurn"] = ""
+                [RoomPaths.LastEstimation] = 0,
+                [RoomPaths.WhoseTurn] = ""
             };
 
-            roomReference.Child("Progression").UpdateChildrenAsync(roomProgressionDictionary);
+            roomReference.Child(RoomPaths.Progression).UpdateChildrenAsync(roomProgressionDictionary);
 
             canPlay = false;
 
@@ -141,8 +142,8 @@ public class FirebaseRoomManager : FBManager
     {
         roomReference = roomReference.Child(CurrentRoomInfoKeeper.roomID);
 
-        roomReference.Child("General").Child("P2-ID").SetValueAsync(auth.CurrentUser.UserId);
-        roomReference.Child("General").Child("P2-Username").SetValueAsync(CurrentUserProfileKeeper.Username);
+        roomReference.Child(RoomPaths.General).Child(RoomPaths.P2_ID).SetValueAsync(auth.CurrentUser.UserId);
+        roomReference.Child(RoomPaths.General).Child(RoomPaths.P2_Username).SetValueAsync(CurrentUserProfileKeeper.Username);
 
         canPlay = false;
 
@@ -166,12 +167,12 @@ public class FirebaseRoomManager : FBManager
 
     private void SetSecretNumber(int currentNumber)
     {
-        roomReference.Child("General").Child("SecretNumber").SetValueAsync(currentNumber);
+        roomReference.Child(RoomPaths.General).Child(RoomPaths.SecretNumber).SetValueAsync(currentNumber);
     }
 
     private IEnumerator GetRoomInfos()
     {
-        Task<DataSnapshot> task = roomReference.Child("General").GetValueAsync();
+        Task<DataSnapshot> task = roomReference.Child(RoomPaths.General).GetValueAsync();
 
         yield return new WaitUntil(() => task.IsCompleted || task.IsFaulted || task.IsCanceled);
 
@@ -189,21 +190,21 @@ public class FirebaseRoomManager : FBManager
 
             if (owner)
             {
-                CurrentRoomInfoKeeper.rivalID = snapshot.Child("P2-ID").Value.ToString();
-                CurrentRoomInfoKeeper.rivalUsername = snapshot.Child("P2-Username").Value.ToString();
+                CurrentRoomInfoKeeper.rivalID = snapshot.Child(RoomPaths.P2_ID).Value.ToString();
+                CurrentRoomInfoKeeper.rivalUsername = snapshot.Child(RoomPaths.P2_Username).Value.ToString();
                 Debug.Log("Ensar");
             }
             else
             {
-                CurrentRoomInfoKeeper.rivalID = snapshot.Child("P1-ID").Value.ToString();
-                CurrentRoomInfoKeeper.rivalUsername = snapshot.Child("P1-Username").Value.ToString();
+                CurrentRoomInfoKeeper.rivalID = snapshot.Child(RoomPaths.P1_ID).Value.ToString();
+                CurrentRoomInfoKeeper.rivalUsername = snapshot.Child(RoomPaths.P1_Username).Value.ToString();
                 Debug.Log("Muhacir");
             }
 
-            CurrentRoomInfoKeeper.answerTimeLimit = int.Parse(snapshot.Child("AnswerTimeLimit").Value.ToString());
-            CurrentRoomInfoKeeper.scoreLimit = int.Parse(snapshot.Child("ScoreLimit").Value.ToString());
-            CurrentRoomInfoKeeper.secretNumber = int.Parse(snapshot.Child("SecretNumber").Value.ToString());
-            CurrentRoomInfoKeeper.secretNumberMaxValue = int.Parse(snapshot.Child("SecretNumberMaxValue").Value.ToString());
+            CurrentRoomInfoKeeper.answerTimeLimit = int.Parse(snapshot.Child(RoomPaths.AnswerTimeLimit).Value.ToString());
+            CurrentRoomInfoKeeper.scoreLimit = int.Parse(snapshot.Child(RoomPaths.ScoreLimit).Value.ToString());
+            CurrentRoomInfoKeeper.secretNumber = int.Parse(snapshot.Child(RoomPaths.SecretNumber).Value.ToString());
+            CurrentRoomInfoKeeper.secretNumberMaxValue = int.Parse(snapshot.Child(RoomPaths.SecretNumberMaxValue).Value.ToString());
         }
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using ConstantKeeper;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 //Firebase kitaplığı
@@ -12,7 +13,7 @@ using UnityEngine.Events;
 using System;
 using System.Threading.Tasks;
 
-public class FBManager : Singleton<FBManager>
+public class FirebaseBaseManager : Singleton<FirebaseBaseManager>
 {
     //Firebase temel ayarlarımız
     protected static FirebaseAuth auth;
@@ -26,6 +27,7 @@ public class FBManager : Singleton<FBManager>
     // Database References
     protected static DatabaseReference userReference;
     protected static DatabaseReference roomReference;
+    protected static DatabaseReference settingsReference;
 
     // User References
     string displayName;
@@ -94,6 +96,7 @@ public class FBManager : Singleton<FBManager>
     {
         FirebaseApp app = FirebaseApp.DefaultInstance;
         auth = FirebaseAuth.DefaultInstance;
+        
         Debug.Log("Initial firebase " + auth);
 
        /* if (auth == null)
@@ -109,6 +112,7 @@ public class FBManager : Singleton<FBManager>
         // Database Reference Declare
         if (auth.CurrentUser != null)
         {
+            SetUserReference();
             //ActionManager.Instance.CallCurrentUserProfile();
             //ActionManager.Instance.ShowUserProfilePanel();
             Debug.Log(auth.CurrentUser.DisplayName);
@@ -123,7 +127,7 @@ public class FBManager : Singleton<FBManager>
 
     
 
-    void AuthStateChanged(object sender, System.EventArgs eventArgs)
+    void AuthStateChanged(object sender, EventArgs eventArgs)
     {
         if (auth.CurrentUser != user)
         {
@@ -147,8 +151,17 @@ public class FBManager : Singleton<FBManager>
         }
     }
 
-    
+    protected void SetSettingsReference() 
+    {
+        settingsReference = FirebaseDatabase.DefaultInstance.GetReference($"{GameSettingsPaths.GameSettings}");
+    }
 
+    protected void SetUserReference()
+    {
+        userReference = FirebaseDatabase.DefaultInstance.GetReference($"{UserPaths.Users}/{UserPaths.UserID}/{auth.CurrentUser.UserId}");
+        Invoke("usercall", 3);
+    }
+    void usercall() { ActionManager.Instance.CallGetCurrentUserProfile(); }
     /*   private void SignUpEmailPassword(string _username, string _email, string _password)
        {
 

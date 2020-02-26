@@ -6,15 +6,15 @@ using UnityEngine.UI;
 public class SignUpUI : Singleton<SignUpUI>
 {
     [Header("SignUp")]
-    [SerializeField] TextMeshProUGUI txt_SignUp_Header;
-    [SerializeField] TextMeshProUGUI txt_SignUp_Username;
-    [SerializeField] TextMeshProUGUI txt_SignUp_Email;
-    [SerializeField] TextMeshProUGUI txt_SignUp_Password;
-    [SerializeField] TextMeshProUGUI txt_SignUp_ConfirmPassword;
-    [SerializeField] TextMeshProUGUI txt_SignUp_Language;
-    [SerializeField] Button btn_SignUp_Home;
-    [SerializeField] Button btn_SignUp_Send;
-    [SerializeField] Button btn_SignUp_SignIn;
+    [SerializeField] private TextMeshProUGUI txt_SignUp_Header;
+    [SerializeField] private TextMeshProUGUI txt_SignUp_Username;
+    [SerializeField] private TextMeshProUGUI txt_SignUp_Email;
+    [SerializeField] private TextMeshProUGUI txt_SignUp_Password;
+    [SerializeField] private TextMeshProUGUI txt_SignUp_ConfirmPassword;
+    [SerializeField] private TextMeshProUGUI txt_SignUp_Language;
+    [SerializeField] private Button btn_SignUp_Home;
+    [SerializeField] private Button btn_SignUp_Send;
+    [SerializeField] private Button btn_SignUp_SignIn;
 
     private void OnEnable()
     {
@@ -37,11 +37,11 @@ public class SignUpUI : Singleton<SignUpUI>
     {
         SignUpStruct signUpStruct = new SignUpStruct();
 
-        signUpStruct.Username = txt_SignUp_Username.text;
-        signUpStruct.Email = txt_SignUp_Email.text;
-        signUpStruct.Password = txt_SignUp_Password.text;
-        signUpStruct.ConfirmPassword = txt_SignUp_ConfirmPassword.text;//.Replace("\u200B", "");
-        signUpStruct.Language = txt_SignUp_Language.text;
+        signUpStruct.Username = txt_SignUp_Username.text.Replace("\u200B", "");
+        signUpStruct.Email = txt_SignUp_Email.text.Replace("\u200B", "");
+        signUpStruct.Password = txt_SignUp_Password.text.Replace("\u200B", "");
+        signUpStruct.ConfirmPassword = txt_SignUp_ConfirmPassword.text.Replace("\u200B", "");//.Replace("\u200B", "");
+        signUpStruct.Language = txt_SignUp_Language.text.Replace("\u200B", "");
 
         ActionManager.Instance.SignUpWithEmailPassword(signUpStruct);
     }

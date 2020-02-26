@@ -5,19 +5,19 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 
-public class FirebaseUserManager : FBManager
+public class FirebaseUserManager : FirebaseBaseManager
 {
     private void OnEnable()
     {
         ActionManager.Instance.CreatUserProfile += CreateUserProfile;
-        ActionManager.Instance.CallCurrentUserProfile += CallGetCurrentUserProfile;
+        ActionManager.Instance.CallGetCurrentUserProfile += CallGetCurrentUserProfile;
         ActionManager.Instance.DeleteUserProfile += DeleteUserProfile;
     }
 
     private void OnDisable()
     {
         ActionManager.Instance.CreatUserProfile -= CreateUserProfile;
-        ActionManager.Instance.CallCurrentUserProfile -= CallGetCurrentUserProfile;
+        ActionManager.Instance.CallGetCurrentUserProfile -= CallGetCurrentUserProfile;
         ActionManager.Instance.DeleteUserProfile -= DeleteUserProfile;
     }
 
@@ -37,7 +37,7 @@ public class FirebaseUserManager : FBManager
 
         string generalJson = JsonUtility.ToJson(userGenerals);
         Debug.Log(generalJson);
-        userReference.Child("General").SetRawJsonValueAsync(generalJson);
+        userReference.Child(ConstantKeeper.UserPaths.General).SetRawJsonValueAsync(generalJson);
 
 
         // Progression
@@ -48,7 +48,7 @@ public class FirebaseUserManager : FBManager
 
         string progressionJson = JsonUtility.ToJson(userProgressions);
         Debug.Log(progressionJson);
-        userReference.Child("Progression").SetRawJsonValueAsync(progressionJson);
+        userReference.Child(ConstantKeeper.UserPaths.Progression).SetRawJsonValueAsync(progressionJson);
 
 
         // Consumables
@@ -59,7 +59,7 @@ public class FirebaseUserManager : FBManager
 
         string consumableJson = JsonUtility.ToJson(userConsumable);
         Debug.Log(consumableJson);
-        userReference.Child("Consumable").SetRawJsonValueAsync(consumableJson);
+        userReference.Child(ConstantKeeper.UserPaths.Consumable).SetRawJsonValueAsync(consumableJson);
     }
 
     private void GetUsers()
@@ -89,7 +89,7 @@ public class FirebaseUserManager : FBManager
         );
     }
 
-    public void CallGetCurrentUserProfile()
+    private void CallGetCurrentUserProfile()
     {
         Debug.Log("Geldik inebilirsin");
         StartCoroutine(GetCurrentUserProfile());
@@ -101,37 +101,46 @@ public class FirebaseUserManager : FBManager
 
         yield return new WaitUntil(() => task.IsCanceled || task.IsCompleted || task.IsFaulted);
 
-        if (task.IsCompleted)
+        if (task.IsCanceled)
+        {
+            Debug.LogWarning(ConstantKeeper.UserTasks.GetCurrentUserProfile + ConstantKeeper.Debugs.IsCanceled);
+        }
+        else if (task.IsFaulted)
+        {
+            Debug.LogError(ConstantKeeper.UserTasks.GetCurrentUserProfile + ConstantKeeper.Debugs.IsFaulted);
+        }
+        else if (task.IsCompleted)
         {
             DataSnapshot snapshot = task.Result;
        
             // String General 
-            CurrentUserProfileKeeper.Username = snapshot.Child("General").Child("Username").Value.ToString();
-            CurrentUserProfileKeeper.Country = snapshot.Child("General").Child("Country").Value.ToString();
-            CurrentUserProfileKeeper.Language = snapshot.Child("General").Child("Language").Value.ToString();
-            CurrentUserProfileKeeper.SignUpDate = snapshot.Child("General").Child("SignUpDate").Value.ToString();
-            CurrentUserProfileKeeper.LastSeen = snapshot.Child("General").Child("LastSeen").Value.ToString();
+            CurrentUserProfileKeeper.Username = snapshot.Child(ConstantKeeper.UserPaths.General).Child(ConstantKeeper.UserPaths.Username).Value.ToString();
+            CurrentUserProfileKeeper.Country = snapshot.Child(ConstantKeeper.UserPaths.General).Child(ConstantKeeper.UserPaths.Country).Value.ToString();
+            CurrentUserProfileKeeper.Language = snapshot.Child(ConstantKeeper.UserPaths.General).Child(ConstantKeeper.UserPaths.Language).Value.ToString();
+            CurrentUserProfileKeeper.SignUpDate = snapshot.Child(ConstantKeeper.UserPaths.General).Child(ConstantKeeper.UserPaths.SignUpDate).Value.ToString();
+            CurrentUserProfileKeeper.LastSeen = snapshot.Child(ConstantKeeper.UserPaths.General).Child(ConstantKeeper.UserPaths.LastSeen).Value.ToString();
 
             // Bool General
-            CurrentUserProfileKeeper.SignInStatus = bool.Parse(snapshot.Child("General").Child("SignInStatus").Value.ToString());
-            CurrentUserProfileKeeper.Intermateable = bool.Parse(snapshot.Child("General").Child("Intermateable").Value.ToString());
+            CurrentUserProfileKeeper.SignInStatus = bool.Parse(snapshot.Child(ConstantKeeper.UserPaths.General).Child(ConstantKeeper.UserPaths.SignInStatus).Value.ToString());
+            CurrentUserProfileKeeper.Intermateable = bool.Parse(snapshot.Child(ConstantKeeper.UserPaths.General).Child(ConstantKeeper.UserPaths.Intermateable).Value.ToString());
 
 
             // Int Progression
-            CurrentUserProfileKeeper.Level = int.Parse(snapshot.Child("Progression").Child("Level").Value.ToString());
-            CurrentUserProfileKeeper.Cup = int.Parse(snapshot.Child("Progression").Child("Cup").Value.ToString());
-            CurrentUserProfileKeeper.Rank = int.Parse(snapshot.Child("Progression").Child("Rank").Value.ToString());
-            CurrentUserProfileKeeper.TotalPlayTime = int.Parse(snapshot.Child("Progression").Child("TotalPlayTime").Value.ToString());
-            CurrentUserProfileKeeper.TotalMatches = int.Parse(snapshot.Child("Progression").Child("TotalMatches").Value.ToString());
-            CurrentUserProfileKeeper.CompletedMatches = int.Parse(snapshot.Child("Progression").Child("CompletedMatches").Value.ToString());
-            CurrentUserProfileKeeper.AbandonedMatches = int.Parse(snapshot.Child("Progression").Child("AbandonedMatches").Value.ToString());
-            CurrentUserProfileKeeper.Wins = int.Parse(snapshot.Child("Progression").Child("Wins").Value.ToString());
-            CurrentUserProfileKeeper.Losses = int.Parse(snapshot.Child("Progression").Child("Losses").Value.ToString());
-            CurrentUserProfileKeeper.WinningStreak = int.Parse(snapshot.Child("Progression").Child("WinningStreak").Value.ToString());
+            CurrentUserProfileKeeper.Level = int.Parse(snapshot.Child(ConstantKeeper.UserPaths.Progression).Child(ConstantKeeper.UserPaths.Level).Value.ToString());
+            CurrentUserProfileKeeper.Cup = int.Parse(snapshot.Child(ConstantKeeper.UserPaths.Progression).Child(ConstantKeeper.UserPaths.Cup).Value.ToString());
+            CurrentUserProfileKeeper.Rank = int.Parse(snapshot.Child(ConstantKeeper.UserPaths.Progression).Child(ConstantKeeper.UserPaths.Rank).Value.ToString());
+            CurrentUserProfileKeeper.TotalPlayTime = int.Parse(snapshot.Child(ConstantKeeper.UserPaths.Progression).Child(ConstantKeeper.UserPaths.TotalPlayTime).Value.ToString());
+            CurrentUserProfileKeeper.TotalMatches = int.Parse(snapshot.Child(ConstantKeeper.UserPaths.Progression).Child(ConstantKeeper.UserPaths.TotalMatches).Value.ToString());
+            CurrentUserProfileKeeper.CompletedMatches = int.Parse(snapshot.Child(ConstantKeeper.UserPaths.Progression).Child(ConstantKeeper.UserPaths.CompletedMatches).Value.ToString());
+            CurrentUserProfileKeeper.AbandonedMatches = int.Parse(snapshot.Child(ConstantKeeper.UserPaths.Progression).Child(ConstantKeeper.UserPaths.AbandonedMatches).Value.ToString());
+            CurrentUserProfileKeeper.Wins = int.Parse(snapshot.Child(ConstantKeeper.UserPaths.Progression).Child(ConstantKeeper.UserPaths.Wins).Value.ToString());
+            CurrentUserProfileKeeper.Losses = int.Parse(snapshot.Child(ConstantKeeper.UserPaths.Progression).Child(ConstantKeeper.UserPaths.Losses).Value.ToString());
+            CurrentUserProfileKeeper.WinningStreak = int.Parse(snapshot.Child(ConstantKeeper.UserPaths.Progression).Child(ConstantKeeper.UserPaths.WinningStreak).Value.ToString());
             
             // Int Consumable
-            CurrentUserProfileKeeper.Gold = int.Parse(snapshot.Child("Consumable").Child("Gold").ToString());
-
+            CurrentUserProfileKeeper.Papcoin = int.Parse(snapshot.Child(ConstantKeeper.UserPaths.Consumable).Child(ConstantKeeper.UserPaths.Papcoin).Value.ToString());
+            CurrentUserProfileKeeper.Gem = int.Parse(snapshot.Child(ConstantKeeper.UserPaths.Consumable).Child(ConstantKeeper.UserPaths.Gem).Value.ToString());
+            
             ActionManager.Instance.ShowUserProfilePanel();
         }
 
@@ -140,7 +149,7 @@ public class FirebaseUserManager : FBManager
 
     private void DeleteUserProfile() 
     {
-        Task task = userReference.RemoveValueAsync();
+        userReference.RemoveValueAsync();
 
        /* if (task.IsCompleted)
         {

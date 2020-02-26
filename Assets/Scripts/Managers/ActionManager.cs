@@ -16,7 +16,7 @@ public class ActionManager : Singleton<ActionManager>
     public UnityAction SignOut;
 
     // User
-    public UnityAction CallCurrentUserProfile;
+    public UnityAction CallGetCurrentUserProfile;
     public UnityAction<string,string> CreatUserProfile;
     public UnityAction DeleteUserProfile;
 
@@ -29,6 +29,8 @@ public class ActionManager : Singleton<ActionManager>
     public UnityAction CreateSecretNumber;
 
     // Panels
-    public UnityAction ShowUserProfilePanel;
     public UnityAction ShowMenuPanel;
+    public UnityAction ShowSignUpPanel;
+    public UnityAction ShowSignInPanel;
+    public UnityAction ShowUserProfilePanel;
 }
