@@ -99,7 +99,7 @@ public class FirebaseRoomManager : FirebaseBaseManager
             {
                 /*["RoomName"] = roomName,
                   ["RoomPassword"] = roomPassword,*/
-                ["CurrentRoomInfoKeeper.roomID"] = CurrentRoomInfoKeeper.roomID,
+                [RoomPaths.RoomID] = CurrentRoomInfoKeeper.roomID,
                 [RoomPaths.P1_ID] = auth.CurrentUser.UserId,
                 [RoomPaths.P1_Username] = CurrentUserProfileKeeper.Username,
                 [RoomPaths.P2_ID] = "",
