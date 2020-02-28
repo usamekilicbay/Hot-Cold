@@ -102,8 +102,8 @@ public class FirebaseRoomManager : FirebaseBaseManager
                 [RoomPaths.RoomID] = CurrentRoomInfoKeeper.roomID,
                 [RoomPaths.P1_ID] = auth.CurrentUser.UserId,
                 [RoomPaths.P1_Username] = CurrentUserProfileKeeper.Username,
-                [RoomPaths.P2_ID] = "",
-                [RoomPaths.P2_Username] = "",
+                /*[RoomPaths.P2_ID] = "",
+                [RoomPaths.P2_Username] = "",*/
                 [RoomPaths.ScoreLimit] = 1,
                 [RoomPaths.AnswerTimeLimit] = 5,
                 [RoomPaths.PlayerLimit] = 2,
@@ -130,7 +130,7 @@ public class FirebaseRoomManager : FirebaseBaseManager
 
             owner = true;
 
-            StartGame();
+            JoinListener();
         }
         else
         {
@@ -152,14 +152,27 @@ public class FirebaseRoomManager : FirebaseBaseManager
         if (canStart)
         {
             owner = false;
-            StartGame();
+            JoinListener();
+            //  StartGame();
         }
 
         Debug.Log("Odaya giriş başarılı!");
     }
 
-    private void StartGame()
+    private void JoinListener() 
     {
+        Debug.Log("ama neden");
+        roomReference.Child(RoomPaths.General).Child(RoomPaths.P2_ID).ValueChanged += StartGame;
+    }
+
+    private void StartGame(object sender, ValueChangedEventArgs args)
+    {
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError(args.DatabaseError.Message);
+            return;
+        }
+
         SetSecretNumber(NumberCreator.CreateNumber());
         StartCoroutine(GetRoomInfos());
         UIManager.Instance.ShowGamePanel();

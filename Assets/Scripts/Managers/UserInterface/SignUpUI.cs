@@ -7,14 +7,14 @@ public class SignUpUI : Singleton<SignUpUI>
 {
     [Header("SignUp")]
     [SerializeField] private TextMeshProUGUI txt_SignUp_Header;
-    [SerializeField] private TextMeshProUGUI txt_SignUp_Username;
-    [SerializeField] private TextMeshProUGUI txt_SignUp_Email;
-    [SerializeField] private TextMeshProUGUI txt_SignUp_Password;
-    [SerializeField] private TextMeshProUGUI txt_SignUp_ConfirmPassword;
-    [SerializeField] private TextMeshProUGUI txt_SignUp_Language;
-    [SerializeField] private Button btn_SignUp_Home;
-    [SerializeField] private Button btn_SignUp_Send;
-    [SerializeField] private Button btn_SignUp_SignIn;
+    [SerializeField] private TMP_InputField inpfld_Username;
+    [SerializeField] private TMP_InputField inpfld_Email;
+    [SerializeField] private TMP_InputField inpfld_Password;
+    [SerializeField] private TMP_InputField inpfld_ConfirmPassword;
+    [SerializeField] private TMP_Dropdown drpdwn_Language;
+    [SerializeField] private Button btn_Home;
+    [SerializeField] private Button btn_SignUp;
+    [SerializeField] private Button btn_SignIn;
 
     private void OnEnable()
     {
@@ -28,20 +28,20 @@ public class SignUpUI : Singleton<SignUpUI>
 
     private void OnClickAddListener()
     {
-        btn_SignUp_Home.onClick.AddListener(UIManager.Instance.ShowMenuPanel);
-        btn_SignUp_SignIn.onClick.AddListener(UIManager.Instance.ShowSignInPanel);
-        btn_SignUp_Send.onClick.AddListener(SignUp);
+        btn_Home.onClick.AddListener(UIManager.Instance.ShowMenuPanel);
+        btn_SignIn.onClick.AddListener(UIManager.Instance.ShowSignInPanel);
+        btn_SignUp.onClick.AddListener(SignUp);
     }
 
     private void SignUp() 
     {
         SignUpStruct signUpStruct = new SignUpStruct();
 
-        signUpStruct.Username = txt_SignUp_Username.text.Replace("\u200B", "");
-        signUpStruct.Email = txt_SignUp_Email.text.Replace("\u200B", "");
-        signUpStruct.Password = txt_SignUp_Password.text.Replace("\u200B", "");
-        signUpStruct.ConfirmPassword = txt_SignUp_ConfirmPassword.text.Replace("\u200B", "");//.Replace("\u200B", "");
-        signUpStruct.Language = txt_SignUp_Language.text.Replace("\u200B", "");
+        signUpStruct.Username = inpfld_Username.textComponent.text.Replace("\u200B", "");
+        signUpStruct.Email = inpfld_Email.textComponent.text.Replace("\u200B", "");
+        signUpStruct.Password = inpfld_Password.textComponent.text.Replace("\u200B", "");
+        signUpStruct.ConfirmPassword = inpfld_ConfirmPassword.textComponent.text.Replace("\u200B", "");//.Replace("\u200B", "");
+        signUpStruct.Language = drpdwn_Language.itemText.text.Replace("\u200B", "");
 
         ActionManager.Instance.SignUpWithEmailPassword(signUpStruct);
     }
