@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class FirebaseGameManager : FirebaseBaseManager
+public class FirebaseGameManager : MonoBehaviour
 {
     private void OnEnable()
     {
@@ -24,15 +24,15 @@ public class FirebaseGameManager : FirebaseBaseManager
 
     private void SendEstimation(int _estimation)
     {
-        roomReference.Child(RoomPaths.Progression).Child(RoomPaths.LastEstimation).SetValueAsync(_estimation);
-        roomReference.Child(RoomPaths.Progression).Child(RoomPaths.LastEstimation).SetValueAsync(CurrentRoomInfoKeeper.rivalUsername);
+        FirebaseBaseManager.roomReference.Child(RoomPaths.Progression).Child(RoomPaths.LastEstimation).SetValueAsync(_estimation);
+        FirebaseBaseManager.roomReference.Child(RoomPaths.Progression).Child(RoomPaths.LastEstimation).SetValueAsync(CurrentRoomInfoKeeper.rivalUsername);
         GameProgressionListener();
     }
 
     private void GameProgressionListener()
     {
-        roomReference.Child(RoomPaths.Progression).Child(RoomPaths.LastEstimation).ValueChanged += GetEstimation;
-        roomReference.Child(RoomPaths.Progression).Child(RoomPaths.WhoseTurn).ValueChanged += WhoseTurn;
+        FirebaseBaseManager.roomReference.Child(RoomPaths.Progression).Child(RoomPaths.LastEstimation).ValueChanged += GetEstimation;
+        FirebaseBaseManager.roomReference.Child(RoomPaths.Progression).Child(RoomPaths.WhoseTurn).ValueChanged += WhoseTurn;
     }
 
     private void WhoseTurn(object sender, ValueChangedEventArgs args) 

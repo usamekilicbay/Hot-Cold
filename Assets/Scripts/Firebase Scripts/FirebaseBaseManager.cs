@@ -16,8 +16,8 @@ using System.Threading.Tasks;
 public class FirebaseBaseManager : Singleton<FirebaseBaseManager>
 {
     //Firebase temel ayarlarımız
-    protected static FirebaseAuth auth;
-    protected static FirebaseUser user;
+    public static FirebaseAuth auth;
+    public static FirebaseUser user;
     protected Dictionary<string, FirebaseUser> userByauth = new Dictionary<string, FirebaseUser>();
     DependencyStatus DependencyStatus = Firebase.DependencyStatus.UnavailableOther;
     private bool fetchingToken = false;
@@ -25,8 +25,8 @@ public class FirebaseBaseManager : Singleton<FirebaseBaseManager>
 
 
     // Database References
-    protected static DatabaseReference userReference;
-    protected static DatabaseReference roomReference;
+    public static DatabaseReference userReference;
+    public static DatabaseReference roomReference;
     protected static DatabaseReference settingsReference;
 
     // User References
@@ -157,10 +157,10 @@ public class FirebaseBaseManager : Singleton<FirebaseBaseManager>
         settingsReference = FirebaseDatabase.DefaultInstance.GetReference($"{GameSettingsPaths.GameSettings}");
     }
 
-    protected void SetUserReference()
+    public static void SetUserReference()
     {
         userReference = FirebaseDatabase.DefaultInstance.GetReference($"{UserPaths.Users}/{UserPaths.UserID}/{auth.CurrentUser.UserId}");
-        Invoke("usercall", 3);
+        //Invoke("usercall", 3);
     }
     void usercall() { ActionManager.Instance.CallGetCurrentUserProfile(); }
   

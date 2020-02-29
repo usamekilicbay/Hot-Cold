@@ -2,11 +2,12 @@
 using Firebase.Database;
 using System.Collections;
 using System.Collections.Generic;
+using ConstantKeeper;
 using System.Threading.Tasks;
 using UnityEngine;
 
 
-public class FirebaseAuthenticationManager : FirebaseBaseManager
+public class FirebaseAuthenticationManager : MonoBehaviour
 {
     private void OnEnable()
     {
@@ -86,28 +87,29 @@ public class FirebaseAuthenticationManager : FirebaseBaseManager
 
     private IEnumerator SignUpEmailPassword(string _username, string _email, string _password, string _language)
     {
-        Task task = auth.CreateUserWithEmailAndPasswordAsync(_email, _password);
+        Task task = FirebaseBaseManager.auth.CreateUserWithEmailAndPasswordAsync(_email, _password);
 
         yield return new WaitUntil(() => task.IsCanceled || task.IsFaulted || task.IsCompleted);
 
         if (task.IsCanceled)
         {
             //LogTaskCompletion(task, "Giriş işlemi iptal edildi");
-            Debug.LogWarning(ConstantKeeper.Authentications.SignUp + ConstantKeeper.Debugs.IsCanceled);
+            Debug.LogWarning(Authentications.SignUp + Debugs.IsCanceled);
         }
         else if (task.IsFaulted)
         {
             // LogTaskCompletion(task, "Kayıt işlemi başarısız oldu!");
-            Debug.LogError(ConstantKeeper.Authentications.SignUp + ConstantKeeper.Debugs.IsFaulted);
+            Debug.LogError(Authentications.SignUp + Debugs.IsFaulted);
         }
         else if (task.IsCompleted)
         {
             // LogTaskCompletion(task, "Kayıt işlemi başarıyla tamamlandı!");
-            Debug.Log(ConstantKeeper.Authentications.SignUp + ConstantKeeper.Debugs.IsCompleted);
-            SetUserReference();
+            Debug.Log(Authentications.SignUp + Debugs.IsCompleted);
+           
+            FirebaseBaseManager.SetUserReference();
 
             ActionManager.Instance.CreatUserProfile(_username, _language);
-            ActionManager.Instance.CallGetCurrentUserProfile();
+           // ActionManager.Instance.CallGetCurrentUserProfile();
         }
     }
 
@@ -122,7 +124,7 @@ public class FirebaseAuthenticationManager : FirebaseBaseManager
 
     private IEnumerator SignInEmailPassword(string _email, string _password)
     {
-        Task task = auth.SignInWithEmailAndPasswordAsync(_email, _password);
+        Task task = FirebaseBaseManager.auth.SignInWithEmailAndPasswordAsync(_email, _password);
 
        // string log = 
 
@@ -130,18 +132,18 @@ public class FirebaseAuthenticationManager : FirebaseBaseManager
 
         if (task.IsCanceled)
         {
-            Debug.LogWarning(ConstantKeeper.Authentications.SignIn + ConstantKeeper.Debugs.IsCanceled);
+            Debug.LogWarning(Authentications.SignIn + Debugs.IsCanceled);
         }
         else if (task.IsFaulted)
         {
-            Debug.LogError(ConstantKeeper.Authentications.SignIn + ConstantKeeper.Debugs.IsFaulted);
+            Debug.LogError(Authentications.SignIn + Debugs.IsFaulted);
         }
         else if (task.IsCompleted)
         {
-            SetUserReference();
+            FirebaseBaseManager.SetUserReference();
 
-            Debug.Log(ConstantKeeper.Authentications.SignIn + ConstantKeeper.Debugs.IsCompleted);
-            ActionManager.Instance.CallGetCurrentUserProfile();
+            Debug.Log(Authentications.SignIn + Debugs.IsCompleted);
+           // ActionManager.Instance.CallGetCurrentUserProfile();
         }
     }
 
@@ -156,21 +158,21 @@ public class FirebaseAuthenticationManager : FirebaseBaseManager
 
     private IEnumerator ResetPassword(string _email)
     {
-        Task task = auth.SendPasswordResetEmailAsync(_email);
+        Task task = FirebaseBaseManager.auth.SendPasswordResetEmailAsync(_email);
 
         yield return new WaitUntil(() => task.IsCanceled || task.IsFaulted || task.IsCompleted);
 
         if (task.IsCanceled)
         {
-            Debug.LogWarning(ConstantKeeper.Authentications.ResetPassword + ConstantKeeper.Debugs.IsCanceled);
+            Debug.LogWarning(Authentications.ResetPassword + Debugs.IsCanceled);
         }
         else if (task.IsFaulted)
         {
-            Debug.LogError(ConstantKeeper.Authentications.ResetPassword + ConstantKeeper.Debugs.IsFaulted);
+            Debug.LogError(Authentications.ResetPassword + Debugs.IsFaulted);
         }
         else if (task.IsCompleted)
         {
-            Debug.Log(ConstantKeeper.Authentications.ResetPassword + ConstantKeeper.Debugs.IsCompleted);
+            Debug.Log(Authentications.ResetPassword + Debugs.IsCompleted);
         }
     }
 
@@ -180,9 +182,9 @@ public class FirebaseAuthenticationManager : FirebaseBaseManager
 
     private void SignOut() 
     {
-        auth.SignOut();
+        FirebaseBaseManager.auth.SignOut();
         
-        Debug.Log(ConstantKeeper.Authentications.SignOut + ConstantKeeper.Debugs.IsCompleted);
+        Debug.Log(Authentications.SignOut + Debugs.IsCompleted);
         ActionManager.Instance.ShowSignInPanel();
     }
 
@@ -192,7 +194,7 @@ public class FirebaseAuthenticationManager : FirebaseBaseManager
 
     private void DeleteUser()
     {
-        auth.CurrentUser.DeleteAsync();
+        FirebaseBaseManager.auth.CurrentUser.DeleteAsync();
         //FirebaseUser user = auth.CurrentUser;
         /*auth.CurrentUser.DeleteAsync().ContinueWith(task =>
            {

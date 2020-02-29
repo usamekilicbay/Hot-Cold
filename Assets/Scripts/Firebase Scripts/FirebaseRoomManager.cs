@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class FirebaseRoomManager : FirebaseBaseManager
+public class FirebaseRoomManager : MonoBehaviour
 {
     bool canPlay = true;
     bool canStart = false;
@@ -34,7 +34,7 @@ public class FirebaseRoomManager : FirebaseBaseManager
 
     private void SetRoomReference()
     {
-        roomReference = FirebaseDatabase.DefaultInstance.GetReference($"{RoomPaths.Rooms}/{RoomPaths.RoomID}");
+        FirebaseBaseManager.roomReference = FirebaseDatabase.DefaultInstance.GetReference($"{RoomPaths.Rooms}/{RoomPaths.RoomID}");
     }
 
     public void CallQuickGame()
@@ -45,7 +45,7 @@ public class FirebaseRoomManager : FirebaseBaseManager
 
     private IEnumerator QuickGame()
     {
-        Task<DataSnapshot> task = roomReference.GetValueAsync();
+        Task<DataSnapshot> task = FirebaseBaseManager.roomReference.GetValueAsync();
 
         yield return new WaitUntil(() => task.IsCanceled || task.IsCompleted || task.IsFaulted);
 
@@ -94,8 +94,8 @@ public class FirebaseRoomManager : FirebaseBaseManager
     {
         if (canPlay)
         {
-            CurrentRoomInfoKeeper.roomID = roomReference.Push().Key;
-            roomReference = roomReference.Child(CurrentRoomInfoKeeper.roomID);
+            CurrentRoomInfoKeeper.roomID = FirebaseBaseManager.roomReference.Push().Key;
+            FirebaseBaseManager.roomReference = FirebaseBaseManager.roomReference.Child(CurrentRoomInfoKeeper.roomID);
            
             // General
             Dictionary<string, object> roomGeneralDictionary = new Dictionary<string, object>
@@ -103,7 +103,7 @@ public class FirebaseRoomManager : FirebaseBaseManager
                 /*["RoomName"] = roomName,
                   ["RoomPassword"] = roomPassword,*/
                 [RoomPaths.RoomID] = CurrentRoomInfoKeeper.roomID,
-                [RoomPaths.P1_ID] = auth.CurrentUser.UserId,
+                [RoomPaths.P1_ID] = FirebaseBaseManager.auth.CurrentUser.UserId,
                 [RoomPaths.P1_Username] = CurrentUserProfileKeeper.Username,
                 /*[RoomPaths.P2_ID] = "",
                 [RoomPaths.P2_Username] = "",*/
@@ -115,7 +115,7 @@ public class FirebaseRoomManager : FirebaseBaseManager
                 [RoomPaths.Penetrability] = true
             };
 
-            roomReference.Child(RoomPaths.General).SetValueAsync(roomGeneralDictionary);
+            FirebaseBaseManager.roomReference.Child(RoomPaths.General).SetValueAsync(roomGeneralDictionary);
 
 
             // Progression
@@ -125,7 +125,7 @@ public class FirebaseRoomManager : FirebaseBaseManager
                 [RoomPaths.WhoseTurn] = ""
             };
 
-            roomReference.Child(RoomPaths.Progression).SetValueAsync(roomProgressionDictionary);
+            FirebaseBaseManager.roomReference.Child(RoomPaths.Progression).SetValueAsync(roomProgressionDictionary);
 
             canPlay = false;
 
@@ -143,10 +143,10 @@ public class FirebaseRoomManager : FirebaseBaseManager
 
     private void JoinRoom()
     {
-        roomReference = roomReference.Child(CurrentRoomInfoKeeper.roomID);
+        FirebaseBaseManager.roomReference = FirebaseBaseManager.roomReference.Child(CurrentRoomInfoKeeper.roomID);
 
-        roomReference.Child(RoomPaths.General).Child(RoomPaths.P2_ID).SetValueAsync(auth.CurrentUser.UserId);
-        roomReference.Child(RoomPaths.General).Child(RoomPaths.P2_Username).SetValueAsync(CurrentUserProfileKeeper.Username);
+        FirebaseBaseManager.roomReference.Child(RoomPaths.General).Child(RoomPaths.P2_ID).SetValueAsync(FirebaseBaseManager.auth.CurrentUser.UserId);
+        FirebaseBaseManager.roomReference.Child(RoomPaths.General).Child(RoomPaths.P2_Username).SetValueAsync(CurrentUserProfileKeeper.Username);
 
         canPlay = false;
 
@@ -165,7 +165,7 @@ public class FirebaseRoomManager : FirebaseBaseManager
     private void JoinListener() 
     {
         Debug.Log("ama neden");
-        roomReference.Child(RoomPaths.General).Child(RoomPaths.P2_ID).ValueChanged += StartGame;
+        FirebaseBaseManager.roomReference.Child(RoomPaths.General).Child(RoomPaths.P2_ID).ValueChanged += StartGame;
     }
 
     private void StartGame(object sender, ValueChangedEventArgs args)
@@ -183,12 +183,12 @@ public class FirebaseRoomManager : FirebaseBaseManager
 
     private void SetSecretNumber(int currentNumber)
     {
-        roomReference.Child(RoomPaths.General).Child(RoomPaths.SecretNumber).SetValueAsync(currentNumber);
+        FirebaseBaseManager.roomReference.Child(RoomPaths.General).Child(RoomPaths.SecretNumber).SetValueAsync(currentNumber);
     }
 
     private IEnumerator GetRoomInfos()
     {
-        Task<DataSnapshot> task = roomReference.Child(RoomPaths.General).GetValueAsync();
+        Task<DataSnapshot> task = FirebaseBaseManager.roomReference.Child(RoomPaths.General).GetValueAsync();
 
         yield return new WaitUntil(() => task.IsCompleted || task.IsFaulted || task.IsCanceled);
 
