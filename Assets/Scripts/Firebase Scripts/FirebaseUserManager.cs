@@ -21,6 +21,13 @@ public class FirebaseUserManager : FirebaseBaseManager
         ActionManager.Instance.DeleteUserProfile -= DeleteUserProfile;
     }
 
+    private void OnApplicationQuit()
+    {
+        ActionManager.Instance.CreatUserProfile -= CreateUserProfile;
+        ActionManager.Instance.CallGetCurrentUserProfile -= CallGetCurrentUserProfile;
+        ActionManager.Instance.DeleteUserProfile -= DeleteUserProfile;
+    }
+
     private void CreateUserProfile(string username, string language)
     {
         // General

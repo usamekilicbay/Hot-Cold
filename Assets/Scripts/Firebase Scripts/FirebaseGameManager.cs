@@ -9,10 +9,15 @@ public class FirebaseGameManager : FirebaseBaseManager
 {
     private void OnEnable()
     {
-        ActionManager.Instance.SendEstimation += SendEstimation;
+    //    ActionManager.Instance.SendEstimation += SendEstimation;
     }
 
     private void OnDisable()
+    {
+        ActionManager.Instance.SendEstimation -= SendEstimation;
+    }
+
+    private void OnApplicationQuit()
     {
         ActionManager.Instance.SendEstimation -= SendEstimation;
     }

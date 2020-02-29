@@ -90,6 +90,13 @@ public class UIManager : Singleton<UIManager>
         ActionManager.Instance.ShowUserProfilePanel -= ShowUserProfilePanel;
     }
 
+    private void OnApplicationQuit()
+    {
+        ActionManager.Instance.ShowSignUpPanel -= ShowSignUpPanel;
+        ActionManager.Instance.ShowSignInPanel -= ShowSignInPanel;
+        ActionManager.Instance.ShowUserProfilePanel -= ShowUserProfilePanel;
+    }
+
     private void Start()
     {
         

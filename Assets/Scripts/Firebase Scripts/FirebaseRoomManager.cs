@@ -12,8 +12,9 @@ public class FirebaseRoomManager : FirebaseBaseManager
     bool owner = true;
 
     
-    private void OnEnable()
+    private void Start()
     {
+        Debug.Log("Double");
         ActionManager.Instance.QuickGame += CallQuickGame;
 
         SetRoomReference();
@@ -26,6 +27,7 @@ public class FirebaseRoomManager : FirebaseBaseManager
 
     private void OnApplicationQuit()
     {
+        ActionManager.Instance.QuickGame -= CallQuickGame;
         /*roomReference.Child(CurrentRoomInfoKeeper.roomID).Child("General").Child("P2-ID").SetValueAsync("");
         roomReference.Child(CurrentRoomInfoKeeper.roomID).Child("General").Child("P2-Username").SetValueAsync("");*/
     }
@@ -37,7 +39,8 @@ public class FirebaseRoomManager : FirebaseBaseManager
 
     public void CallQuickGame()
     {
-        StartCoroutine(QuickGame());
+        Debug.Log("kekke");
+        //StartCoroutine(QuickGame());
     }
 
     private IEnumerator QuickGame()
@@ -112,7 +115,7 @@ public class FirebaseRoomManager : FirebaseBaseManager
                 [RoomPaths.Penetrability] = true
             };
 
-            roomReference.Child(RoomPaths.General).UpdateChildrenAsync(roomGeneralDictionary);
+            roomReference.Child(RoomPaths.General).SetValueAsync(roomGeneralDictionary);
 
 
             // Progression
@@ -122,7 +125,7 @@ public class FirebaseRoomManager : FirebaseBaseManager
                 [RoomPaths.WhoseTurn] = ""
             };
 
-            roomReference.Child(RoomPaths.Progression).UpdateChildrenAsync(roomProgressionDictionary);
+            roomReference.Child(RoomPaths.Progression).SetValueAsync(roomProgressionDictionary);
 
             canPlay = false;
 

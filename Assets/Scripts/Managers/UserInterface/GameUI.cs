@@ -29,6 +29,11 @@ public class GameUI : Singleton<GameUI>
         ActionManager.Instance.ShowLastEstimation -= ShowLastEstimation;
     }
 
+    private void OnApplicationQuit()
+    {
+        ActionManager.Instance.ShowLastEstimation -= ShowLastEstimation;
+    }
+
     private void OnClickAddListener()
     {
         btn_Game_Home.onClick.AddListener(UIManager.Instance.ShowMenuPanel);

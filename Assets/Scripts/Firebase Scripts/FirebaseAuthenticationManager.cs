@@ -10,11 +10,11 @@ public class FirebaseAuthenticationManager : FirebaseBaseManager
 {
     private void OnEnable()
     {
-        ActionManager.Instance.SignUpWithEmailPassword += CallSignUpWithEmailPassword;
-        ActionManager.Instance.SignInWithEmailPassword += CallSignInWithEmailPassword;
-        ActionManager.Instance.ResetPasswordWithMail += CallResetPasswordWithMail;
-        ActionManager.Instance.SignOut += SignOut;
-        ActionManager.Instance.DeleteUser += DeleteUser;
+        //ActionManager.Instance.SignUpWithEmailPassword += CallSignUpWithEmailPassword;
+        //ActionManager.Instance.SignInWithEmailPassword += CallSignInWithEmailPassword;
+        //ActionManager.Instance.ResetPasswordWithMail += CallResetPasswordWithMail;
+        //ActionManager.Instance.SignOut += SignOut;
+        //ActionManager.Instance.DeleteUser += DeleteUser;
     }
 
     private void OnDisable()
@@ -26,6 +26,14 @@ public class FirebaseAuthenticationManager : FirebaseBaseManager
         ActionManager.Instance.DeleteUser -= DeleteUser;
     }
 
+    private void OnApplicationQuit()
+    {
+        ActionManager.Instance.SignUpWithEmailPassword -= CallSignUpWithEmailPassword;
+        ActionManager.Instance.SignInWithEmailPassword -= CallSignInWithEmailPassword;
+        ActionManager.Instance.ResetPasswordWithMail -= CallResetPasswordWithMail;
+        ActionManager.Instance.SignOut -= SignOut;
+        ActionManager.Instance.DeleteUser -= DeleteUser;
+    }
 
     /* void IdTokenChanged(object sender, System.EventArgs eventArgs)
      {

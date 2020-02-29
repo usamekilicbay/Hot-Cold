@@ -33,7 +33,7 @@ public class FirebaseBaseManager : Singleton<FirebaseBaseManager>
     string displayName;
     string emailAddress;
 
-    private void OnEnable()
+    private void Start()
     {
         FireBaseStart();
     }
@@ -50,7 +50,7 @@ public class FirebaseBaseManager : Singleton<FirebaseBaseManager>
 
     private void OnApplicationQuit()
     {
-        auth.StateChanged -= AuthStateChanged;
+        //auth.StateChanged -= AuthStateChanged;
     }
 
     private void FireBaseStart()
@@ -78,6 +78,7 @@ public class FirebaseBaseManager : Singleton<FirebaseBaseManager>
         }
         else
         {
+            Debug.Log("Bağlantı ayarlanıyor");
             InitalizeFirebase();
         }
 
@@ -121,13 +122,13 @@ public class FirebaseBaseManager : Singleton<FirebaseBaseManager>
         
 
 
-        AuthStateChanged(this, null);
+      //  AuthStateChanged(this, null);
 
     }
 
     
 
-    void AuthStateChanged(object sender, EventArgs eventArgs)
+   /* void AuthStateChanged(object sender, EventArgs eventArgs)
     {
         if (auth.CurrentUser != user)
         {
@@ -150,7 +151,7 @@ public class FirebaseBaseManager : Singleton<FirebaseBaseManager>
             Debug.Log("Kullanıcı yok galiba");
         }
     }
-
+    */
     protected void SetSettingsReference() 
     {
         settingsReference = FirebaseDatabase.DefaultInstance.GetReference($"{GameSettingsPaths.GameSettings}");
@@ -162,6 +163,9 @@ public class FirebaseBaseManager : Singleton<FirebaseBaseManager>
         Invoke("usercall", 3);
     }
     void usercall() { ActionManager.Instance.CallGetCurrentUserProfile(); }
+  
+    
+    
     /*   private void SignUpEmailPassword(string _username, string _email, string _password)
        {
 
