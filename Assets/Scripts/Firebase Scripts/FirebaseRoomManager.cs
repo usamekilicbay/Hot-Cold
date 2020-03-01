@@ -40,7 +40,7 @@ public class FirebaseRoomManager : MonoBehaviour
     public void CallQuickGame()
     {
         Debug.Log("kekke");
-        //StartCoroutine(QuickGame());
+        StartCoroutine(QuickGame());
     }
 
     private IEnumerator QuickGame()

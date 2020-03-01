@@ -1,5 +1,6 @@
 ﻿using ConstantKeeper;
 using Firebase.Database;
+using Firebase.Auth;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,6 +9,8 @@ using UnityEngine;
 
 public class FirebaseUserManager : MonoBehaviour
 {
+    
+
     private void OnEnable()
     {
         ActionManager.Instance.CreatUserProfile += CreateUserProfile;
@@ -17,7 +20,7 @@ public class FirebaseUserManager : MonoBehaviour
 
         if (FirebaseBaseManager.auth != null)
         {
-            AddUserDataListener();
+            //AddUserDataListener();
         }
     }
 
@@ -113,7 +116,10 @@ public class FirebaseUserManager : MonoBehaviour
 
     private IEnumerator GetCurrentUserProfile()
     {
-        Task<DataSnapshot> task = FirebaseBaseManager.userReference.GetValueAsync();
+
+        DatabaseReference getCurrentUserProfileReference = FirebaseDatabase.DefaultInstance.GetReference($"{UserPaths.Users}/{UserPaths.UserID}/{FirebaseBaseManager.auth.CurrentUser.UserId}");
+       
+        Task<DataSnapshot> task = getCurrentUserProfileReference.GetValueAsync();
 
         yield return new WaitUntil(() => task.IsCanceled || task.IsCompleted || task.IsFaulted);
 
@@ -159,8 +165,6 @@ public class FirebaseUserManager : MonoBehaviour
             
             ActionManager.Instance.ShowUserProfilePanel();
         }
-
-       // LogTaskCompletion(task, "Şimdiki kullanıcı bilgileri çekme ");
     }
 
     private void DeleteUserProfile() 
@@ -174,9 +178,10 @@ public class FirebaseUserManager : MonoBehaviour
         }*/
     }
 
-    private void UpdateUserData(string secondaryPath, string spesificPath, string key, object value)
+    private void UpdateUserData(string secondaryPath, string key, object value)
     {
-        FirebaseBaseManager.userReference.Child(secondaryPath).Child(spesificPath).Child(key).SetValueAsync(value);
+        FirebaseBaseManager.userReference.Child(secondaryPath).Child(key).SetValueAsync(value);
+        AddUserDataListener();
     }
 
     private void AddUserDataListener() 
@@ -192,9 +197,17 @@ public class FirebaseUserManager : MonoBehaviour
         FirebaseBaseManager.userReference.Child(UserPaths.Progression).ChildChanged -= GetuserDAtaBridge;
         FirebaseBaseManager.userReference.Child(UserPaths.Consumable).ChildChanged -= GetuserDAtaBridge;
     }
-  
-    void GetuserDAtaBridge(object sender, ChildChangedEventArgs args) 
+
+    void GetuserDAtaBridge(object sender, ChildChangedEventArgs args)
     {
-        StartCoroutine(GetCurrentUserProfile());
+        Debug.Log("ML");
+        if (FirebaseBaseManager.auth.CurrentUser == null)
+        {
+            return;
+        }
+        else
+        {
+            StartCoroutine(GetCurrentUserProfile());
+        }
     }
 }

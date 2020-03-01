@@ -11,11 +11,11 @@ public class FirebaseAuthenticationManager : MonoBehaviour
 {
     private void OnEnable()
     {
-        //ActionManager.Instance.SignUpWithEmailPassword += CallSignUpWithEmailPassword;
-        //ActionManager.Instance.SignInWithEmailPassword += CallSignInWithEmailPassword;
-        //ActionManager.Instance.ResetPasswordWithMail += CallResetPasswordWithMail;
-        //ActionManager.Instance.SignOut += SignOut;
-        //ActionManager.Instance.DeleteUser += DeleteUser;
+        ActionManager.Instance.SignUpWithEmailPassword += CallSignUpWithEmailPassword;
+        ActionManager.Instance.SignInWithEmailPassword += CallSignInWithEmailPassword;
+        ActionManager.Instance.ResetPasswordWithMail += CallResetPasswordWithMail;
+        ActionManager.Instance.SignOut += SignOut;
+        ActionManager.Instance.DeleteUser += DeleteUser;
     }
 
     private void OnDisable()
@@ -143,7 +143,7 @@ public class FirebaseAuthenticationManager : MonoBehaviour
             FirebaseBaseManager.SetUserReference();
 
             Debug.Log(Authentications.SignIn + Debugs.IsCompleted);
-           // ActionManager.Instance.CallGetCurrentUserProfile();
+            ActionManager.Instance.UpdateUserData(UserPaths.General,UserPaths.SignInStatus,true);
         }
     }
 
@@ -185,6 +185,7 @@ public class FirebaseAuthenticationManager : MonoBehaviour
         FirebaseBaseManager.auth.SignOut();
         
         Debug.Log(Authentications.SignOut + Debugs.IsCompleted);
+        ActionManager.Instance.UpdateUserData(UserPaths.General, UserPaths.SignInStatus, false);
         ActionManager.Instance.ShowSignInPanel();
     }
 

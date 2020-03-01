@@ -17,7 +17,7 @@ public class ActionManager : Singleton<ActionManager>
 
     // User
     public UnityAction<string,string> CreatUserProfile;
-    public UnityAction<string, string, string, object> UpdateUserData;
+    public UnityAction<string, string, object> UpdateUserData;
     public UnityAction CallGetCurrentUserProfile;
     public UnityAction DeleteUserProfile;
 

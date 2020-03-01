@@ -108,18 +108,21 @@ public class FirebaseBaseManager : Singleton<FirebaseBaseManager>
     */
         app.SetEditorDatabaseUrl("https://hot-cold-guess-game.firebaseio.com/");
         if (app.Options.DatabaseUrl != null) app.SetEditorDatabaseUrl(app.Options.DatabaseUrl);
-        
+
 
         // Database Reference Declare
         if (auth.CurrentUser != null)
         {
             SetUserReference();
-            //ActionManager.Instance.CallCurrentUserProfile();
+            ActionManager.Instance.CallGetCurrentUserProfile();
             //ActionManager.Instance.ShowUserProfilePanel();
             Debug.Log(auth.CurrentUser.DisplayName);
         }
-        else UIManager.Instance.ShowSignInPanel();
-        
+        else
+        {
+            SetUserFirstReference();
+            UIManager.Instance.ShowSignInPanel();
+        }
 
 
       //  AuthStateChanged(this, null);
@@ -155,6 +158,11 @@ public class FirebaseBaseManager : Singleton<FirebaseBaseManager>
     protected void SetSettingsReference() 
     {
         settingsReference = FirebaseDatabase.DefaultInstance.GetReference($"{GameSettingsPaths.GameSettings}");
+    }
+
+    public static void SetUserFirstReference() 
+    {
+        FirebaseDatabase.DefaultInstance.GetReference($"{UserPaths.Users}/{UserPaths.UserID}");
     }
 
     public static void SetUserReference()
