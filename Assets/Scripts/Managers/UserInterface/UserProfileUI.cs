@@ -49,13 +49,13 @@ public class UserProfileUI : MonoBehaviour
 
         if (bool.Parse(CurrentUserProfileKeeper.SignInStatus.ToString()))
         {
-            txt_User_LastSeen.SetText("Online");//LocalizationKeeper.Online);
+            txt_User_LastSeen.SetText("ONLINE");//LocalizationKeeper.Online);
         }
         else
         {
             txt_User_LastSeen.SetText(CurrentUserProfileKeeper.LastSeen.ToString());
         }
-
+        Debug.Log(CurrentUserProfileKeeper.Cup);
         txt_User_Level.SetText(CurrentUserProfileKeeper.Level.ToString());
         txt_User_Cup.SetText(CurrentUserProfileKeeper.Cup.ToString());
         txt_User_Rank.SetText(CurrentUserProfileKeeper.Rank.ToString());

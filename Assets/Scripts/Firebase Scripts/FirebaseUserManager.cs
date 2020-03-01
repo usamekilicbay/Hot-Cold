@@ -149,7 +149,7 @@ public class FirebaseUserManager : MonoBehaviour
 
             // Int Progression
             CurrentUserProfileKeeper.Level = int.Parse(snapshot.Child(UserPaths.Progression).Child(UserPaths.Level).Value.ToString());
-            CurrentUserProfileKeeper.Cup = int.Parse(snapshot.Child(UserPaths.Progression).Child(UserPaths.Cup).Value.ToString());
+            CurrentUserProfileKeeper.Cup = int.Parse(snapshot.Child(UserPaths.Progression).Child(UserPaths.Level).Value.ToString());
             CurrentUserProfileKeeper.Rank = int.Parse(snapshot.Child(UserPaths.Progression).Child(UserPaths.Rank).Value.ToString());
             CurrentUserProfileKeeper.TotalPlayTime = int.Parse(snapshot.Child(UserPaths.Progression).Child(UserPaths.TotalPlayTime).Value.ToString());
             CurrentUserProfileKeeper.TotalMatches = int.Parse(snapshot.Child(UserPaths.Progression).Child(UserPaths.TotalMatches).Value.ToString());
@@ -180,12 +180,13 @@ public class FirebaseUserManager : MonoBehaviour
 
     private void UpdateUserData(string secondaryPath, string key, object value)
     {
-        FirebaseBaseManager.userReference.Child(secondaryPath).Child(key).SetValueAsync(value);
         AddUserDataListener();
+        FirebaseBaseManager.userReference.Child(secondaryPath).Child(key).SetValueAsync(value);
     }
 
     private void AddUserDataListener() 
     {
+        Debug.Log("Shigure");
         FirebaseBaseManager.userReference.Child(UserPaths.General).ChildChanged += GetuserDAtaBridge;
         FirebaseBaseManager.userReference.Child(UserPaths.Progression).ChildChanged += GetuserDAtaBridge;
         FirebaseBaseManager.userReference.Child(UserPaths.Consumable).ChildChanged += GetuserDAtaBridge;

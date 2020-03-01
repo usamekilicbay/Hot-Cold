@@ -2246,7 +2246,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &146848788
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2319,7 +2319,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba6e873ab00573e4b9a7b6bb6dbf9f6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  txt_Menu_Header: {fileID: 1164096274}
+  txt_Header: {fileID: 0}
+  txt_Papcoin: {fileID: 0}
+  txt_Gem: {fileID: 0}
   btn_Menu_Play: {fileID: 143084953}
   btn_Menu_Settings: {fileID: 772144453}
   btn_Menu_Store: {fileID: 1282412136}
@@ -5272,7 +5274,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 314718389}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 058cba836c1846c3aa1c5fd2e28aea77, type: 3}
   m_Name: 
@@ -12129,7 +12131,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 964822886}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 058cba836c1846c3aa1c5fd2e28aea77, type: 3}
   m_Name: 
@@ -20028,7 +20030,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1456465379}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 058cba836c1846c3aa1c5fd2e28aea77, type: 3}
   m_Name: 
@@ -26860,7 +26862,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2032360725
 RectTransform:
   m_ObjectHideFlags: 0

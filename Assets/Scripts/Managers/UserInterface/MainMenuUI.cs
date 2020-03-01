@@ -7,7 +7,9 @@ using UnityEngine.UI;
 public class MainMenuUI : MonoBehaviour
 {
     [Header("Panel / Menu")]
-    [SerializeField] TextMeshProUGUI txt_Menu_Header;
+    [SerializeField] TextMeshProUGUI txt_Header;
+    [SerializeField] TextMeshProUGUI txt_Papcoin;
+    [SerializeField] TextMeshProUGUI txt_Gem;
     [SerializeField] Button btn_Menu_Play;
     [SerializeField] Button btn_Menu_Settings;
     [SerializeField] Button btn_Menu_Store;
@@ -17,6 +19,7 @@ public class MainMenuUI : MonoBehaviour
     private void OnEnable()
     {
         OnClickAddListener();
+        LoadData();
     }
 
     private void OnDisable()
@@ -32,6 +35,12 @@ public class MainMenuUI : MonoBehaviour
         btn_Menu_User.onClick.AddListener(UIManager.Instance.ShowUserProfilePanel);
         //btn_Menu_User.onClick.AddListener(() => ActionManager.Instance.CallCurrentUserProfile());
         //btn_Menu_RateUs.onClick.AddListener(RateUs);
+    }
+
+    private void LoadData() 
+    {
+        txt_Papcoin.SetText(CurrentUserProfileKeeper.Papcoin.ToString());
+        txt_Gem.SetText(CurrentUserProfileKeeper.Gem.ToString());
     }
 
     private void QuickGame() 

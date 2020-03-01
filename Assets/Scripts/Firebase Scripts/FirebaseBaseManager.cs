@@ -36,16 +36,12 @@ public class FirebaseBaseManager : Singleton<FirebaseBaseManager>
     private void Start()
     {
         FireBaseStart();
+        auth.StateChanged += AuthStateChanged;
     }
 
     private void OnDisable()
     {
-       /* ActionManager.Instance.SignUpEmailPassword -= SignUpEmailPassword;
-        ActionManager.Instance.SignInEmailPassword -= SignInEmailPassword;
        
-        ActionManager.Instance.QuickGame -= CallQuickGame;
-
-        ActionManager.Instance.CallCurrentUserProfile -= CallGetCurrentUserProfile;*/
     }
 
     private void OnApplicationQuit()
@@ -90,6 +86,7 @@ public class FirebaseBaseManager : Singleton<FirebaseBaseManager>
 
         Debug.Log("Bağlantı Sağlandı");
         // StartCoroutine(SignInAgain());
+
     }
 
 
@@ -123,15 +120,13 @@ public class FirebaseBaseManager : Singleton<FirebaseBaseManager>
             SetUserFirstReference();
             UIManager.Instance.ShowSignInPanel();
         }
-
-
-      //  AuthStateChanged(this, null);
-
+        
+        // AuthStateChanged(this, null);
     }
 
     
 
-   /* void AuthStateChanged(object sender, EventArgs eventArgs)
+    void AuthStateChanged(object sender, EventArgs eventArgs)
     {
         if (auth.CurrentUser != user)
         {
@@ -139,6 +134,7 @@ public class FirebaseBaseManager : Singleton<FirebaseBaseManager>
             if (!signedIn && user != null)
             {
                 Debug.Log("Signed out " + user.UserId);
+                ActionManager.Instance.ShowSignInPanel();
             }
             user = auth.CurrentUser;
             if (signedIn)
@@ -147,6 +143,7 @@ public class FirebaseBaseManager : Singleton<FirebaseBaseManager>
                 Debug.Log("Signed in " + user.UserId);
                 displayName = user.DisplayName ?? "";
                 emailAddress = user.Email ?? "";
+                ActionManager.Instance.CallGetCurrentUserProfile();
             }
         }
         else
@@ -154,7 +151,7 @@ public class FirebaseBaseManager : Singleton<FirebaseBaseManager>
             Debug.Log("Kullanıcı yok galiba");
         }
     }
-    */
+    
     protected void SetSettingsReference() 
     {
         settingsReference = FirebaseDatabase.DefaultInstance.GetReference($"{GameSettingsPaths.GameSettings}");
@@ -168,35 +165,5 @@ public class FirebaseBaseManager : Singleton<FirebaseBaseManager>
     public static void SetUserReference()
     {
         userReference = FirebaseDatabase.DefaultInstance.GetReference($"{UserPaths.Users}/{UserPaths.UserID}/{auth.CurrentUser.UserId}");
-        //Invoke("usercall", 3);
     }
-    void usercall() { ActionManager.Instance.CallGetCurrentUserProfile(); }
-  
-    
-    
-    /*   private void SignUpEmailPassword(string _username, string _email, string _password)
-       {
-
-           auth.CreateUserWithEmailAndPasswordAsync(_email, _password).ContinueWith(task =>
-           {
-               if (task.IsCanceled)
-               {
-                   //LogTaskCompletion(task, "Giriş işlemi iptal edildi");
-                   Debug.Log("Giriş işlemi iptal edildi");
-                   return;
-               }
-               else if (task.IsFaulted)
-               {
-                   // LogTaskCompletion(task, "Kayıt işlemi başarısız oldu!");
-                   Debug.Log("Kayıt işlemi başarısız oldu!");
-                   return;
-               }
-               // LogTaskCompletion(task, "Kayıt işlemi başarıyla tamamlandı!");
-               Debug.Log("Kayıt işlemi başarıyla tamamlandı!");
-
-               FirebaseUser newUser = task.Result;
-               Debug.Log("Display Name " + newUser.DisplayName);
-
-           });
-       }*/
 }

@@ -186,6 +186,7 @@ public class FirebaseAuthenticationManager : MonoBehaviour
         
         Debug.Log(Authentications.SignOut + Debugs.IsCompleted);
         ActionManager.Instance.UpdateUserData(UserPaths.General, UserPaths.SignInStatus, false);
+        //FirebaseBaseManager.AuthStateChanged(this, null);
         ActionManager.Instance.ShowSignInPanel();
     }
 
