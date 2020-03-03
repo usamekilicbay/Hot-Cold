@@ -11,26 +11,22 @@ public class FirebaseUserManager : MonoBehaviour
 {
     
 
-    private void OnEnable()
+    private void Awake()
     {
+        Debug.Log("wtf");
         ActionManager.Instance.CreatUserProfile += CreateUserProfile;
         ActionManager.Instance.UpdateUserData += UpdateUserData;
         ActionManager.Instance.CallGetCurrentUserProfile += CallGetCurrentUserProfile;
         ActionManager.Instance.DeleteUserProfile += DeleteUserProfile;
-
-        if (FirebaseBaseManager.auth != null)
-        {
-            //AddUserDataListener();
-        }
     }
 
-    private void OnDisable()
+   /* private void OnDisable()
     {
         ActionManager.Instance.CreatUserProfile -= CreateUserProfile;
         ActionManager.Instance.UpdateUserData -= UpdateUserData;
         ActionManager.Instance.CallGetCurrentUserProfile -= CallGetCurrentUserProfile;
         ActionManager.Instance.DeleteUserProfile -= DeleteUserProfile;
-    }
+    }*/
 
     private void OnApplicationQuit()
     {
@@ -125,16 +121,19 @@ public class FirebaseUserManager : MonoBehaviour
 
         if (task.IsCanceled)
         {
-            Debug.LogWarning(UserTasks.GetCurrentUserProfile + Debugs.IsCanceled);
+            Debug.LogWarning(UserTaskDebugs.GetCurrentUserProfile + Debugs.IsCanceled);
         }
         else if (task.IsFaulted)
         {
-            Debug.LogError(UserTasks.GetCurrentUserProfile + Debugs.IsFaulted);
+            Debug.LogError(UserTaskDebugs.GetCurrentUserProfile + Debugs.IsFaulted);
         }
         else if (task.IsCompleted)
         {
             DataSnapshot snapshot = task.Result;
-       
+
+            string json = snapshot.GetRawJsonValue();
+            Debug.Log(json);
+
             // String General 
             CurrentUserProfileKeeper.Username = snapshot.Child(UserPaths.General).Child(UserPaths.Username).Value.ToString();
             CurrentUserProfileKeeper.Country = snapshot.Child(UserPaths.General).Child(UserPaths.Country).Value.ToString();
@@ -149,7 +148,7 @@ public class FirebaseUserManager : MonoBehaviour
 
             // Int Progression
             CurrentUserProfileKeeper.Level = int.Parse(snapshot.Child(UserPaths.Progression).Child(UserPaths.Level).Value.ToString());
-            CurrentUserProfileKeeper.Cup = int.Parse(snapshot.Child(UserPaths.Progression).Child(UserPaths.Level).Value.ToString());
+            CurrentUserProfileKeeper.Cup = int.Parse(snapshot.Child(UserPaths.Progression).Child(UserPaths.Cup).Value.ToString());
             CurrentUserProfileKeeper.Rank = int.Parse(snapshot.Child(UserPaths.Progression).Child(UserPaths.Rank).Value.ToString());
             CurrentUserProfileKeeper.TotalPlayTime = int.Parse(snapshot.Child(UserPaths.Progression).Child(UserPaths.TotalPlayTime).Value.ToString());
             CurrentUserProfileKeeper.TotalMatches = int.Parse(snapshot.Child(UserPaths.Progression).Child(UserPaths.TotalMatches).Value.ToString());

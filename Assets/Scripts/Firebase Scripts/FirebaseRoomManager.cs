@@ -20,10 +20,10 @@ public class FirebaseRoomManager : MonoBehaviour
         SetRoomReference();
     }
 
-    private void OnDisable()
+   /* private void OnDisable()
     {
         ActionManager.Instance.QuickGame -= CallQuickGame;
-    }
+    }*/
 
     private void OnApplicationQuit()
     {
@@ -92,6 +92,8 @@ public class FirebaseRoomManager : MonoBehaviour
 
     private void CreateRoom(string roomName = "", string roomPassword = "")
     {
+        JoinListener();
+
         if (canPlay)
         {
             CurrentRoomInfoKeeper.roomID = FirebaseBaseManager.roomReference.Push().Key;
@@ -133,7 +135,7 @@ public class FirebaseRoomManager : MonoBehaviour
 
             owner = true;
 
-            JoinListener();
+            
         }
         else
         {

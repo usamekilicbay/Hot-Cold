@@ -111,7 +111,7 @@ public class FirebaseBaseManager : Singleton<FirebaseBaseManager>
         if (auth.CurrentUser != null)
         {
             SetUserReference();
-            ActionManager.Instance.CallGetCurrentUserProfile();
+           // ActionManager.Instance.CallGetCurrentUserProfile();
             //ActionManager.Instance.ShowUserProfilePanel();
             Debug.Log(auth.CurrentUser.DisplayName);
         }

@@ -8,7 +8,7 @@ namespace ConstantKeeper
 		public static readonly string IsCompleted = " başarıyla tamamlandı!";
 	}
 
-	public static class Authentications
+	public static class AuthenticationsDebugs
 	{
 		public static readonly string SignIn = "Oturum açma işlemi";
 		public static readonly string SignUp = "Kayıt olma işlemi";
@@ -18,7 +18,13 @@ namespace ConstantKeeper
 
 	}
 
-	public static class UserTasks
+	public static class GetDataTaskDebugs
+	{
+		public static readonly string GetData = "Veri çekme işlemi";
+	
+	}
+
+	public static class UserTaskDebugs
 	{
 		public static readonly string GetCurrentUserProfile = "Kullanıcı verileri çekme işlemi";
 		public static readonly string UpdateCurrentUserProfile = "Kullanıcı verileri güncelleme işlemi";

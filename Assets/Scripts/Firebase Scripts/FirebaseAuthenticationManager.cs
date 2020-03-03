@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class FirebaseAuthenticationManager : MonoBehaviour
 {
-    private void OnEnable()
+    private void Start()
     {
         ActionManager.Instance.SignUpWithEmailPassword += CallSignUpWithEmailPassword;
         ActionManager.Instance.SignInWithEmailPassword += CallSignInWithEmailPassword;
@@ -18,14 +18,14 @@ public class FirebaseAuthenticationManager : MonoBehaviour
         ActionManager.Instance.DeleteUser += DeleteUser;
     }
 
-    private void OnDisable()
+   /* private void OnDisable()
     {
         ActionManager.Instance.SignUpWithEmailPassword -= CallSignUpWithEmailPassword;
         ActionManager.Instance.SignInWithEmailPassword -= CallSignInWithEmailPassword;
         ActionManager.Instance.ResetPasswordWithMail -= CallResetPasswordWithMail;
         ActionManager.Instance.SignOut -= SignOut;
         ActionManager.Instance.DeleteUser -= DeleteUser;
-    }
+    }*/
 
     private void OnApplicationQuit()
     {
@@ -94,17 +94,17 @@ public class FirebaseAuthenticationManager : MonoBehaviour
         if (task.IsCanceled)
         {
             //LogTaskCompletion(task, "Giriş işlemi iptal edildi");
-            Debug.LogWarning(Authentications.SignUp + Debugs.IsCanceled);
+            Debug.LogWarning(AuthenticationsDebugs.SignUp + Debugs.IsCanceled);
         }
         else if (task.IsFaulted)
         {
             // LogTaskCompletion(task, "Kayıt işlemi başarısız oldu!");
-            Debug.LogError(Authentications.SignUp + Debugs.IsFaulted);
+            Debug.LogError(AuthenticationsDebugs.SignUp + Debugs.IsFaulted);
         }
         else if (task.IsCompleted)
         {
             // LogTaskCompletion(task, "Kayıt işlemi başarıyla tamamlandı!");
-            Debug.Log(Authentications.SignUp + Debugs.IsCompleted);
+            Debug.Log(AuthenticationsDebugs.SignUp + Debugs.IsCompleted);
            
             FirebaseBaseManager.SetUserReference();
 
@@ -132,18 +132,18 @@ public class FirebaseAuthenticationManager : MonoBehaviour
 
         if (task.IsCanceled)
         {
-            Debug.LogWarning(Authentications.SignIn + Debugs.IsCanceled);
+            Debug.LogWarning(AuthenticationsDebugs.SignIn + Debugs.IsCanceled);
         }
         else if (task.IsFaulted)
         {
-            Debug.LogError(Authentications.SignIn + Debugs.IsFaulted);
+            Debug.LogError(AuthenticationsDebugs.SignIn + Debugs.IsFaulted);
         }
         else if (task.IsCompleted)
         {
             FirebaseBaseManager.SetUserReference();
 
-            Debug.Log(Authentications.SignIn + Debugs.IsCompleted);
-            ActionManager.Instance.UpdateUserData(UserPaths.General,UserPaths.SignInStatus,true);
+            Debug.Log(AuthenticationsDebugs.SignIn + Debugs.IsCompleted);
+          // ActionManager.Instance.UpdateUserData(UserPaths.General,UserPaths.SignInStatus,true);
         }
     }
 
@@ -164,15 +164,15 @@ public class FirebaseAuthenticationManager : MonoBehaviour
 
         if (task.IsCanceled)
         {
-            Debug.LogWarning(Authentications.ResetPassword + Debugs.IsCanceled);
+            Debug.LogWarning(AuthenticationsDebugs.ResetPassword + Debugs.IsCanceled);
         }
         else if (task.IsFaulted)
         {
-            Debug.LogError(Authentications.ResetPassword + Debugs.IsFaulted);
+            Debug.LogError(AuthenticationsDebugs.ResetPassword + Debugs.IsFaulted);
         }
         else if (task.IsCompleted)
         {
-            Debug.Log(Authentications.ResetPassword + Debugs.IsCompleted);
+            Debug.Log(AuthenticationsDebugs.ResetPassword + Debugs.IsCompleted);
         }
     }
 
@@ -184,7 +184,7 @@ public class FirebaseAuthenticationManager : MonoBehaviour
     {
         FirebaseBaseManager.auth.SignOut();
         
-        Debug.Log(Authentications.SignOut + Debugs.IsCompleted);
+        Debug.Log(AuthenticationsDebugs.SignOut + Debugs.IsCompleted);
         ActionManager.Instance.UpdateUserData(UserPaths.General, UserPaths.SignInStatus, false);
         //FirebaseBaseManager.AuthStateChanged(this, null);
         ActionManager.Instance.ShowSignInPanel();
