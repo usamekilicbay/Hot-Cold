@@ -43,10 +43,18 @@ public class FirebaseSettingsManager : MonoBehaviour
             Debug.Log(GetDataTaskDebugs.GetData + Debugs.IsCompleted);
 
             DataSnapshot snapshot = task.Result;
-           
-            string json = snapshot.GetRawJsonValue();
+
+            foreach (DataSnapshot item in snapshot.Children)
+            {
+
+                string key = item.Key;
+                string value = item.Child("Turkish").Value.ToString();
+                LocalizationManager.Instance.SetDictionary(key, value);
+
+            }
+            /*string json = snapshot.GetRawJsonValue();
             LocalizationManager.Instance.SetDictionary(json);
-            Debug.Log("AL sana bir adet " + json);
+            Debug.Log("AL sana bir adet " + json);*/
         }
     }
     
